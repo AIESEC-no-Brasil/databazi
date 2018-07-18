@@ -202,7 +202,7 @@ DEPENDENCIES
   puma (~> 3.11)
   rails (~> 5.2.0)
   rspec-rails (~> 3.7)
-  shoulda-matchers (~> 3.1)
+  shoulda-matchers
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data
