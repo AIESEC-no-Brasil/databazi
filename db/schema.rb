@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 2018_07_18_204044) do
     t.string "fullname"
     t.string "cellphone"
     t.string "email"
-    t.datetime "birthdate"
+    t.date "birthdate"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "registerable_id"
