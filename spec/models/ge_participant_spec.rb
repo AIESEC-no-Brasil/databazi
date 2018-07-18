@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe GeParticipant, type: :model do
   describe "#associations" do
     it { is_expected.to have_one(:exchange_participant).dependent(:destroy) }
+    it { is_expected.to have_one(:english_level).dependent(:destroy) }
   end
 
   describe "#attributes" do

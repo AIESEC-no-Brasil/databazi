@@ -20,5 +20,6 @@ RSpec.describe GtParticipant, type: :model do
 
   describe "#associations" do
     it { is_expected.to have_one(:exchange_participant).dependent(:destroy) }
+    it { is_expected.to have_one(:english_level).dependent(:destroy) }
   end
 end
