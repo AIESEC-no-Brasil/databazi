@@ -4,7 +4,7 @@ class CreateExchangeParticipants < ActiveRecord::Migration[5.2]
       t.string :fullname
       t.string :cellphone
       t.string :email
-      t.datetime :birthdate
+      t.date :birthdate
 
       t.timestamps
     end
