@@ -57,6 +57,8 @@ GEM
     factory_bot_rails (4.10.0)
       factory_bot (~> 4.10.0)
       railties (>= 3.0.0)
+    faker (1.9.1)
+      i18n (>= 0.7)
     ffi (1.9.25)
     formatador (0.2.5)
     globalid (0.4.1)
@@ -192,6 +194,7 @@ DEPENDENCIES
   bootsnap (>= 1.1.0)
   byebug
   factory_bot_rails
+  faker
   guard-rspec
   libnotify
   listen (>= 3.0.5, < 3.2)
@@ -199,7 +202,7 @@ DEPENDENCIES
   puma (~> 3.11)
   rails (~> 5.2.0)
   rspec-rails (~> 3.7)
-  shoulda-matchers (~> 3.1)
+  shoulda-matchers
   spring
   spring-watcher-listen (~> 2.0.0)
   tzinfo-data

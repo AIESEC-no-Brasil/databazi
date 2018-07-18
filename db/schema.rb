@@ -10,9 +10,47 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2018_07_18_204044) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "english_levels", force: :cascade do |t|
+    t.integer "english_level"
+    t.string "englishable_type"
+    t.integer "englishable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "exchange_participants", force: :cascade do |t|
+    t.string "fullname"
+    t.string "cellphone"
+    t.string "email"
+    t.date "birthdate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "registerable_id"
+    t.string "registerable_type"
+    t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
+  end
+
+  create_table "ge_participants", force: :cascade do |t|
+    t.integer "spanish_level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "gt_participants", force: :cascade do |t|
+    t.integer "scholarity"
+    t.integer "experience"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "gv_participants", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
 end
