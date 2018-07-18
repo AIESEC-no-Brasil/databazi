@@ -33,8 +33,8 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails', '~> 3.7'
   gem 'shoulda-matchers'
-	gem 'factory_bot_rails'
-	gem 'guard-rspec', require: false
+  gem 'factory_bot_rails'
+  gem 'guard-rspec', require: false
 end
 
 group :development do
