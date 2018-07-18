@@ -20,3 +20,8 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+*.sw?
+
+config/database.yml
+config/local_env.yml
