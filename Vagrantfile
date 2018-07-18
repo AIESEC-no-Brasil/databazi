@@ -10,6 +10,7 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder '.', '/vagrant', nfs: true
 
   config.vm.provider "virtualbox" do |v|
+    v.name = "databazi"
     v.memory = 1024
   end
 
@@ -35,7 +36,7 @@ Vagrant.configure(2) do |config|
 
     sudo apt-get install -y curl
   SHELL
-
+  
   config.vm.provision :shell, path: "install-rvm.sh", args: "stable", privileged: false
   config.vm.provision :shell, path: "install-ruby.sh", args: "2.5.1", privileged: false
 end
