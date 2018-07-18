@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_18_175658) do
+ActiveRecord::Schema.define(version: 2018_07_18_190608) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,14 @@ ActiveRecord::Schema.define(version: 2018_07_18_175658) do
     t.string "cellphone"
     t.string "email"
     t.datetime "birthdate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "registerable_id"
+    t.string "registerable_type"
+    t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
+  end
+
+  create_table "gv_participants", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

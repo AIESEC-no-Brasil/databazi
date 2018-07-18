@@ -4,4 +4,6 @@ class ExchangeParticipant < ApplicationRecord
   validates :email, presence: true,
                     uniqueness: true
   validates :birthdate, presence: true
+
+  belongs_to :registerable, polymorphic: true
 end

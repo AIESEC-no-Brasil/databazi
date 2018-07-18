@@ -15,4 +15,8 @@ RSpec.describe ExchangeParticipant, type: :model do
     it { is_expected.to validate_uniqueness_of :email }
     it { is_expected.to validate_presence_of :birthdate }
   end
+
+  describe "#associations" do
+    it { is_expected.to belong_to :registerable }
+  end
 end
