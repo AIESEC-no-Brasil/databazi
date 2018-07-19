@@ -16,6 +16,8 @@ RSpec.describe GtParticipant, type: :model do
       is_expected.to define_enum_for(:scholarity).
         with([:graduating, :post_graduated, :almost_graduated, :graduated])
     end
+    it { is_expected.to accept_nested_attributes_for :exchange_participant }
+    it { is_expected.to accept_nested_attributes_for :english_level }
   end
 
   describe "#associations" do

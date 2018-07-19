@@ -1,22 +1,29 @@
 class GvParticipantsController < ApplicationController
-	expose :gv_participant
+  expose :gv_participant
 
   def create
-		if gv_participant.save
-			render json: { status: :success }
-		else
-			render json: { status: :failure }
-		end
+    if gv_participant.save
+      render json: { status: :success }
+    else
+      render json: { status: :failure }
+    end
   end
 
-	private
+  private
 
-	def gv_participant_params
-		exchange_params = params[:gv_participant]
-			.slice(:id, :birthdate, :fullname, :email, :cellphone)
-		ActionController::Parameters.new(
-			gv_participant: { exchange_participant_attributes: exchange_params }
-		).require(:gv_participant)
-		.permit!
-	end
+  def gv_participant_params
+    nested_params.require(:gv_participant)
+    .permit(exchange_participant_attributes: [ :id, :fullname, :birthdate, :email, :cellphone ])
+  end
+
+  def nested_params
+    ActionController::Parameters.new(
+      gv_participant: { exchange_participant_attributes: exchange_participant_params }
+    )
+  end
+
+  def exchange_participant_params
+    params[:gv_participant]
+    .slice(:id, :birthdate, :fullname, :email, :cellphone)
+  end
 end

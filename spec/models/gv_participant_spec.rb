@@ -12,5 +12,4 @@ RSpec.describe GvParticipant, type: :model do
     it { is_expected.to respond_to :birthdate }
     it { is_expected.to accept_nested_attributes_for :exchange_participant }
   end
-
 end
