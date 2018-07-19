@@ -16,5 +16,11 @@ RSpec.describe GeParticipant, type: :model do
       is_expected.to define_enum_for(:spanish_level).
         with([:none, :basic, :intermediate, :advanced, :fluent])
     end
+    it { is_expected.to accept_nested_attributes_for :exchange_participant }
+    it { is_expected.to accept_nested_attributes_for :english_level }
+  end
+
+  describe "#validation" do
+    it { is_expected.to validate_presence_of :spanish_level }
   end
 end
