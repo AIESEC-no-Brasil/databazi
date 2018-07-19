@@ -3,4 +3,6 @@ class GvParticipant < ApplicationRecord
 
   delegate :fullname, :cellphone, :email, :birthdate,
     to: :exchange_participant, prefix: false
+
+  accepts_nested_attributes_for :exchange_participant
 end
