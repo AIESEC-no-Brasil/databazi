@@ -5,8 +5,10 @@ class GtParticipantsController < ApplicationController
     if gt_participant.save
       render json: { status: :success }
     else
-      render json: { status: :failure },
-      messages: gt_participant.errors.messages
+      render json: {
+        status: :failure,
+        messages: gt_participant.errors.messages
+      }
     end
   end
 
