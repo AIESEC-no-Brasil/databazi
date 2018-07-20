@@ -3,4 +3,8 @@ class EnglishLevel < ApplicationRecord
 
   enum english_level: [:none, :basic, :intermediate, :advanced, :fluent],
     _suffix: true
+
+  def to_s
+    english_level
+  end
 end

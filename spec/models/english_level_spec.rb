@@ -12,4 +12,10 @@ RSpec.describe EnglishLevel, type: :model do
   describe "#associations" do
     it { is_expected.to belong_to :englishable }
   end
+
+  describe "#to_s" do
+    subject(:english_level) { build(:english_level, english_level: "fluent") }
+
+    it { expect(english_level.to_s).to eq "fluent" }
+  end
 end

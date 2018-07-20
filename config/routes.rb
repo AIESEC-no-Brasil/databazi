@@ -1,3 +1,5 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  resources :ge_participants, only: :create
+  resources :gt_participants, only: :create
+  resources :gv_participants, only: :create
 end
