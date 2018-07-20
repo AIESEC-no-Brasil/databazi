@@ -1,21 +1,32 @@
 require 'rails_helper'
 
 RSpec.describe GvParticipantsController, type: :controller do
-  let(:gv_participant) { create(:gv_participant) }
-  let(:exchange_participant) { create(:exchange_participant, registerable: gv_participant) }
+  let(:exchange_participant) { build(:exchange_participant) }
+  let(:gv_participant) do
+    build(:gv_participant, exchange_participant: exchange_participant)
+  end
 
   describe "#create" do
-    before { exchange_participant }
     subject(:do_create) { post :create, params: { gv_participant: gv_params } }
 
     let(:gv_params) do
-      { fullname: 'test', email: 'email', cellphone: 'phone', birthdate: Date.today }
+      {
+        fullname: gv_participant.fullname,
+        email: gv_participant.email,
+        cellphone: gv_participant.cellphone,
+        birthdate: gv_participant.birthdate
+      }
     end
-    context "success" do
-      it { is_expected.to be_successful }
+    let(:response) { JSON.parse(subject.body) }
 
+    it { is_expected.to be_successful }
+    context "success" do
       it { expect { do_create }.to change(ExchangeParticipant, :count).by 1 }
       it { expect { do_create }.to change(GvParticipant, :count).by 1 }
+
+      describe "response" do
+        it { expect(response['status']).to eq 'success' }
+      end
     end
 
     context "failure" do
@@ -23,6 +34,10 @@ RSpec.describe GvParticipantsController, type: :controller do
 
       it { expect { do_create }.not_to change(ExchangeParticipant, :count) }
       it { expect { do_create }.not_to change(GvParticipant, :count) }
+
+      describe "response" do
+        it { expect(response['status']).to eq 'failure' }
+      end
     end
   end
 

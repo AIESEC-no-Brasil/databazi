@@ -5,7 +5,8 @@ class GvParticipantsController < ApplicationController
     if gv_participant.save
       render json: { status: :success }
     else
-      render json: { status: :failure }
+      render json: { status: :failure },
+      messages: gv_participant.errors.messages
     end
   end
 

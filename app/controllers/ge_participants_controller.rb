@@ -5,7 +5,10 @@ class GeParticipantsController < ApplicationController
     if ge_participant.save
       render json: { status: :success }
     else
-      render json: { status: :failure }
+      render json: {
+        status: :failure,
+        messages: ge_participant.errors.messages
+      }
     end
   end
 
