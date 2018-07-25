@@ -18,7 +18,8 @@ RSpec.describe GeParticipantsController, type: :controller do
          cellphone: ge_participant.cellphone,
          birthdate: ge_participant.birthdate,
          english_level: ge_participant.english_level.to_s,
-         spanish_level: ge_participant.spanish_level.to_s
+         spanish_level: ge_participant.spanish_level.to_s,
+         local_committee_id: exchange_participant.local_committee_id
        }
     end
     let(:response) { JSON.parse(subject.body) }

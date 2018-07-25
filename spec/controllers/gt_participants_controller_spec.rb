@@ -19,7 +19,8 @@ RSpec.describe GtParticipantsController, type: :controller do
          birthdate: gt_participant.birthdate,
          english_level: gt_participant.english_level.to_s,
          scholarity: gt_participant.scholarity,
-         experience: gt_participant.experience
+         experience: gt_participant.experience,
+         local_committee_id: exchange_participant.local_committee_id
       }
     end
     let(:response) { JSON.parse(subject.body) }

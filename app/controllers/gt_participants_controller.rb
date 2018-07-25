@@ -17,7 +17,9 @@ class GtParticipantsController < ApplicationController
   def gt_participant_params
     nested_params.require(:gt_participant).permit(
       :scholarity, :experience,
-      exchange_participant_attributes: [ :id, :fullname, :email, :birthdate, :cellphone ],
+      exchange_participant_attributes: [
+        :id, :fullname, :email, :birthdate, :cellphone, :local_committee_id
+      ],
       english_level_attributes: [ :english_level ])
   end
 
@@ -34,7 +36,7 @@ class GtParticipantsController < ApplicationController
 
   def exchange_participant_params
     params[:gt_participant]
-    .slice(:id, :birthdate, :fullname, :email, :cellphone)
+    .slice(:id, :birthdate, :fullname, :email, :cellphone, :local_committee_id)
   end
 
   def english_level_params

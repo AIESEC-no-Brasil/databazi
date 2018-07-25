@@ -16,7 +16,9 @@ class GvParticipantsController < ApplicationController
 
   def gv_participant_params
     nested_params.require(:gv_participant)
-    .permit(exchange_participant_attributes: [ :id, :fullname, :birthdate, :email, :cellphone ])
+      .permit(exchange_participant_attributes: [
+        :id, :fullname, :birthdate, :email, :cellphone, :local_committee_id
+      ])
   end
 
   def nested_params
@@ -27,6 +29,6 @@ class GvParticipantsController < ApplicationController
 
   def exchange_participant_params
     params[:gv_participant]
-    .slice(:id, :birthdate, :fullname, :email, :cellphone)
+    .slice(:id, :birthdate, :fullname, :email, :cellphone, :local_committee_id)
   end
 end
