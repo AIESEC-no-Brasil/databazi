@@ -27,3 +27,5 @@ config/database.yml
 config/local_env.yml
 
 .vagrant/
+# Ignore application configuration
+/config/application.yml
