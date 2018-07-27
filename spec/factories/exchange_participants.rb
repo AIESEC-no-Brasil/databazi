@@ -6,5 +6,6 @@ FactoryBot.define do
     birthdate { Faker::Date.birthday(18, 65) }
     local_committee
     university
+    college_course
   end
 end
