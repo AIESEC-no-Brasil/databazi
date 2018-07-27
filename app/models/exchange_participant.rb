@@ -6,4 +6,5 @@ class ExchangeParticipant < ApplicationRecord
   validates :birthdate, presence: true
 
   belongs_to :registerable, polymorphic: true
+  belongs_to :local_committee
 end

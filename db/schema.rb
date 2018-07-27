@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_18_204044) do
+ActiveRecord::Schema.define(version: 2018_07_25_120610) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,8 @@ ActiveRecord::Schema.define(version: 2018_07_18_204044) do
     t.datetime "updated_at", null: false
     t.integer "registerable_id"
     t.string "registerable_type"
+    t.bigint "local_committee_id"
+    t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
   end
 
@@ -53,4 +55,13 @@ ActiveRecord::Schema.define(version: 2018_07_18_204044) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "local_committees", force: :cascade do |t|
+    t.string "name"
+    t.integer "expa_id"
+    t.integer "podio_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "exchange_participants", "local_committees"
 end

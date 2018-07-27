@@ -17,7 +17,9 @@ class GeParticipantsController < ApplicationController
   def ge_participant_params
     nested_params.require(:ge_participant).permit(
       :spanish_level,
-      exchange_participant_attributes: [ :id, :fullname, :email, :birthdate, :cellphone ],
+      exchange_participant_attributes: [
+        :id, :fullname, :email, :birthdate, :cellphone, :local_committee_id
+      ],
       english_level_attributes: [ :english_level ])
   end
 
@@ -33,7 +35,7 @@ class GeParticipantsController < ApplicationController
 
   def exchange_participant_params
     params[:ge_participant]
-    .slice(:id, :birthdate, :fullname, :email, :cellphone)
+    .slice(:id, :birthdate, :fullname, :email, :cellphone, :local_committee_id)
   end
 
   def english_level_params
