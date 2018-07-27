@@ -16,6 +16,7 @@ RSpec.describe GvParticipantsController, type: :controller do
         cellphone: gv_participant.cellphone,
         birthdate: gv_participant.birthdate,
         local_committee_id: exchange_participant.local_committee_id,
+        college_course_id: exchange_participant.college_course_id,
         university_id: exchange_participant.university_id
       }
     end

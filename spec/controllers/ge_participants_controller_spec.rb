@@ -20,7 +20,8 @@ RSpec.describe GeParticipantsController, type: :controller do
          english_level: ge_participant.english_level.to_s,
          spanish_level: ge_participant.spanish_level.to_s,
          local_committee_id: exchange_participant.local_committee_id,
-         university_id: exchange_participant.university_id
+         university_id: exchange_participant.university_id,
+         college_course_id: exchange_participant.college_course_id
        }
     end
     let(:response) { JSON.parse(subject.body) }

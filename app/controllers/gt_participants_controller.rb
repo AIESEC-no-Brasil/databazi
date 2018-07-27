@@ -19,7 +19,7 @@ class GtParticipantsController < ApplicationController
       :scholarity, :experience,
       exchange_participant_attributes: [
         :id, :fullname, :email, :birthdate, :cellphone, :local_committee_id,
-        :university_id
+        :university_id, :college_course_id
       ],
       english_level_attributes: [ :english_level ])
   end
@@ -38,7 +38,7 @@ class GtParticipantsController < ApplicationController
   def exchange_participant_params
     params[:gt_participant]
     .slice(:id, :birthdate, :fullname, :email, :cellphone, :local_committee_id,
-      :university_id)
+      :university_id, :college_course_id)
   end
 
   def english_level_params
