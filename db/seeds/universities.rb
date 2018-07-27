@@ -2611,9 +2611,9 @@ university_list = [
 ['UNIVIÇOSA - União de Ensino Superior de Viçosa', 'Universidade05251']
 ]
 
-#university_list.each do |name, podio_id|
-#	University.create(
-#		name: name,
-#		podio_id: podio_id
-#	)
-#end
+university_list.each do |name, podio_id|
+	University.create(
+		name: name,
+		podio_id: podio_id
+	)
+end
