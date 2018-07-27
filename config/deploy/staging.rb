@@ -1,4 +1,4 @@
-server 'ec2-52-53-159-125.us-west-1.compute.amazonaws.com', port: 22, roles: [:web, :app, :db], primary: true
+server 'http://qa.databazi.aiesec.org.br', port: 22, roles: [:web, :app, :db], primary: true
 
 set :branch, :staging
 
