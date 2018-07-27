@@ -5,5 +5,6 @@ FactoryBot.define do
     email { Faker::Internet.email }
     birthdate { Faker::Date.birthday(18, 65) }
     local_committee
+    college_course
   end
 end

@@ -10,10 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_25_120610) do
+ActiveRecord::Schema.define(version: 2018_07_27_032716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "college_courses", force: :cascade do |t|
+    t.string "name"
+    t.string "podio_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "english_levels", force: :cascade do |t|
     t.integer "english_level"
@@ -33,6 +40,8 @@ ActiveRecord::Schema.define(version: 2018_07_25_120610) do
     t.integer "registerable_id"
     t.string "registerable_type"
     t.bigint "local_committee_id"
+    t.bigint "college_course_id"
+    t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
   end
@@ -63,5 +72,6 @@ ActiveRecord::Schema.define(version: 2018_07_25_120610) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "exchange_participants", "college_courses"
   add_foreign_key "exchange_participants", "local_committees"
 end
