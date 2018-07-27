@@ -7,4 +7,5 @@ class ExchangeParticipant < ApplicationRecord
 
   belongs_to :registerable, polymorphic: true
   belongs_to :local_committee
+  belongs_to :university
 end
