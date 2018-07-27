@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_27_032716) do
+ActiveRecord::Schema.define(version: 2018_07_27_123730) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,9 +41,11 @@ ActiveRecord::Schema.define(version: 2018_07_27_032716) do
     t.string "registerable_type"
     t.bigint "local_committee_id"
     t.bigint "college_course_id"
+    t.bigint "university_id"
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
+    t.index ["university_id"], name: "index_exchange_participants_on_university_id"
   end
 
   create_table "ge_participants", force: :cascade do |t|
@@ -72,6 +74,14 @@ ActiveRecord::Schema.define(version: 2018_07_27_032716) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "universities", force: :cascade do |t|
+    t.string "name"
+    t.string "podio_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "exchange_participants", "college_courses"
   add_foreign_key "exchange_participants", "local_committees"
+  add_foreign_key "exchange_participants", "universities"
 end

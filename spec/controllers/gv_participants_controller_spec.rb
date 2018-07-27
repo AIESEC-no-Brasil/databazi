@@ -15,7 +15,9 @@ RSpec.describe GvParticipantsController, type: :controller do
         email: gv_participant.email,
         cellphone: gv_participant.cellphone,
         birthdate: gv_participant.birthdate,
-        local_committee_id: exchange_participant.local_committee_id
+        local_committee_id: exchange_participant.local_committee_id,
+        college_course_id: exchange_participant.college_course_id,
+        university_id: exchange_participant.university_id
       }
     end
     let(:response) { JSON.parse(subject.body) }

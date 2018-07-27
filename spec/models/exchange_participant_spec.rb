@@ -19,6 +19,7 @@ RSpec.describe ExchangeParticipant, type: :model do
   describe "#associations" do
     it { is_expected.to belong_to :registerable }
     it { is_expected.to belong_to :local_committee }
+    it { is_expected.to belong_to :university }
     it { is_expected.to belong_to :college_course }
   end
 end
