@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount SwaggerUiEngine::Engine, at: "/api_docs"
+
   resources :universities, only: :index
   resources :college_courses, only: :index
   resources :local_committees, only: :index
