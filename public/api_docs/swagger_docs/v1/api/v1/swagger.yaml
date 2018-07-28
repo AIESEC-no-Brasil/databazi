@@ -1,0 +1,248 @@
+swagger: "2.0"
+info:
+  description: "Databazi API endpoints"
+  version: "1.0.0"
+  title: "Databazi"
+  contact:
+    email: "contato@devmagic.com.br"
+host: "qa.databazi.aiesec.org.br"
+basePath: "/"
+schemes:
+- "http"
+paths:
+  /gv_participants:
+    post:
+      tags:
+      - "gv_participants"
+      summary: "Adds a new gv_participant"
+      description: ""
+      operationId: "addGvParticipant"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "GV Participant object that is going to be registered"
+        required: true
+        schema:
+          $ref: "#/definitions/GvParticipant"
+      responses:
+        405:
+          description: "Invalid input"
+        200:
+          description: "Success"
+  /gt_participants:
+    post:
+      tags:
+      - "gt_participants"
+      summary: "Adds a new gt_participant"
+      description: ""
+      operationId: "addGtParticipant"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "GT Participant object that is going to be registered"
+        required: true
+        schema:
+          $ref: "#/definitions/GtParticipant"
+      responses:
+        405:
+          description: "Invalid input"
+        200:
+          description: "Success"
+  /ge_participants:
+    post:
+      tags:
+      - "ge_participants"
+      summary: "Adds a new ge_participant"
+      description: ""
+      operationId: "addGeParticipant"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "GE Participant object that is going to be registered"
+        required: true
+        schema:
+          $ref: "#/definitions/GeParticipant"
+      responses:
+        405:
+          description: "Invalid input"
+        200:
+          description: "Success"
+  /universities:
+    get:
+      tags:
+      - "universities"
+      summary: "Returns a list of university names"
+      description: ""
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+  /college_courses:
+    get:
+      tags:
+      - "college_courses"
+      summary: "Returns a list of college courses names"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+  /local_committees:
+    get:
+      tags:
+      - "local_committees"
+      summary: "Returns a list of local committees names"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+definitions:
+  GvParticipant:
+    type: "object"
+    required:
+    - "fullname"
+    - "cellphone"
+    - "email"
+    - "birthdate"
+    - "local_committee"
+    - "university"
+    - "college_course"
+    properties:
+      gv_participant:
+        type: "object"
+        properties:
+          fullname:
+            type: "string"
+            example: "John Doe"
+          cellphone:
+            type: "string"
+            example: "11998985656"
+          email:
+            type: "string"
+            example: "johndoe@example.com"
+          birthdate:
+            type: "string"
+            example: "1930-05-11"
+          local_committee_id:
+            type: "integer"
+            example: 1
+          university_id:
+            type: "integer"
+            example: 1
+          college_course_id:
+            type: "integer"
+            example: 1
+  GtParticipant:
+    type: "object"
+    required:
+    - "fullname"
+    - "cellphone"
+    - "email"
+    - "birthdate"
+    - "english_level"
+    - "experience"
+    - "scholarity"
+    - "local_committee"
+    - "university"
+    - "college_course"
+    properties:
+      gt_participant:
+        type: "object"
+        properties:
+          fullname:
+            type: "string"
+            example: "John Doe"
+          cellphone:
+            type: "string"
+            example: "11998985656"
+          email:
+            type: "string"
+            example: "johndoe@example.com"
+          birthdate:
+            type: "string"
+            example: "1930-05-11"
+          english_level:
+            type: "integer"
+            example: 1
+          experience:
+            type: "integer"
+            example: 1
+          scholarity:
+            type: "integer"
+            example: 1
+          local_committee_id:
+            type: "integer"
+            example: 1
+          university_id:
+            type: "integer"
+            example: 1
+          college_course_id:
+            type: "integer"
+            example: 1
+  GeParticipant:
+    type: "object"
+    required:
+    - "fullname"
+    - "cellphone"
+    - "email"
+    - "birthdate"
+    - "spanish_level"
+    - "english_level"
+    - "local_committee"
+    - "university"
+    - "college_course"
+    properties:
+      ge_participant:
+        type: "object"
+        properties:
+          fullname:
+            type: "string"
+            example: "John Doe"
+          cellphone:
+            type: "string"
+            example: "11998985656"
+          email:
+            type: "string"
+            example: "johndoe@example.com"
+          birthdate:
+            type: "string"
+            example: "1930-05-11"
+          spanish_level:
+            type: "integer"
+            example: 1
+          english_level:
+            type: "integer"
+            example: 1
+          local_committee_id:
+            type: "integer"
+            example: 1
+          university_id:
+            type: "integer"
+            example: 1
+          college_course_id:
+            type: "integer"
+            example: 1
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
