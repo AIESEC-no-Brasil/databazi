@@ -17,7 +17,6 @@ RSpec.describe UniversitiesController, type: :controller do
         before { create_list(:university, 3) }
 
         context 'format' do
-
           it { expect(response.first.keys).to match_array(['id', 'name']) }
         end
 
@@ -36,7 +35,6 @@ RSpec.describe UniversitiesController, type: :controller do
           it { expect(response).to eq([first_university, second_university].as_json(only: [:id, :name])) }
 
           it { expect(response.count).to eq([first_university, second_university].count) }
-
         end
       end
     end
