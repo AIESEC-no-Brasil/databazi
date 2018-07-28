@@ -39,7 +39,6 @@ ActiveRecord::Schema.define(version: 2018_07_27_123730) do
     t.datetime "updated_at", null: false
     t.integer "registerable_id"
     t.string "registerable_type"
-    t.string "password"
     t.bigint "local_committee_id"
     t.bigint "college_course_id"
     t.bigint "university_id"
