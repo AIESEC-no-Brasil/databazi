@@ -1,13 +1,8 @@
 class University < ApplicationRecord
-  validates_presence_of :name, :podio_id
-
+  scope :by_name, -> (name = nil) { where("lower(name) LIKE ?", "%#{name}%") } 
+  
   has_many :exchange_participants
 
-  def as_json
-    {
-      id: id,
-      name: name,
-      podio_id: podio_id
-    }
-  end
+  validates :podio_id, presence: true
+  validates :name, presence: true
 end
