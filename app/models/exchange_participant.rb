@@ -9,4 +9,16 @@ class ExchangeParticipant < ApplicationRecord
   belongs_to :local_committee
   belongs_to :university
   belongs_to :college_course
+
+  #def self.encrypted_password(password)
+  #  key = ENV['KEY']
+  #  crypt = ActiveSupport::MessageEncryptor.new(key)
+  #  crypt.encrypt_and_sign(password)
+  #end
+
+  #def self.decrypted_password(password)
+  #  key = ENV['KEY']
+  #  crypt = ActiveSupport::MessageEncryptor.new(key)
+  #  crypt.decrypt_and_verify(password)
+  #end
 end
