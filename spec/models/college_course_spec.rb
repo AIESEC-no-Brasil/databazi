@@ -6,7 +6,7 @@ RSpec.describe CollegeCourse, type: :model do
   end
 
   describe '#scopes' do
-    context 'by_name' do
+    describe 'by_name' do
       let!(:college_course) { create(:college_course, name: 'Bachelor By Name Scope') }
 
       let!(:college_courses) { create_list(:college_course, 3) }
