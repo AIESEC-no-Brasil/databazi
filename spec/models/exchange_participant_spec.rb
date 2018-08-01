@@ -24,4 +24,23 @@ RSpec.describe ExchangeParticipant, type: :model do
     it { is_expected.to belong_to :university }
     it { is_expected.to belong_to :college_course }
   end
+
+  describe "#methods" do
+    describe "#decrypted_password" do
+      subject(:exchange_participant) do
+        create(:exchange_participant,
+               registerable: build(:gv_participant), password: "test")
+      end
+
+      it { expect(subject.password).not_to eq "test" }
+      it { expect(subject.decrypted_password).to eq "test" }
+
+      context "changing password" do
+        before { exchange_participant.password = "changed" }
+
+        it { expect(subject.password).to eq "changed" }
+        it { expect(subject.decrypted_password).to eq "changed" }
+      end
+    end
+  end
 end
