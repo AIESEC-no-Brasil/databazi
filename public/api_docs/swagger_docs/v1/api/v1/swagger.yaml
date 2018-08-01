@@ -83,10 +83,21 @@ paths:
     get:
       tags:
       - "universities"
-      summary: "Returns a list of university names"
-      description: ""
+      summary: "Returns a list of university names optionally filtered by name"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
+      parameters:
+      - in: "body"
+        name: "name"
+        description: "Optional filter by name"
+        required: false
+        schema:
+          properties:
+            name:
+              type: "string"
+              example: "unesp"
       responses:
         200:
           description: "Success"
@@ -94,9 +105,21 @@ paths:
     get:
       tags:
       - "college_courses"
-      summary: "Returns a list of college courses names"
+      summary: "Returns a list of college courses names optionally filtered by name"
+      consumes:
+      - "application/json"
       produces:
       - "application/json"
+      parameters:
+      - in: "body"
+        name: "name"
+        description: "Optional filter by name"
+        required: false
+        schema:
+          properties:
+            name:
+              type: "string"
+              example: "computacao"
       responses:
         200:
           description: "Success"
