@@ -1,0 +1,40 @@
+require: rubocop-rspec
+AllCops:
+  Exclude:
+    - 'config/**/*'
+    - 'script/**/*'
+    - 'bin/**/*'
+    - 'Vagrantfile'
+    - 'Guardfile'
+Metrics/BlockLength:
+  ExcludedMethods:
+    - describe
+    - context
+  Exclude:
+    - 'db/schema.rb'
+Metrics/LineLength:
+  Exclude:
+    - 'db/seeds/**'
+    - 'db/schema.rb'
+RSpec/NestedGroups:
+  Max: 4
+Style/Documentation:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
+Style/NumericLiterals:
+  Exclude:
+    - 'db/seeds/**'
+    - 'db/schema.rb'
+Style/StringLiterals:
+  Exclude:
+    - 'db/schema.rb'
+Style/SymbolArray:
+  Exclude:
+    - 'db/migrate/**'
+Style/SymbolProc:
+  Exclude:
+    - 'db/migrate/**'
+Style/WordArray:
+  Exclude:
+    - 'db/schema.rb'
