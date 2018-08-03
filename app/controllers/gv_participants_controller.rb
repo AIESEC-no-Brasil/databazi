@@ -19,7 +19,7 @@ class GvParticipantsController < ApplicationController
       .require(:gv_participant)
       .permit(exchange_participant_attributes: %i[
                 id fullname birthdate email cellphone local_committee_id
-                university_id college_course_id
+                university_id college_course_id password
               ])
   end
 
@@ -34,6 +34,6 @@ class GvParticipantsController < ApplicationController
   def exchange_participant_params
     params[:gv_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
-             :local_committee_id, :university_id, :college_course_id)
+             :local_committee_id, :university_id, :college_course_id, :password)
   end
 end

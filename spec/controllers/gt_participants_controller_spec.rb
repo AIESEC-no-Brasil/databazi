@@ -22,7 +22,8 @@ RSpec.describe GtParticipantsController, type: :controller do
         experience: gt_participant.experience,
         local_committee_id: exchange_participant.local_committee_id,
         college_course_id: exchange_participant.college_course_id,
-        university_id: exchange_participant.university_id
+        university_id: exchange_participant.university_id,
+        password: exchange_participant.password
       }
     end
     let(:response) { JSON.parse(subject.body) }
