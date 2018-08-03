@@ -9,8 +9,6 @@ gem 'faker'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.11'
 gem 'rails', '~> 5.2.0'
-gem 'rubocop', require: false
-gem 'rubocop-rspec'
 gem 'swagger_ui_engine'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
@@ -18,7 +16,10 @@ group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'factory_bot_rails'
   gem 'guard-rspec', require: false
+  gem 'guard-rubocop'
   gem 'rspec-rails', '~> 3.7'
+  gem 'rubocop', require: false
+  gem 'rubocop-rspec'
   gem 'shoulda-matchers'
 end
 
