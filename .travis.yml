@@ -1,17 +1,19 @@
 addons:
   postgresql: 9.6
-#   code_climate:
-#       repo_token: <Get from Code Climate>
-# after_success:
-#   - bundle exec codeclimate-test-reporter
 before_script:
-  - cp config/local_env.yml.travis config/local_env.yml
-  - cp config/database.yml.travis config/database.yml
-  - psql -c 'create database travis_ci_test;' -U postgres
+- cp config/local_env.yml.travis config/local_env.yml
+- cp config/database.yml.travis config/database.yml
+- psql -c 'create database travis_ci_test;' -U postgres
 dist: trusty
 language: ruby
 rvm:
-  - 2.5.1
+- 2.5.1
 script:
-  - bundle exec rails db:migrate RAILS_ENV=test
-  - bundle exec rspec
+- bundle exec rails db:migrate RAILS_ENV=test
+- bundle exec rspec
+after_success:
+  - "openssl aes-256-cbc -k $DEPLOY_KEY -in config/deploy_id_rsa_enc_travis -d -a -out config/deploy_id_rsa"
+  - "bundle exec cap staging deploy"
+env:
+  global:
+    secure: U0uGp3KVJKQOuXgnY9lt8GeqrBwMx7V6VOlgGPkC/KyOMWlMBPmkwQAjKg1SwDcHmpnGT/EjBmZldVSRn+D+pqG1acPiwkZGrOESPOAFhpFT1ZtyaNxjuv5tEp8NQK4scOkN1aJiEcRsOf+A0JWuH3tYdPvJmoxGYDNXSNC9v0V1yFqZdzEZN/Rb+Zt+5EcAh5PHOuQYuYi88Gqa09jwKnbKb2PpswvEkwVHpYJK5SpLvtvJ2z+DmZtHIIcXM7WW/x3ujvLPsI3lKqmuzYZ3EfoO0O2yZGEg2UUHrj93GFpaLst1ljEj+noFkrHiAOiiGNwyxemU7lA0iDq+SE//VWNtKb5hfDNc7Um7p44Tad7LeMsnWCBwyWnVp0ZsckteK8NOwoD6MqdMJn7P8qHitmJ9yrcZoRmgfxLEqL7uqpWJCrgjglJ0jNogANGMKYQWYof/HIBn2sMY/+I3uQqOUghp2wE4jG5SQmXK3Kc9cNI7dDAkxMtXLCXiD0+EEnFktlxFr1SSE2UgDkpCnrqcARrC9AANPujdyY7xFVoGuU4y7ozGkU50BuyLgo/jlS4NnDiMkbVyBiS3BRUsRlDDWnDN9siyJN/J8x4AcMOmItvLbh2GJtkY5OWHHMbhxqiVjFrCr7sA6EekJ1UT38Jr71twS3+4TTLonoBOT3TS74c=
