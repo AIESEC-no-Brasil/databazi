@@ -1,6 +1,7 @@
 addons:
   postgresql: 9.6
 before_script:
+- chmod +x deploy.sh 
 - cp config/local_env.yml.travis config/local_env.yml
 - cp config/database.yml.travis config/database.yml
 - psql -c 'create database travis_ci_test;' -U postgres
@@ -11,15 +12,8 @@ rvm:
 script:
 - bundle exec rails db:migrate RAILS_ENV=test
 - bundle exec rspec
-deploy:
-- provider: script
-  skip_cleanup: true
-  scipt:
-  - openssl aes-256-cbc -k $DEPLOY_KEY -in config/deploy_id_rsa_travis_enc_travis -d -a -out
-    config/deploy_id_rsa
-  - bundle exec cap staging deploy
-  on:
-    branch: staging
+after_success:
+- ./deploy.sh
 env:
   global:
     secure: BifOZuT0bYI7olqTHW2u6rBiD46PR2m8xFGKdN24IKx4+kRXB73jp7CHpvi9vvU/1qyB0I2XpD0LQhuYJkoEYq3J9gPOxU66Q2WHnrxVWUpJakPo0Yu1hTHCQWFBZ+RsNfQGm0FL4rystPJlF/+r+cM8wYnY+IKt3yUBucz2BA4gVGNS5lLoux4S27+ESBZ1QGRseBuBxFB4naUnD9TKXaVJgzE8FAGqEh4eC5L5ud0uTHxQS4xpoROHQNKPQImqEjHkr5zBxl941qJiEurLxSWst5qUeQy6YtvyHzXioNevDDGJwLvAsxkb8niFKb8LOMrMKYsMLyVdw6Hk534MGMOVcXSyXv3zzxCAw+ftShJGuQbk1BDesXu+rG5SuBefI+ksVgjKNcbqo74WXRdcmbpr5hDwUZOz1VXTm3EuOyX9U6h61jf0g+blDMm7NrjCYkFLPqaqUDGZ0WCTlHi1eal4RrVpGciSWgd5emwe3ruGOTRothSyAdDuWpLhSf7qkTqzVdnUGrh5TKq3/UIpe42MmZAwV6Hxt7xkh4aOzLEntFnL+CaocbMs29KNtTxUDI4RpLzQDCfhQugRQw9QlkZPS+eiZaTIqW794icWtH/hF9s5Ga55fHoXXb1k7Txp4VR5/dXk7Q6OmTOt5Qsm/2e8nLxLw0bEGZrZKnZo3qI=
