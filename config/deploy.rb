@@ -20,6 +20,8 @@ set :puma_preload_app, true
 set :puma_worker_timeout, nil
 set :puma_init_active_record, true  # Change to false when not using ActiveRecord
 
+set :ssh_options, keys: ["config/deploy_id_rsa"] if File.exist?("config/deploy_id_rsa")
+
 ## Defaults:
 # set :scm,           :git
 # set :branch,        :staging
@@ -44,17 +46,6 @@ namespace :puma do
 end
 
 namespace :deploy do
-  desc "Make sure local git is in sync with remote."
-  task :check_revision do
-    on roles(:app) do
-      unless `git rev-parse HEAD` == `git rev-parse upstream/staging`
-        puts "WARNING: HEAD is not the same as upstream/staging"
-        puts "Run `git push` to sync changes."
-        exit
-      end
-    end
-  end
-
   desc 'Initial Deploy'
   task :initial do
     on roles(:app) do
@@ -70,7 +61,6 @@ namespace :deploy do
     end
   end
 
-  before :starting,     :check_revision
   after  :finishing,    :compile_assets
   after  :finishing,    :cleanup
   after  :finishing,    :restart

@@ -1,4 +1,4 @@
-server 'qa.databazi.aiesec.org.br', port: 22, roles: [:web, :app, :db], primary: true
+server 'qa.databazi.aiesec.org.br', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
 
 set :branch, :staging
 
