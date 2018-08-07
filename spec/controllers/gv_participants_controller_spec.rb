@@ -6,7 +6,7 @@ RSpec.describe GvParticipantsController, type: :controller do
     build(:gv_participant, exchange_participant: exchange_participant)
   end
 
-  describe "#create" do
+  describe '#create' do
     subject(:do_create) { post :create, params: { gv_participant: gv_params } }
 
     let(:gv_params) do
@@ -24,25 +24,33 @@ RSpec.describe GvParticipantsController, type: :controller do
     let(:response) { JSON.parse(subject.body) }
 
     it { is_expected.to be_successful }
-    context "success" do
+    context 'when successful' do
       it { expect { do_create }.to change(ExchangeParticipant, :count).by 1 }
       it { expect { do_create }.to change(GvParticipant, :count).by 1 }
 
-      describe "response" do
+      describe 'response' do
         it { expect(response['status']).to eq 'success' }
       end
     end
 
-    context "failure" do
-      before { allow_any_instance_of(GvParticipant).to receive(:save).and_return(false) }
+    context 'when unsuccessful' do
+      before do
+        allow(participant_double).to receive(:save).and_return(false)
+        allow(errors).to receive(:messages).and_return(['error'])
+        allow(participant_double).to receive(:errors).and_return(errors)
+        allow(controller)
+          .to receive(:gv_participant).and_return(participant_double)
+      end
+
+      let(:participant_double) { instance_double(GvParticipant) }
+      let(:errors) { instance_double(ActiveModel::Errors) }
 
       it { expect { do_create }.not_to change(ExchangeParticipant, :count) }
       it { expect { do_create }.not_to change(GvParticipant, :count) }
 
-      describe "response" do
+      describe 'response' do
         it { expect(response['status']).to eq 'failure' }
       end
     end
   end
-
 end

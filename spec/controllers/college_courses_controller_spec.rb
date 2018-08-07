@@ -1,41 +1,46 @@
 require 'rails_helper'
 
 RSpec.describe CollegeCoursesController, type: :controller do
-  describe "#index" do
-    let(:response) { JSON.parse(subject.body) }
- 
+  describe '#index' do
     subject(:do_index) { get :index }
 
-    it { is_expected.to be_successful }
+    let(:response) { JSON.parse(subject.body) }
 
-    describe "response" do
-      context "empty list" do
-        it { expect(response).to be_empty }
+    it { is_expected.to be_successful }
+    it { expect(response).to be_empty }
+
+    describe 'response' do
+      before { create_list(:college_course, 3) }
+
+      it 'is properly formatter' do
+        expect(response.first.keys).to match_array(%w[id name])
       end
 
-      context "filled list" do
-        before { create_list(:college_course, 3) }
-        
-        context 'format' do
-          it { expect(response.first.keys).to match_array(['id', 'name']) }
+      context 'with no params' do
+        it do
+          expected = CollegeCourse.all
+          expect(response).to match_array(expected.as_json(only: %i[id name]))
         end
 
-        context 'with no params' do
-          it { expect(response).to match_array(CollegeCourse.all.as_json(only: [:id, :name])) }
+        it { expect(response.size).to eq CollegeCourse.count }
+      end
 
-          it { expect(response.count).to eq CollegeCourse.count }
+      context 'with name param' do
+        subject(:do_index) { get :index, params: { name: 'abc' } }
+
+        let!(:first_college_course) do
+          create(:college_course, name: 'Bachelor in ABC')
+        end
+        let!(:second_college_course) do
+          create(:college_course, name: 'Abc Master\'s Degree')
         end
 
-        context 'with name param' do
-          subject(:do_index) { get :index, params: { name: 'abc' } }
-
-          let!(:first_college_course) { create(:college_course, name: 'Bachelor in ABC') }
-          let!(:second_college_course) { create(:college_course, name: 'Abc Master\'s Degree') }
-
-          it { expect(response).to match_array([first_college_course, second_college_course].as_json(only: [:id, :name])) }
-
-          it { expect(response.count).to eq([first_college_course, second_college_course].count) }
+        it do
+          expected = [first_college_course, second_college_course]
+          expect(response).to match_array(expected.as_json(only: %i[id name]))
         end
+
+        it { expect(response.size).to eq 2 }
       end
     end
   end

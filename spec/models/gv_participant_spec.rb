@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe GvParticipant, type: :model do
-  describe "#associations" do
+  describe '#associations' do
     it { is_expected.to have_one(:exchange_participant).dependent(:destroy) }
   end
 
-  describe "#attributes" do
+  describe '#attributes' do
     it { is_expected.to respond_to :fullname }
     it { is_expected.to respond_to :cellphone }
     it { is_expected.to respond_to :email }

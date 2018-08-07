@@ -14,19 +14,18 @@ class ExchangeParticipant < ApplicationRecord
   belongs_to :college_course
 
   def decrypted_password
-    return self.password if self.password_changed?
-    password_encryptor.decrypt_and_verify(self.password)
+    return password if password_changed?
+    password_encryptor.decrypt_and_verify(password)
   end
 
   private
 
   def encrypted_password
-    self.password = password_encryptor.encrypt_and_sign(self.password)
+    self.password = password_encryptor.encrypt_and_sign(password)
   end
 
   def password_encryptor
     key = ActiveSupport::KeyGenerator.new('password').generate_key(ENV['SALT'], 32)
     ActiveSupport::MessageEncryptor.new(key)
   end
-
 end
