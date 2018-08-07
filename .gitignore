@@ -22,6 +22,7 @@
 /config/master.key
 
 *.sw?
+Session.vim
 
 config/database.yml
 config/local_env.yml
