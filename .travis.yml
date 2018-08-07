@@ -5,6 +5,7 @@ addons:
 # after_success:
 #   - bundle exec codeclimate-test-reporter
 before_script:
+  - cp config/local_env.yml.travis config/local_env.yml
   - cp config/database.yml.travis config/database.yml
   - psql -c 'create database travis_ci_test;' -U postgres
 dist: trusty
