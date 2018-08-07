@@ -11,9 +11,15 @@ rvm:
 script:
 - bundle exec rails db:migrate RAILS_ENV=test
 - bundle exec rspec
-after_success:
-  - "openssl aes-256-cbc -k $DEPLOY_KEY -in config/deploy_id_rsa_enc_travis -d -a -out config/deploy_id_rsa"
-  - "bundle exec cap staging deploy"
+deploy:
+- provider: script
+  skip_cleanup: true
+  scipt:
+  - openssl aes-256-cbc -k $DEPLOY_KEY -in config/deploy_id_rsa_travis_enc_travis -d -a -out
+    config/deploy_id_rsa
+  - bundle exec cap staging deploy
+  on:
+    branch: staging
 env:
   global:
-    secure: U0uGp3KVJKQOuXgnY9lt8GeqrBwMx7V6VOlgGPkC/KyOMWlMBPmkwQAjKg1SwDcHmpnGT/EjBmZldVSRn+D+pqG1acPiwkZGrOESPOAFhpFT1ZtyaNxjuv5tEp8NQK4scOkN1aJiEcRsOf+A0JWuH3tYdPvJmoxGYDNXSNC9v0V1yFqZdzEZN/Rb+Zt+5EcAh5PHOuQYuYi88Gqa09jwKnbKb2PpswvEkwVHpYJK5SpLvtvJ2z+DmZtHIIcXM7WW/x3ujvLPsI3lKqmuzYZ3EfoO0O2yZGEg2UUHrj93GFpaLst1ljEj+noFkrHiAOiiGNwyxemU7lA0iDq+SE//VWNtKb5hfDNc7Um7p44Tad7LeMsnWCBwyWnVp0ZsckteK8NOwoD6MqdMJn7P8qHitmJ9yrcZoRmgfxLEqL7uqpWJCrgjglJ0jNogANGMKYQWYof/HIBn2sMY/+I3uQqOUghp2wE4jG5SQmXK3Kc9cNI7dDAkxMtXLCXiD0+EEnFktlxFr1SSE2UgDkpCnrqcARrC9AANPujdyY7xFVoGuU4y7ozGkU50BuyLgo/jlS4NnDiMkbVyBiS3BRUsRlDDWnDN9siyJN/J8x4AcMOmItvLbh2GJtkY5OWHHMbhxqiVjFrCr7sA6EekJ1UT38Jr71twS3+4TTLonoBOT3TS74c=
+    secure: BifOZuT0bYI7olqTHW2u6rBiD46PR2m8xFGKdN24IKx4+kRXB73jp7CHpvi9vvU/1qyB0I2XpD0LQhuYJkoEYq3J9gPOxU66Q2WHnrxVWUpJakPo0Yu1hTHCQWFBZ+RsNfQGm0FL4rystPJlF/+r+cM8wYnY+IKt3yUBucz2BA4gVGNS5lLoux4S27+ESBZ1QGRseBuBxFB4naUnD9TKXaVJgzE8FAGqEh4eC5L5ud0uTHxQS4xpoROHQNKPQImqEjHkr5zBxl941qJiEurLxSWst5qUeQy6YtvyHzXioNevDDGJwLvAsxkb8niFKb8LOMrMKYsMLyVdw6Hk534MGMOVcXSyXv3zzxCAw+ftShJGuQbk1BDesXu+rG5SuBefI+ksVgjKNcbqo74WXRdcmbpr5hDwUZOz1VXTm3EuOyX9U6h61jf0g+blDMm7NrjCYkFLPqaqUDGZ0WCTlHi1eal4RrVpGciSWgd5emwe3ruGOTRothSyAdDuWpLhSf7qkTqzVdnUGrh5TKq3/UIpe42MmZAwV6Hxt7xkh4aOzLEntFnL+CaocbMs29KNtTxUDI4RpLzQDCfhQugRQw9QlkZPS+eiZaTIqW794icWtH/hF9s5Ga55fHoXXb1k7Txp4VR5/dXk7Q6OmTOt5Qsm/2e8nLxLw0bEGZrZKnZo3qI=
