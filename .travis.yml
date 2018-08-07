@@ -1,6 +1,7 @@
 addons:
   postgresql: 9.6
 before_script:
+- chmod +x deploy.sh 
 - cp config/local_env.yml.travis config/local_env.yml
 - cp config/database.yml.travis config/database.yml
 - psql -c 'create database travis_ci_test;' -U postgres
