@@ -133,6 +133,28 @@ paths:
       responses:
         200:
           description: "Success"
+  /exchange_participants:
+    get:
+      tags:
+      - "exchange_participants"
+      summary: "Returns the existence status for an exchange participant email"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "email"
+        description: "Input email to be checked for existence"
+        required: true
+        schema:
+          properties:
+            email:
+              type: "string"
+              example: "johndoe@example.com"
+      responses:
+        200:
+          description: "Success"
 definitions:
   GvParticipant:
     type: "object"
