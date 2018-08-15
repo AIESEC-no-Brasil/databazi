@@ -21,6 +21,7 @@ class ExchangeParticipantsController < ApplicationController
   end
 
   def bazicon_email_validation(_email)
+    # TODO
     # Uncomment method when
     # https://github.com/AIESEC-no-Brasil/Bazicon/pull/213
     # has been merged and deployed to production
