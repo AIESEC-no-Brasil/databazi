@@ -25,7 +25,8 @@ class ExchangeParticipant < ApplicationRecord
   end
 
   def password_encryptor
-    key = ActiveSupport::KeyGenerator.new('password').generate_key(ENV['SALT'], 32)
+    key = ActiveSupport::KeyGenerator.new('password')
+                                     .generate_key(ENV['SALT'], 32)
     ActiveSupport::MessageEncryptor.new(key)
   end
 end
