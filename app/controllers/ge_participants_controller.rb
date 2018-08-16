@@ -4,18 +4,6 @@ class GeParticipantsController < ApplicationController
   expose :ge_participant
   expose :exchange_participantable, -> { ge_participant }
 
-  def create
-    if ge_participant.save
-      SignUpWorker.perform_async(ge_participant.as_sqs)
-      render json: { status: :success }
-    else
-      render json: {
-        status: :failure,
-        messages: ge_participant.errors.messages
-      }
-    end
-  end
-
   private
 
   def ge_participant_params
