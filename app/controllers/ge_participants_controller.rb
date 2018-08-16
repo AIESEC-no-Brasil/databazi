@@ -1,5 +1,8 @@
 class GeParticipantsController < ApplicationController
+  include ExchangeParticipantable
+
   expose :ge_participant
+  expose :exchange_participantable, -> { ge_participant }
 
   def create
     if ge_participant.save
