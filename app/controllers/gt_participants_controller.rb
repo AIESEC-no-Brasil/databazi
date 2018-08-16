@@ -3,6 +3,7 @@ class GtParticipantsController < ApplicationController
 
   def create
     if gt_participant.save
+      SignUpWorker.perform_async(gt_participant.as_sqs)
       render json: { status: :success }
     else
       render json: {

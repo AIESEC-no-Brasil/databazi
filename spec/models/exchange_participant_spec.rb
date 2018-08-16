@@ -26,12 +26,13 @@ RSpec.describe ExchangeParticipant, type: :model do
   end
 
   describe '#methods' do
-    describe '#decrypted_password' do
-      subject(:exchange_participant) do
-        create(:exchange_participant,
-               registerable: build(:gv_participant), password: 'test')
-      end
+    let(:exchange_participant) do
+      create(:exchange_participant,
+             fullname: 'Forrest Gump',
+             registerable: build(:gv_participant), password: 'test')
+    end
 
+    describe '#decrypted_password' do
       it { expect(exchange_participant.password).not_to eq 'test' }
       it { expect(exchange_participant.decrypted_password).to eq 'test' }
 
@@ -41,6 +42,28 @@ RSpec.describe ExchangeParticipant, type: :model do
         it { expect(exchange_participant.password).to eq 'changed' }
         it { expect(exchange_participant.decrypted_password).to eq 'changed' }
       end
+    end
+
+    describe '#first_name' do
+      subject { exchange_participant.first_name }
+
+      it { is_expected.to eq 'Forrest' }
+    end
+
+    describe '#last_name' do
+      subject { exchange_participant.last_name }
+
+      it { is_expected.to eq 'Gump' }
+    end
+
+    describe '#as_sqs' do
+      subject { exchange_participant.as_sqs }
+
+      let(:expected) do
+        { exchange_participant_id: exchange_participant.id }
+      end
+
+      it { is_expected.to match_array expected }
     end
   end
 end

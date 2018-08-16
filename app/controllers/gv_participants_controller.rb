@@ -3,6 +3,7 @@ class GvParticipantsController < ApplicationController
 
   def create
     if gv_participant.save
+      SignUpWorker.perform_async(gv_participant.as_sqs)
       render json: { status: :success }
     else
       render json: {
