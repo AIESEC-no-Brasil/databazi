@@ -30,7 +30,7 @@ set :ssh_options, keys: ["config/deploy_id_rsa"] if File.exist?("config/deploy_i
 # set :keep_releases, 5
 
 ## Linked Files & Directories (Default None):
-set :linked_files, %w{config/database.yml config/master.key}
+set :linked_files, %w{config/database.yml config/master.key config/local_env.yml}
 # set :linked_dirs,  %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system config}
 
 namespace :puma do
