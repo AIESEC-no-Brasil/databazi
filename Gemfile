@@ -3,12 +3,14 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.5.1'
 
+gem 'aws-sdk-sqs'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'decent_exposure'
 gem 'faker'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.11'
 gem 'rails', '~> 5.2.0'
+gem 'shoryuken'
 gem 'swagger_ui_engine'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 

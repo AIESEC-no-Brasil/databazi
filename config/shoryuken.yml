@@ -1,0 +1,4 @@
+concurrency: 5
+delay: 0
+queues:
+  - [sign_up_queue, 1]
