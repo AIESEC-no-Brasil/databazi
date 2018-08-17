@@ -1,16 +1,8 @@
 class GeParticipantsController < ApplicationController
-  expose :ge_participant
+  include ExchangeParticipantable
 
-  def create
-    if ge_participant.save
-      render json: { status: :success }
-    else
-      render json: {
-        status: :failure,
-        messages: ge_participant.errors.messages
-      }
-    end
-  end
+  expose :ge_participant
+  expose :exchange_participantable, -> { ge_participant }
 
   private
 

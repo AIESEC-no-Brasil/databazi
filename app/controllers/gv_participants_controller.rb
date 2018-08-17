@@ -1,16 +1,8 @@
 class GvParticipantsController < ApplicationController
-  expose :gv_participant
+  include ExchangeParticipantable
 
-  def create
-    if gv_participant.save
-      render json: { status: :success }
-    else
-      render json: {
-        status: :failure,
-        messages: gv_participant.errors.messages
-      }
-    end
-  end
+  expose :gv_participant
+  expose :exchange_participantable, -> { gv_participant }
 
   private
 
