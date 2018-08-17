@@ -6,7 +6,7 @@ RSpec.describe GvParticipantsController, type: :controller do
     build(:gv_participant, exchange_participant: exchange_participant)
   end
 
-  describe '#create' do
+  describe '#create', aws: true do
     subject(:do_create) { post :create, params: { gv_participant: gv_params } }
 
     let(:gv_params) do

@@ -8,7 +8,7 @@ RSpec.describe GeParticipantsController, type: :controller do
                            exchange_participant: exchange_participant)
   end
 
-  describe '#create' do
+  describe '#create', aws: true do
     subject(:do_create) { post :create, params: { ge_participant: ge_params } }
 
     let(:ge_params) do

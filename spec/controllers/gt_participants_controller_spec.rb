@@ -8,7 +8,7 @@ RSpec.describe GtParticipantsController, type: :controller do
                            exchange_participant: exchange_participant)
   end
 
-  describe '#create' do
+  describe '#create', aws: true do
     subject(:do_create) { post :create, params: { gt_participant: gt_params } }
 
     let(:gt_params) do
