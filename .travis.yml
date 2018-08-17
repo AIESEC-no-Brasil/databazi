@@ -11,7 +11,7 @@ language: ruby
 rvm:
 - 2.5.1
 script:
-- - '[ "${TRAVIS_PULL_REQUEST}" = "true" ] && bundle exec rspec spec/ --flag ~aws:true || bundle exec rspec spec/'
+- '[ "${TRAVIS_PULL_REQUEST}" = "true" ] && bundle exec rspec spec/ --flag ~aws:true || bundle exec rspec spec/'
 after_success:
 - "./deploy.sh"
 env:
