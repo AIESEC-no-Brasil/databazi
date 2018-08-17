@@ -4,5 +4,5 @@ bundle exec rails db:migrate RAILS_ENV=test
 if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
 	bundle exec rspec spec/
 else
-	bundle exec rspec spec/ --flag ~aws:true
+	eval "bundle exec rspec spec/ --flag ~aws:true"
 fi
