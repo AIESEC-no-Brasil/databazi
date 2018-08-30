@@ -7,14 +7,14 @@ gem 'aws-sdk-sqs'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'decent_exposure'
 gem 'faker'
+gem 'mechanize'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.11'
+gem 'rack-cors'
 gem 'rails', '~> 5.2.0'
 gem 'shoryuken'
 gem 'swagger_ui_engine'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
-gem 'rack-cors'
-gem 'mechanize'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
