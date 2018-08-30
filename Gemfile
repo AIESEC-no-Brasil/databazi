@@ -13,6 +13,7 @@ gem 'rails', '~> 5.2.0'
 gem 'shoryuken'
 gem 'swagger_ui_engine'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+gem 'rack-cors'
 gem 'mechanize'
 
 group :development, :test do
