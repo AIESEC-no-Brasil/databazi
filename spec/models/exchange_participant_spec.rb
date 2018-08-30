@@ -7,6 +7,7 @@ RSpec.describe ExchangeParticipant, type: :model do
     it { is_expected.to respond_to :email }
     it { is_expected.to respond_to :birthdate }
     it { is_expected.to respond_to :password }
+    it { is_expected.to respond_to :cellphone_contactable }
   end
 
   describe '#validations' do

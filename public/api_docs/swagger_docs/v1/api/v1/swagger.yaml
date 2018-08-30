@@ -167,6 +167,7 @@ definitions:
     - "local_committee"
     - "university"
     - "college_course"
+    - "cellphone_contactable"
     properties:
       gv_participant:
         type: "object"
@@ -195,6 +196,9 @@ definitions:
           college_course_id:
             type: "integer"
             example: 1
+          cellphone_contactable:
+            type: "boolean"
+            example: false
   GtParticipant:
     type: "object"
     required:
@@ -209,6 +213,7 @@ definitions:
     - "local_committee"
     - "university"
     - "college_course"
+    - "cellphone_contactable"
     properties:
       gt_participant:
         type: "object"
@@ -246,6 +251,9 @@ definitions:
           college_course_id:
             type: "integer"
             example: 1
+          cellphone_contactable:
+            type: "boolean"
+            example: false
   GeParticipant:
     type: "object"
     required:
@@ -259,6 +267,7 @@ definitions:
     - "local_committee"
     - "university"
     - "college_course"
+    - "cellphone_contactable"
     properties:
       ge_participant:
         type: "object"
@@ -293,6 +302,9 @@ definitions:
           college_course_id:
             type: "integer"
             example: 1
+          cellphone_contactable:
+            type: "boolean"
+            example: false
   ApiResponse:
     type: "object"
     properties:
