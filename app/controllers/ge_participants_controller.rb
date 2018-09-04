@@ -3,6 +3,7 @@ class GeParticipantsController < ApplicationController
 
   expose :ge_participant
   expose :exchange_participantable, -> { ge_participant }
+  expose :ep_fields, -> { ge_participant_fields }
 
   private
 
@@ -36,5 +37,15 @@ class GeParticipantsController < ApplicationController
   def english_level_params
     params[:ge_participant]
       .slice(:english_level)
+  end
+
+  def ge_participant_fields
+    {
+      'email' => ge_participant.email,
+      'fullname' => ge_participant.fullname,
+      'cellphone' => ge_participant.cellphone,
+      'birthdate' => ge_participant.birthdate,
+      'podio_app' => 170_576_29
+    }
   end
 end
