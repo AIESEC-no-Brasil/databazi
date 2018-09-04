@@ -162,10 +162,12 @@ definitions:
     - "fullname"
     - "cellphone"
     - "email"
+    - "password"
     - "birthdate"
     - "local_committee"
     - "university"
     - "college_course"
+    - "cellphone_contactable"
     properties:
       gv_participant:
         type: "object"
@@ -179,6 +181,9 @@ definitions:
           email:
             type: "string"
             example: "johndoe@example.com"
+          password:
+            type: "string"
+            example: "Mypass123"
           birthdate:
             type: "string"
             example: "1930-05-11"
@@ -191,12 +196,16 @@ definitions:
           college_course_id:
             type: "integer"
             example: 1
+          cellphone_contactable:
+            type: "boolean"
+            example: false
   GtParticipant:
     type: "object"
     required:
     - "fullname"
     - "cellphone"
     - "email"
+    - "password"
     - "birthdate"
     - "english_level"
     - "experience"
@@ -204,6 +213,7 @@ definitions:
     - "local_committee"
     - "university"
     - "college_course"
+    - "cellphone_contactable"
     properties:
       gt_participant:
         type: "object"
@@ -217,6 +227,9 @@ definitions:
           email:
             type: "string"
             example: "johndoe@example.com"
+          password:
+            type: "string"
+            example: "Mypass123"
           birthdate:
             type: "string"
             example: "1930-05-11"
@@ -238,18 +251,23 @@ definitions:
           college_course_id:
             type: "integer"
             example: 1
+          cellphone_contactable:
+            type: "boolean"
+            example: false
   GeParticipant:
     type: "object"
     required:
     - "fullname"
     - "cellphone"
     - "email"
+    - "password"
     - "birthdate"
     - "spanish_level"
     - "english_level"
     - "local_committee"
     - "university"
     - "college_course"
+    - "cellphone_contactable"
     properties:
       ge_participant:
         type: "object"
@@ -263,6 +281,9 @@ definitions:
           email:
             type: "string"
             example: "johndoe@example.com"
+          password:
+            type: "string"
+            example: "Mypass123"
           birthdate:
             type: "string"
             example: "1930-05-11"
@@ -281,6 +302,9 @@ definitions:
           college_course_id:
             type: "integer"
             example: 1
+          cellphone_contactable:
+            type: "boolean"
+            example: false
   ApiResponse:
     type: "object"
     properties:
