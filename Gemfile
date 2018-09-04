@@ -8,6 +8,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'decent_exposure'
 gem 'faker'
 gem 'pg', '>= 0.18', '< 2.0'
+gem 'podio'
 gem 'puma', '~> 3.11'
 gem 'rails', '~> 5.2.0'
 gem 'shoryuken'

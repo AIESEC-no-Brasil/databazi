@@ -3,6 +3,7 @@ class GvParticipantsController < ApplicationController
 
   expose :gv_participant
   expose :exchange_participantable, -> { gv_participant }
+  expose :ep_fields, -> { gv_participant_fields }
 
   private
 
@@ -27,5 +28,15 @@ class GvParticipantsController < ApplicationController
     params[:gv_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id, :password)
+  end
+
+  def gv_participant_fields
+    {
+      'email' => gv_participant.email,
+      'fullname' => gv_participant.fullname,
+      'cellphone' => gv_participant.cellphone,
+      'birthdate' => gv_participant.birthdate,
+      'podio_app' => 152_908_22
+    }
   end
 end

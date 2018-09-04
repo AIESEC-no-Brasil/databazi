@@ -3,6 +3,7 @@ class GtParticipantsController < ApplicationController
 
   expose :gt_participant
   expose :exchange_participantable, -> { gt_participant }
+  expose :ep_fields, -> { gt_participant_fields }
 
   private
 
@@ -37,5 +38,15 @@ class GtParticipantsController < ApplicationController
   def english_level_params
     params[:gt_participant]
       .slice(:english_level)
+  end
+
+  def gt_participant_fields
+    {
+      'email' => gt_participant.email,
+      'fullname' => gt_participant.fullname,
+      'cellphone' => gt_participant.cellphone,
+      'birthdate' => gt_participant.birthdate,
+      'podio_app' => 170_570_01
+    }
   end
 end
