@@ -3,6 +3,7 @@ module ExchangeParticipantable
 
   def create
     if exchange_participantable.save
+      SendToPodioWorker.perform_async(ep_fields)
       SignUpWorker.perform_async(exchange_participantable.as_sqs)
       render json: { status: :success }
     else

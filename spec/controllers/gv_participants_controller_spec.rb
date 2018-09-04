@@ -25,7 +25,11 @@ RSpec.describe GvParticipantsController, type: :controller do
 
     it { is_expected.to be_successful }
     context 'when successful' do
-      before { SignUpWorker.stub(:perform_async) }
+      before do
+        SignUpWorker.stub(:perform_async)
+        SendToPodioWorker.stub(:perform_async)
+        SendToPodio.stub(:call)
+      end
 
       it { expect { do_create }.to change(ExchangeParticipant, :count).by 1 }
       it { expect { do_create }.to change(GvParticipant, :count).by 1 }
@@ -33,6 +37,12 @@ RSpec.describe GvParticipantsController, type: :controller do
         do_create
 
         expect(SignUpWorker).to have_received(:perform_async)
+      end
+
+      it 'sends message to podio' do
+        do_create
+
+        expect(SendToPodioWorker).to have_received(:perform_async)
       end
 
       describe 'response' do
