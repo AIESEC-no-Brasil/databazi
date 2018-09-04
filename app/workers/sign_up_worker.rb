@@ -7,7 +7,7 @@ class SignUpWorker
                     auto_delete: false,
                     body_parser: JSON
 
-  def perform(_sqs_msg, body)
-    ExpaSignUp.call(body)
+  def perform(sqs_msg, body)
+    sqs_msg.delete if ExpaSignUp.call(body)
   end
 end
