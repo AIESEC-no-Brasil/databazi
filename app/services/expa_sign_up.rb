@@ -21,7 +21,15 @@ class ExpaSignUp
   def send_data_to_expa(exchange_participant)
     page = sign_in_page
 
-    auth_form = page.forms[1]
+    fill_form(page.forms[1], exchange_participant)
+
+    page = agent.submit(auth_form, auth_form.buttons.first)
+    page.code.to_i == 200 &&
+      EXPA::Client.new.auth(exchange_participant.email,
+                            exchange_participant.decrypted_password)
+  end
+
+  def fill_form(auth_form, exchange_participant)
     auth_form.field_with(name: 'user[email]').value =
       exchange_participant.email
     auth_form.field_with(name: 'user[first_name]').value =
@@ -43,10 +51,7 @@ class ExpaSignUp
     auth_form.checkbox_with(name: 'user[allow_phone_communication]').checked =
       exchange_participant.cellphone_contactable
 
-    page = agent.submit(auth_form, auth_form.buttons.first)
-    page.code.to_i == 200 &&
-      EXPA::Client.new.auth(exchange_participant.email,
-                            exchange_participant.decrypted_password)
+    auth_form
   end
 
   def agent
