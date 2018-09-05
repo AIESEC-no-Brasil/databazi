@@ -44,8 +44,9 @@ class ExpaSignUp
       exchange_participant.cellphone_contactable
 
     page = agent.submit(auth_form, auth_form.buttons.first)
-    page.code.to_i == 200 && EXPA::Client.new.auth(exchange_participant.email,
-      exchange_participant.decrypted_password)
+    page.code.to_i == 200 &&
+      EXPA::Client.new.auth(exchange_participant.email,
+                            exchange_participant.decrypted_password)
   end
 
   def agent

@@ -6,7 +6,7 @@ ruby '2.5.1'
 gem 'aws-sdk-sqs'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'decent_exposure'
-gem 'expa', '0.1.2.10', :git => 'http://github.com/AIESEC-no-Brasil/expa-rb'
+gem 'expa', '0.1.2.10', git: 'http://github.com/AIESEC-no-Brasil/expa-rb'
 gem 'faker'
 gem 'mechanize'
 gem 'pg', '>= 0.18', '< 2.0'
