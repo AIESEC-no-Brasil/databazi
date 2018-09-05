@@ -44,7 +44,7 @@ class ExpaSignUp
       exchange_participant.cellphone_contactable
 
     page = agent.submit(auth_form, auth_form.buttons.first)
-    page.code.to_i == 200 && auth(exchange_participant.email,
+    page.code.to_i == 200 && EXPA::Client.new.auth(exchange_participant.email,
       exchange_participant.decrypted_password)
   end
 
@@ -52,49 +52,6 @@ class ExpaSignUp
     Mechanize.new do |a|
       a.ssl_version = 'TLSv1'
       a.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    end
-  end
-
-  def auth(email, password)
-    # FIX-ME: specs pending
-    @url = 'https://auth.aiesec.org/users/sign_in'
-    @url_op = 'https://aiesec.org/auth'
-    @token = nil
-    @max_age = nil
-    @expiration_time = nil
-    @password = nil
-
-    agent = Mechanize.new do |a|
-      a.ssl_version = 'TLSv1'
-      a.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    end
-
-    page = agent.get(@url)
-    aiesec_form = page.form
-    aiesec_form.field_with(name: 'user[email]').value = email
-    aiesec_form.field_with(name: 'user[password]').value = password
-
-    begin
-      page = agent.submit(aiesec_form, aiesec_form.buttons.first)
-    rescue => exception
-      puts exception.to_s
-      false
-    else
-      if page.code.to_i == 200
-        cj = page.mech.agent.cookie_jar.store
-        index = cj.count
-        for i in 0...index
-          index = i if cj.to_a[i].domain == 'aiesec.org'
-        end
-        if index != cj.count
-          params = cj.to_a[index].value
-          data = JSON.parse(URI.decode(params))
-          @token = data['token']['access_token']
-          @expiration_time = cj.to_a[index].created_at
-          @max_age = data['token']['max_age']
-          true
-        end
-      end
     end
   end
 

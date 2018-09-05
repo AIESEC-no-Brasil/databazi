@@ -1,3 +1,9 @@
+GIT
+  remote: http://github.com/AIESEC-no-Brasil/expa-rb
+  revision: 17be76f5601d7ab0f8c08657a78e209a9e5227ad
+  specs:
+    expa (0.1.2.10)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -323,6 +329,7 @@ DEPENDENCIES
   capistrano-rvm
   capistrano3-puma
   decent_exposure
+  expa (= 0.1.2.10)!
   factory_bot_rails
   faker
   guard-rspec
