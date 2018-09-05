@@ -9,7 +9,7 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-ActiveRecord::Schema.define(version: 2018_08_30_142424) do
+ActiveRecord::Schema.define(version: 2018_09_05_175543) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -48,6 +48,17 @@ ActiveRecord::Schema.define(version: 2018_08_30_142424) do
     t.index ["university_id"], name: "index_exchange_participants_on_university_id"
   end
 
+  create_table "experiences", force: :cascade do |t|
+    t.boolean "language", default: false
+    t.boolean "marketing", default: false
+    t.boolean "information_technology", default: false
+    t.boolean "management", default: false
+    t.bigint "gt_participant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["gt_participant_id"], name: "index_experiences_on_gt_participant_id"
+  end
+
   create_table "ge_participants", force: :cascade do |t|
     t.integer "spanish_level"
     t.datetime "created_at", null: false
@@ -56,7 +67,6 @@ ActiveRecord::Schema.define(version: 2018_08_30_142424) do
 
   create_table "gt_participants", force: :cascade do |t|
     t.integer "scholarity"
-    t.integer "experience"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

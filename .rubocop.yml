@@ -16,6 +16,12 @@ Metrics/LineLength:
   Exclude:
     - 'db/seeds/**'
     - 'db/schema.rb'
+Metrics/AbcSize:
+  Exclude:
+    - 'app/services/expa_sign_up.rb'
+Metrics/MethodLength:
+  Exclude:
+    - 'app/services/expa_sign_up.rb'
 RSpec/NestedGroups:
   Max: 4
 Style/Documentation:

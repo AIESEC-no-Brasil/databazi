@@ -3,9 +3,11 @@ require 'rails_helper'
 RSpec.describe GtParticipantsController, type: :controller do
   let(:english_level) { build(:english_level) }
   let(:exchange_participant) { build(:exchange_participant) }
+  let(:experience) { build(:experience) }
   let(:gt_participant) do
     build(:gt_participant, english_level: english_level,
-                           exchange_participant: exchange_participant)
+                           exchange_participant: exchange_participant,
+                           experience: experience)
   end
 
   describe '#create', aws: true do
@@ -19,7 +21,12 @@ RSpec.describe GtParticipantsController, type: :controller do
         birthdate: gt_participant.birthdate,
         english_level: gt_participant.english_level.to_s,
         scholarity: gt_participant.scholarity,
-        experience: gt_participant.experience,
+        experience: {
+          language: experience.language,
+          marketing: experience.marketing,
+          information_technology: experience.information_technology,
+          management: experience.management
+        },
         local_committee_id: exchange_participant.local_committee_id,
         college_course_id: exchange_participant.college_course_id,
         university_id: exchange_participant.university_id,
@@ -36,6 +43,7 @@ RSpec.describe GtParticipantsController, type: :controller do
       it { expect { do_create }.to change(ExchangeParticipant, :count).by 1 }
       it { expect { do_create }.to change(GtParticipant, :count).by 1 }
       it { expect { do_create }.to change(EnglishLevel, :count).by 1 }
+      it { expect { do_create }.to change(Experience, :count).by 1 }
       it 'sends message to sqs' do
         do_create
 
@@ -62,6 +70,7 @@ RSpec.describe GtParticipantsController, type: :controller do
       it { expect { do_create }.not_to change(ExchangeParticipant, :count) }
       it { expect { do_create }.not_to change(GtParticipant, :count) }
       it { expect { do_create }.not_to change(EnglishLevel, :count) }
+      it { expect { do_create }.not_to change(Experience, :count) }
 
       describe 'response' do
         it { expect(response['status']).to eq 'failure' }
