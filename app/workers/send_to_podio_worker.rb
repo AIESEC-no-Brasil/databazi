@@ -7,7 +7,7 @@ class SendToPodioWorker
                     auto_delete: false,
                     body_parser: JSON
 
-  def perform(_sqs_msg, body)
-    SendToPodio.call(body)
+  def perform(sqs_msg, body)
+    sqs_msg.delete if SendToPodio.call(body)
   end
 end

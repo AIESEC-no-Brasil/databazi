@@ -11,7 +11,7 @@ class SendToPodio
   end
 
   def call
-    @status = send_to_podio(params)
+    @status = send_to_podio(@params)
   end
 
   private
@@ -44,7 +44,7 @@ class SendToPodio
       'email' => [{ 'type' => 'home', 'value' => params['email'] }],
       'telefone' => [{ 'type' => 'home', 'value' => params['cellphone'] }],
       'data-de-nascimento' => {
-        start: params['birthdate'].strftime('%Y-%m-%d %H:%M:%S')
+        start: Date.parse(params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
       }
     }
   end
