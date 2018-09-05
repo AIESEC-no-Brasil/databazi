@@ -5,7 +5,7 @@ info:
   title: "Databazi"
   contact:
     email: "contato@devmagic.com.br"
-host: "localhost:3000/"
+host: "qa.databazi.aiesec.org.br"
 basePath: "/"
 schemes:
 - "http"
