@@ -8,7 +8,7 @@ RSpec.describe SendToPodio do
       'email' => 'test@example.com',
       'fullname' => 'John Test',
       'cellphone' => '+5523998989898',
-      'birthdate' => Date.parse('1994-04-04-04')
+      'birthdate' => '1994-04-04'
     }
   end
   let(:service) { described_class.new(params) }
