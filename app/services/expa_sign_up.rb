@@ -19,8 +19,7 @@ class ExpaSignUp
   private
 
   def send_data_to_expa(exchange_participant)
-    url = 'https://auth.aiesec.org/users/sign_in'
-    page = agent.get(url)
+    page = sign_in_page
 
     auth_form = page.forms[1]
     auth_form.field_with(name: 'user[email]').value =
@@ -45,7 +44,8 @@ class ExpaSignUp
       exchange_participant.cellphone_contactable
 
     page = agent.submit(auth_form, auth_form.buttons.first)
-    page.code.to_i == 200 && auth(exchange_participant.email, exchange_participant.decrypted_password)
+    page.code.to_i == 200 && auth(exchange_participant.email,
+      exchange_participant.decrypted_password)
   end
 
   def agent
@@ -56,18 +56,23 @@ class ExpaSignUp
   end
 
   def auth(email, password)
+    # FIX-ME: specs pending
     @url = 'https://auth.aiesec.org/users/sign_in'
     @url_op = 'https://aiesec.org/auth'
     @token = nil
     @max_age = nil
     @expiration_time = nil
-    @email = email
-    @password = password
-    agent = Mechanize.new {|a| a.ssl_version, a.verify_mode = 'TLSv1',OpenSSL::SSL::VERIFY_NONE}
+    @password = nil
+
+    agent = Mechanize.new do |a|
+      a.ssl_version = 'TLSv1'
+      a.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    end
+
     page = agent.get(@url)
-    aiesec_form = page.form()
-    aiesec_form.field_with(:name => 'user[email]').value = @email
-    aiesec_form.field_with(:name => 'user[password]').value = @password
+    aiesec_form = page.form
+    aiesec_form.field_with(name: 'user[email]').value = email
+    aiesec_form.field_with(name: 'user[password]').value = password
 
     begin
       page = agent.submit(aiesec_form, aiesec_form.buttons.first)
@@ -84,12 +89,16 @@ class ExpaSignUp
         if index != cj.count
           params = cj.to_a[index].value
           data = JSON.parse(URI.decode(params))
-          @token = data["token"]["access_token"]
+          @token = data['token']['access_token']
           @expiration_time = cj.to_a[index].created_at
-          @max_age = data["token"]["max_age"]
+          @max_age = data['token']['max_age']
           true
         end
       end
     end
+  end
+
+  def sign_in_page
+    agent.get('https://auth.aiesec.org/users/sign_in')
   end
 end
