@@ -12,7 +12,7 @@ class GeParticipantsController < ApplicationController
       :spanish_level,
       exchange_participant_attributes: %i[
         id fullname email birthdate cellphone local_committee_id
-        university_id college_course_id password
+        university_id college_course_id password scholarity
       ],
       english_level_attributes: [:english_level]
     )
@@ -31,7 +31,8 @@ class GeParticipantsController < ApplicationController
   def exchange_participant_params
     params[:ge_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
-             :local_committee_id, :university_id, :college_course_id, :password)
+             :local_committee_id, :university_id, :college_course_id,
+             :password, :scholarity)
   end
 
   def english_level_params

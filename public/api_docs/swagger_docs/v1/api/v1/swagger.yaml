@@ -164,6 +164,7 @@ definitions:
     - "email"
     - "password"
     - "birthdate"
+    - "scholarity"
     - "local_committee"
     - "university"
     - "college_course"
@@ -187,6 +188,9 @@ definitions:
           birthdate:
             type: "string"
             example: "1930-05-11"
+          scholarity:
+            type: "integer"
+            example: 1
           local_committee_id:
             type: "integer"
             example: 1
@@ -264,6 +268,7 @@ definitions:
     - "birthdate"
     - "spanish_level"
     - "english_level"
+    - "scholarity"
     - "local_committee"
     - "university"
     - "college_course"
@@ -291,6 +296,9 @@ definitions:
             type: "integer"
             example: 1
           english_level:
+            type: "integer"
+            example: 1
+          scholarity:
             type: "integer"
             example: 1
           local_committee_id:

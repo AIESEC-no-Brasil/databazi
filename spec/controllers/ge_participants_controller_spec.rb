@@ -22,7 +22,8 @@ RSpec.describe GeParticipantsController, type: :controller do
         local_committee_id: exchange_participant.local_committee_id,
         university_id: exchange_participant.university_id,
         college_course_id: exchange_participant.college_course_id,
-        password: exchange_participant.password
+        password: exchange_participant.password,
+        scholarity: ge_participant.scholarity
       }
     end
     let(:response) { JSON.parse(subject.body) }
