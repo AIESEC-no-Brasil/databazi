@@ -4,7 +4,7 @@ class GtParticipant < ApplicationRecord
   has_one :experience, dependent: :destroy
 
   delegate :as_sqs, :fullname, :cellphone, :email, :birthdate,
-           :first_name, :last_name,
+           :first_name, :last_name, :scholarity,
            to: :exchange_participant, prefix: false
 
   accepts_nested_attributes_for :exchange_participant

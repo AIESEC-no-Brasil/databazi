@@ -9,5 +9,6 @@ FactoryBot.define do
     university
     college_course
     cellphone_contactable false
+    scholarity 1
   end
 end
