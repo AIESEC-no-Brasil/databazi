@@ -8,7 +8,7 @@ FactoryBot.define do
     local_committee
     university
     college_course
-    cellphone_contactable false
-    scholarity 1
+    cellphone_contactable { false }
+    scholarity { 1 }
   end
 end
