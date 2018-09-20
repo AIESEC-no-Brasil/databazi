@@ -4,7 +4,7 @@ RSpec.describe EnglishLevel, type: :model do
   describe '#attributes' do
     it { is_expected.to respond_to :english_level }
     it do
-      is_expected.to define_enum_for(:english_level)
+      expect(EnglishLevel.new).to define_enum_for(:english_level)
         .with(%i[none basic intermediate advanced fluent])
     end
   end

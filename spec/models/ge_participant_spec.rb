@@ -15,7 +15,7 @@ RSpec.describe GeParticipant, type: :model do
     it { is_expected.to respond_to :last_name }
     it { is_expected.to respond_to :spanish_level }
     it do
-      is_expected.to define_enum_for(:spanish_level)
+      expect(GeParticipant.new).to define_enum_for(:spanish_level)
         .with(%i[none basic intermediate advanced fluent])
     end
     it { is_expected.to accept_nested_attributes_for :exchange_participant }

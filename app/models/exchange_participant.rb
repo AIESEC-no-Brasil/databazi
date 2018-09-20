@@ -10,7 +10,8 @@ class ExchangeParticipant < ApplicationRecord
 
   belongs_to :registerable, polymorphic: true
   belongs_to :local_committee
-  # TODO: assert optional association with shoulda-matchers when new version is available
+  # TODO: assert optional association with shoulda-matchers when
+  # new version is available
   belongs_to :university, optional: true
   belongs_to :college_course, optional: true
 
@@ -19,6 +20,7 @@ class ExchangeParticipant < ApplicationRecord
 
   def decrypted_password
     return password if password_changed?
+
     password_encryptor.decrypt_and_verify(password)
   end
 
