@@ -10,8 +10,9 @@ class ExchangeParticipant < ApplicationRecord
 
   belongs_to :registerable, polymorphic: true
   belongs_to :local_committee
-  belongs_to :university
-  belongs_to :college_course
+  # TODO: assert optional association with shoulda-matchers when new version is available
+  belongs_to :university, optional: true
+  belongs_to :college_course, optional: true
 
   enum scholarity: %i[highschool incomplete_graduation graduating
                       post_graduated almost_graduated graduated other]
