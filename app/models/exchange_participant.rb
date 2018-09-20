@@ -13,6 +13,9 @@ class ExchangeParticipant < ApplicationRecord
   belongs_to :university
   belongs_to :college_course
 
+  enum scholarity: %i[highschool incomplete_graduation graduating
+                      post_graduated almost_graduated graduated other]
+
   def decrypted_password
     return password if password_changed?
     password_encryptor.decrypt_and_verify(password)
