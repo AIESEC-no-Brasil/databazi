@@ -45,7 +45,10 @@ class SendToPodio
       'telefone' => [{ 'type' => 'home', 'value' => params['cellphone'] }],
       'data-de-nascimento' => {
         start: Date.parse(params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
-      }
+      },
+      'tag-origem' => params['source'],
+      'tag-meio' => params['medium'],
+      'tag-campaign' => params['campaign']
     }
   end
 end

@@ -9,11 +9,14 @@ class ExchangeParticipant < ApplicationRecord
   validates :password, presence: true
 
   belongs_to :registerable, polymorphic: true
+  belongs_to :campaign, optional: true
   belongs_to :local_committee
   # TODO: assert optional association with shoulda-matchers when
   # new version is available
   belongs_to :university, optional: true
   belongs_to :college_course, optional: true
+
+  accepts_nested_attributes_for :campaign
 
   enum scholarity: %i[highschool incomplete_graduation graduating
                       post_graduated almost_graduated graduated other]
