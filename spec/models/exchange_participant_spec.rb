@@ -32,6 +32,10 @@ RSpec.describe ExchangeParticipant, type: :model do
     it { is_expected.to belong_to :college_course }
   end
 
+  describe 'nested attributes' do
+    it { is_expected.to accept_nested_attributes_for :campaign }
+  end
+
   describe '#methods' do
     let(:exchange_participant) do
       create(:exchange_participant,

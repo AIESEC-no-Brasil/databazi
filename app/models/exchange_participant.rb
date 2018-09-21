@@ -16,6 +16,8 @@ class ExchangeParticipant < ApplicationRecord
   belongs_to :university, optional: true
   belongs_to :college_course, optional: true
 
+  accepts_nested_attributes_for :campaign
+
   enum scholarity: %i[highschool incomplete_graduation graduating
                       post_graduated almost_graduated graduated other]
 
