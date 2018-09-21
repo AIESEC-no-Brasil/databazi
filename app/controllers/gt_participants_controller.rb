@@ -32,6 +32,7 @@ class GtParticipantsController < ApplicationController
     %i[
       id fullname email birthdate cellphone local_committee_id
       university_id college_course_id password scholarity
+      campaign_id
     ]
   end
 
@@ -61,7 +62,7 @@ class GtParticipantsController < ApplicationController
     params[:gt_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
-             :password, :scholarity)
+             :password, :scholarity, :campaign_id)
   end
 
   def experience_params
@@ -75,6 +76,9 @@ class GtParticipantsController < ApplicationController
       'fullname' => gt_participant.fullname,
       'cellphone' => gt_participant.cellphone,
       'birthdate' => gt_participant.birthdate,
+      'source' => gt_participant.exchange_participant.campaign.source,
+      'medium' => gt_participant.exchange_participant.campaign.medium,
+      'campaign' => gt_participant.exchange_participant.campaign.campaign,
       'podio_app' => 170_570_01
     }
   end

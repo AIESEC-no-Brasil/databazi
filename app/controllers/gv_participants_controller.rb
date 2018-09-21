@@ -25,6 +25,7 @@ class GvParticipantsController < ApplicationController
       .permit(exchange_participant_attributes: %i[
                 id fullname birthdate email cellphone local_committee_id
                 university_id college_course_id password scholarity
+                campaign_id
               ])
   end
 
@@ -49,9 +50,9 @@ class GvParticipantsController < ApplicationController
       'fullname' => gv_participant.fullname,
       'cellphone' => gv_participant.cellphone,
       'birthdate' => gv_participant.birthdate,
-      'source' => gv_participant.exchange_participant.source,
-      'medium' => gv_participant.exchange_participant.medium,
-      'campaign' => gv_participant.exchange_participant.campaign,
+      'source' => gv_participant.exchange_participant.campaign.source,
+      'medium' => gv_participant.exchange_participant.campaign.medium,
+      'campaign' => gv_participant.exchange_participant.campaign.campaign,
       'podio_app' => 152_908_22
     }
   end
