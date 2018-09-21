@@ -1,11 +1,23 @@
 class GtParticipantsController < ApplicationController
   include ExchangeParticipantable
+  before_action :campaign_sign_up
 
   expose :gt_participant
   expose :exchange_participantable, -> { gt_participant }
   expose :ep_fields, -> { gt_participant_fields }
+  expose :campaign, lambda {
+    Campaign.where(source: params[:gt_participant][:source],
+                   medium: params[:gt_participant][:medium],
+                   campaign: params[:gt_participant][:campaign]).first_or_create
+  }
 
   private
+
+  def campaign_sign_up
+    params[:gt_participant][:source] && params[:gt_participant][:medium] &&
+      params[:gt_participant][:campaign] &&
+      gt_participant.exchange_participant.campaign = campaign
+  end
 
   def gt_participant_params
     nested_params.require(:gt_participant).permit(
@@ -20,6 +32,7 @@ class GtParticipantsController < ApplicationController
     %i[
       id fullname email birthdate cellphone local_committee_id
       university_id college_course_id password scholarity
+      campaign_id
     ]
   end
 
@@ -49,7 +62,7 @@ class GtParticipantsController < ApplicationController
     params[:gt_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
-             :password, :scholarity)
+             :password, :scholarity, :campaign_id)
   end
 
   def experience_params
@@ -63,6 +76,9 @@ class GtParticipantsController < ApplicationController
       'fullname' => gt_participant.fullname,
       'cellphone' => gt_participant.cellphone,
       'birthdate' => gt_participant.birthdate,
+      'source' => gt_participant.exchange_participant.campaign.source,
+      'medium' => gt_participant.exchange_participant.campaign.medium,
+      'campaign' => gt_participant.exchange_participant.campaign.campaign,
       'podio_app' => 170_570_01
     }
   end
