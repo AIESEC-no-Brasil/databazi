@@ -45,14 +45,23 @@ class GvParticipantsController < ApplicationController
   end
 
   def gv_participant_fields
+    source = nil
+    medium = nil
+    campaign = nil
+
+    if gv_participant.exchange_participant.campaign
+      source = gv_participant.exchange_participant.campaign.source
+      medium = gv_participant.exchange_participant.campaign.medium
+      campaign = gv_participant.exchange_participant.campaign.campaign
+    end
     {
       'email' => gv_participant.email,
       'fullname' => gv_participant.fullname,
       'cellphone' => gv_participant.cellphone,
       'birthdate' => gv_participant.birthdate,
-      'source' => gv_participant.exchange_participant.campaign.source,
-      'medium' => gv_participant.exchange_participant.campaign.medium,
-      'campaign' => gv_participant.exchange_participant.campaign.campaign,
+      'source' => source,
+      'medium' => medium,
+      'campaign' => campaign,
       'podio_app' => 152_908_22
     }
   end

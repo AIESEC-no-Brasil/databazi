@@ -71,14 +71,24 @@ class GtParticipantsController < ApplicationController
   end
 
   def gt_participant_fields
+    source = nil
+    medium = nil
+    campaign = nil
+
+    if gt_participant.exchange_participant.campaign
+      source = gt_participant.exchange_participant.campaign.source
+      medium = gt_participant.exchange_participant.campaign.medium
+      campaign = gt_participant.exchange_participant.campaign.campaign
+    end
+
     {
       'email' => gt_participant.email,
       'fullname' => gt_participant.fullname,
       'cellphone' => gt_participant.cellphone,
       'birthdate' => gt_participant.birthdate,
-      'source' => gt_participant.exchange_participant.campaign.source,
-      'medium' => gt_participant.exchange_participant.campaign.medium,
-      'campaign' => gt_participant.exchange_participant.campaign.campaign,
+      'source' => source,
+      'medium' => medium,
+      'campaign' => campaign,
       'podio_app' => 170_570_01
     }
   end

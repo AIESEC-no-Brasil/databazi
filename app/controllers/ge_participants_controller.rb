@@ -54,14 +54,24 @@ class GeParticipantsController < ApplicationController
   end
 
   def ge_participant_fields
+    source = nil
+    medium = nil
+    campaign = nil
+
+    if ge_participant.exchange_participant.campaign
+      source = ge_participant.exchange_participant.campaign.source
+      medium = ge_participant.exchange_participant.campaign.medium
+      campaign = ge_participant.exchange_participant.campaign.campaign
+    end
+
     {
       'email' => ge_participant.email,
       'fullname' => ge_participant.fullname,
       'cellphone' => ge_participant.cellphone,
       'birthdate' => ge_participant.birthdate,
-      'source' => ge_participant.exchange_participant.campaign.source,
-      'medium' => ge_participant.exchange_participant.campaign.medium,
-      'campaign' => ge_participant.exchange_participant.campaign.campaign,
+      'source' => source,
+      'medium' => medium,
+      'campaign' => campaign,
       'podio_app' => 170_576_29
     }
   end

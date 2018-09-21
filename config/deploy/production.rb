@@ -1,3 +1,6 @@
+server 'ec2-54-215-129-93.us-west-1.compute.amazonaws.com', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
+
+set :branch, :master
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.
