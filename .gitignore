@@ -20,8 +20,16 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+/config/local_env.yml
+/config/deploy_id_rsa
 
 *.sw?
+Session.vim
 
 config/database.yml
 config/local_env.yml
+
+.vagrant/
+
+# Ignore coverage reports
+/coverage/*
