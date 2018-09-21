@@ -9,6 +9,7 @@ class ExchangeParticipant < ApplicationRecord
   validates :password, presence: true
 
   belongs_to :registerable, polymorphic: true
+  belongs_to :campaign, optional: true
   belongs_to :local_committee
   # TODO: assert optional association with shoulda-matchers when
   # new version is available

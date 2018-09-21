@@ -10,9 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_21_131758) do
+ActiveRecord::Schema.define(version: 2018_09_21_141714) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
   create_table "campaigns", force: :cascade do |t|
     t.string "source"
     t.string "medium"
@@ -51,6 +53,7 @@ ActiveRecord::Schema.define(version: 2018_09_21_131758) do
     t.string "password"
     t.boolean "cellphone_contactable", default: false
     t.integer "scholarity"
+    t.integer "campaign_id"
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
