@@ -9,6 +9,7 @@ RSpec.describe GtParticipantsController, type: :controller do
                            exchange_participant: exchange_participant,
                            experience: experience)
   end
+  let(:campaign) { build(:campaign) }
 
   describe '#create', aws: true do
     subject(:do_create) { post :create, params: { gt_participant: gt_params } }
@@ -30,7 +31,10 @@ RSpec.describe GtParticipantsController, type: :controller do
         local_committee_id: exchange_participant.local_committee_id,
         college_course_id: exchange_participant.college_course_id,
         university_id: exchange_participant.university_id,
-        password: exchange_participant.password
+        password: exchange_participant.password,
+        source: campaign.source,
+        medium: campaign.medium,
+        campaign: campaign.campaign
       }
     end
     let(:response) { JSON.parse(subject.body) }
@@ -44,6 +48,8 @@ RSpec.describe GtParticipantsController, type: :controller do
       it { expect { do_create }.to change(GtParticipant, :count).by 1 }
       it { expect { do_create }.to change(EnglishLevel, :count).by 1 }
       it { expect { do_create }.to change(Experience, :count).by 1 }
+      it { expect { do_create }.to change(Campaign, :count).by 1 }
+
       it 'sends message to sqs' do
         do_create
 
@@ -60,17 +66,23 @@ RSpec.describe GtParticipantsController, type: :controller do
         allow(participant_double).to receive(:save).and_return(false)
         allow(errors).to receive(:messages).and_return(['error'])
         allow(participant_double).to receive(:errors).and_return(errors)
+        allow(ep_double)
+          .to receive(:campaign=).and_return(nil)
         allow(controller)
           .to receive(:gt_participant).and_return(participant_double)
+        allow(participant_double)
+          .to receive(:exchange_participant).and_return(ep_double)
       end
 
       let(:participant_double) { instance_double(GtParticipant) }
+      let(:ep_double) { instance_double(ExchangeParticipant) }
       let(:errors) { instance_double(ActiveModel::Errors) }
 
       it { expect { do_create }.not_to change(ExchangeParticipant, :count) }
       it { expect { do_create }.not_to change(GtParticipant, :count) }
       it { expect { do_create }.not_to change(EnglishLevel, :count) }
       it { expect { do_create }.not_to change(Experience, :count) }
+      it { expect { do_create }.not_to change(Campaign, :count) }
 
       describe 'response' do
         it { expect(response['status']).to eq 'failure' }

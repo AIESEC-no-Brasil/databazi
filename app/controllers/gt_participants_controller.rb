@@ -1,11 +1,23 @@
 class GtParticipantsController < ApplicationController
   include ExchangeParticipantable
+  before_action :campaign_sign_up
 
   expose :gt_participant
   expose :exchange_participantable, -> { gt_participant }
   expose :ep_fields, -> { gt_participant_fields }
+  expose :campaign, lambda {
+    Campaign.where(source: params[:gt_participant][:source],
+                   medium: params[:gt_participant][:medium],
+                   campaign: params[:gt_participant][:campaign]).first_or_create
+  }
 
   private
+
+  def campaign_sign_up
+    params[:gt_participant][:source] && params[:gt_participant][:medium] &&
+      params[:gt_participant][:campaign] &&
+      gt_participant.exchange_participant.campaign = campaign
+  end
 
   def gt_participant_params
     nested_params.require(:gt_participant).permit(
