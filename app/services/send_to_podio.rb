@@ -48,7 +48,7 @@ class SendToPodio
       },
       'tag-origem' => params['source'],
       'tag-meio' => params['medium'],
-      'tag-campaign' => params['campaign']
+      'tag-campanha' => params['campaign']
     }
   end
 end
