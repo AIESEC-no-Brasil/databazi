@@ -21,7 +21,7 @@ class ExpaSignUp
   def send_data_to_expa(exchange_participant)
     page = sign_in_page
 
-    fill_form(page.forms[1], exchange_participant)
+    auth_form = fill_form(page.forms[1], exchange_participant)
 
     page = agent.submit(auth_form, auth_form.buttons.first)
     page.code.to_i == 200 &&
