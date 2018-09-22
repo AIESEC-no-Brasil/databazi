@@ -26,9 +26,14 @@ RSpec.describe ExchangeParticipant, type: :model do
 
   describe '#associations' do
     it { is_expected.to belong_to :registerable }
+    it { is_expected.to belong_to :campaign }
     it { is_expected.to belong_to :local_committee }
     it { is_expected.to belong_to :university }
     it { is_expected.to belong_to :college_course }
+  end
+
+  describe 'nested attributes' do
+    it { is_expected.to accept_nested_attributes_for :campaign }
   end
 
   describe '#methods' do
