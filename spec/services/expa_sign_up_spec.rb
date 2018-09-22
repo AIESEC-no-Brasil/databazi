@@ -11,7 +11,7 @@ RSpec.describe ExpaSignUp do
            registerable: build(:gv_participant))
   end
 
-  let(:params) { exchange_participant.id }
+  let(:params) { { exchange_participant_id: exchange_participant.id } }
 
   it { is_expected.to respond_to(:call) }
 
