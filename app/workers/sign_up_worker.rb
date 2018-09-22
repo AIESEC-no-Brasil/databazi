@@ -1,7 +1,7 @@
 class SignUpWorker
   include Shoryuken::Worker
 
-  QUEUE_NAME = 'sign_up_queue'.freeze
+  QUEUE_NAME = 'databazi_sign_up_queue'.freeze
 
   shoryuken_options queue: QUEUE_NAME,
                     auto_delete: false,
