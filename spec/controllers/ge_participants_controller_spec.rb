@@ -25,9 +25,11 @@ RSpec.describe GeParticipantsController, type: :controller do
         college_course_id: exchange_participant.college_course_id,
         password: exchange_participant.password,
         scholarity: ge_participant.scholarity,
-        source: campaign.source,
-        medium: campaign.medium,
-        campaign: campaign.campaign
+        utm_source: campaign.utm_source,
+        utm_medium: campaign.utm_medium,
+        utm_campaign: campaign.utm_campaign,
+        utm_term: campaign.utm_term,
+        utm_content: campaign.utm_content
       }
     end
     let(:response) { JSON.parse(subject.body) }
