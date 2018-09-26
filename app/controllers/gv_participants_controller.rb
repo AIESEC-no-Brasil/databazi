@@ -6,17 +6,27 @@ class GvParticipantsController < ApplicationController
   expose :exchange_participantable, -> { gv_participant }
   expose :ep_fields, -> { gv_participant_fields }
   expose :campaign, lambda {
-    Campaign.where(source: params[:gv_participant][:source],
-                   medium: params[:gv_participant][:medium],
-                   campaign: params[:gv_participant][:campaign]).first_or_create
+    Campaign.where(utm_source: params[:gv_participant][:utm_source],
+                   utm_medium: params[:gv_participant][:utm_medium],
+                   utm_campaign: params[:gv_participant][:utm_campaign],
+                   utm_term: params[:gv_participant][:utm_term],
+                   utm_content: params[:gv_participant][:utm_content])
+      .first_or_create
   }
 
   private
 
   def campaign_sign_up
-    params[:gv_participant][:source] && params[:gv_participant][:medium] &&
-      params[:gv_participant][:campaign] &&
+      params_filled &&
       gv_participant.exchange_participant.campaign = campaign
+  end
+
+  def params_filled
+    params[:gv_participant][:utm_source] &&
+      params[:gv_participant][:utm_medium] &&
+      params[:gv_participant][:utm_campaign] &&
+      params[:gv_participant][:utm_term] &&
+      params[:gv_participant][:utm_content]
   end
 
   def gv_participant_params
@@ -45,24 +55,37 @@ class GvParticipantsController < ApplicationController
   end
 
   def gv_participant_fields
-    source = nil
-    medium = nil
-    campaign = nil
-
-    if gv_participant.exchange_participant.campaign
-      source = gv_participant.exchange_participant.campaign.source
-      medium = gv_participant.exchange_participant.campaign.medium
-      campaign = gv_participant.exchange_participant.campaign.campaign
-    end
     {
       'email' => gv_participant.email,
       'fullname' => gv_participant.fullname,
       'cellphone' => gv_participant.cellphone,
       'birthdate' => gv_participant.birthdate,
-      'source' => source,
-      'medium' => medium,
-      'campaign' => campaign,
+      'utm_source' => utm_source,
+      'utm_medium' => utm_medium,
+      'utm_campaign' => utm_campaign,
+      'utm_term' => utm_term,
+      'utm_content' => utm_content,
       'podio_app' => 152_908_22
     }
+  end
+
+  def utm_source
+    gv_participant&.exchange_participant&.campaign&.utm_source
+  end
+
+  def utm_medium
+    gv_participant&.exchange_participant&.campaign&.utm_medium
+  end
+
+  def utm_campaign
+    gv_participant&.exchange_participant&.campaign&.utm_campaign
+  end
+
+  def utm_term
+    gv_participant&.exchange_participant&.campaign&.utm_term
+  end
+
+  def utm_content
+    gv_participant&.exchange_participant&.campaign&.utm_content
   end
 end
