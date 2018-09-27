@@ -11,13 +11,13 @@ class GvParticipantsController < ApplicationController
                    utm_campaign: params[:gv_participant][:utm_campaign],
                    utm_term: params[:gv_participant][:utm_term],
                    utm_content: params[:gv_participant][:utm_content])
-      .first_or_create
+            .first_or_create
   }
 
   private
 
   def campaign_sign_up
-      params_filled &&
+    params_filled &&
       gv_participant.exchange_participant.campaign = campaign
   end
 
@@ -56,16 +56,12 @@ class GvParticipantsController < ApplicationController
 
   def gv_participant_fields
     {
-      'email' => gv_participant.email,
-      'fullname' => gv_participant.fullname,
+      'email' => gv_participant.email, 'fullname' => gv_participant.fullname,
       'cellphone' => gv_participant.cellphone,
       'birthdate' => gv_participant.birthdate,
-      'utm_source' => utm_source,
-      'utm_medium' => utm_medium,
-      'utm_campaign' => utm_campaign,
-      'utm_term' => utm_term,
-      'utm_content' => utm_content,
-      'podio_app' => 152_908_22
+      'utm_source' => utm_source, 'utm_medium' => utm_medium,
+      'utm_campaign' => utm_campaign, 'utm_term' => utm_term,
+      'utm_content' => utm_content, 'podio_app' => 152_908_22
     }
   end
 

@@ -44,7 +44,7 @@ RSpec.describe GtParticipantsController, type: :controller do
     it { is_expected.to be_successful }
 
     context 'when successful' do
-      before { SignUpWorker.stub(:perform_async) }
+      before { allow(SignUpWorker).to receive(:perform_async) }
 
       it { expect { do_create }.to change(ExchangeParticipant, :count).by 1 }
       it { expect { do_create }.to change(GtParticipant, :count).by 1 }

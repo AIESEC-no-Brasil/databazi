@@ -11,13 +11,13 @@ class GeParticipantsController < ApplicationController
                    utm_campaign: params[:ge_participant][:utm_campaign],
                    utm_term: params[:ge_participant][:utm_term],
                    utm_content: params[:ge_participant][:utm_content])
-      .first_or_create
+            .first_or_create
   }
 
   private
 
   def campaign_sign_up
-      params_filled &&
+    params_filled &&
       ge_participant.exchange_participant.campaign = campaign
   end
 
@@ -65,16 +65,12 @@ class GeParticipantsController < ApplicationController
 
   def ge_participant_fields
     {
-      'email' => ge_participant.email,
-      'fullname' => ge_participant.fullname,
+      'email' => ge_participant.email, 'fullname' => ge_participant.fullname,
       'cellphone' => ge_participant.cellphone,
       'birthdate' => ge_participant.birthdate,
-      'utm_source' => utm_source,
-      'utm_medium' => utm_medium,
-      'utm_campaign' => utm_campaign,
-      'utm_term' => utm_term,
-      'utm_content' => utm_content,
-      'podio_app' => 170_576_29
+      'utm_source' => utm_source, 'utm_medium' => utm_medium,
+      'utm_campaign' => utm_campaign, 'utm_term' => utm_term,
+      'utm_content' => utm_content, 'podio_app' => 170_576_29
     }
   end
 

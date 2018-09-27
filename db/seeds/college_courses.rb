@@ -199,7 +199,8 @@ college_course_list = [
   %w[Turismo\ E\ Meio\ Ambiente Curso0000000005],
   %w[Turismo\ Receptivo Curso0000000004],
   %w[Web\ Design\ E\ Programacao Curso0000000003],
-  %w[Zootecnia Curso0000000002]
+  %w[Zootecnia Curso0000000002],
+  %w[Outro]
 ]
 
 college_course_list.each do |name, podio_id|

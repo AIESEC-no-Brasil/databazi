@@ -19,9 +19,13 @@ Metrics/LineLength:
 Metrics/AbcSize:
   Exclude:
     - 'app/services/expa_sign_up.rb'
+    - 'app/controllers/gv_participants_controller.rb'
+    - 'app/controllers/ge_participants_controller.rb'
+    - 'app/controllers/gt_participants_controller.rb'
 Metrics/MethodLength:
   Exclude:
     - 'app/services/expa_sign_up.rb'
+    - 'app/services/send_to_podio.rb'
 RSpec/NestedGroups:
   Max: 4
 Style/Documentation:
