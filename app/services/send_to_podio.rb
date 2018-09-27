@@ -46,9 +46,11 @@ class SendToPodio
       'data-de-nascimento' => {
         start: Date.parse(params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
       },
-      'tag-origem' => params['source'],
-      'tag-meio' => params['medium'],
-      'tag-campaign' => params['campaign']
+      'tag-origem' => params['utm_source'],
+      'tag-meio' => params['utm_medium'],
+      'tag-campaign' => params['utm_campaign'],
+      'tag-termo' => params['utm_term'],
+      'tag-conteudo2' => params['utm_content']
     }
   end
 end
