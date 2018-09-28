@@ -67,7 +67,7 @@ class GvParticipantsController < ApplicationController
   end
 
   def scholarity_human_name
-    ep_scholarity = gv_participant&.exchange_participant&.scholarity
+    ep_scholarity = gv_participant.exchange_participant.scholarity
     ExchangeParticipant.human_enum_name(:scholarity, ep_scholarity)
   end
 
