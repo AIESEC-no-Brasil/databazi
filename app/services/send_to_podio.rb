@@ -51,7 +51,12 @@ class SendToPodio
       'tag-campanha' => params['utm_campaign'],
       'tag-termo' => params['utm_term'],
       'tag-conteudo2' => params['utm_content'],
-      'escolaridade' => params['scholarity']
+      'escolaridade' => params['scholarity'],
+      'cl-marcado-no-expa-nao-conta-expansao-ainda' => params['local_committee'],
+      'nivel-de-ingles' => params['english_level'],
+      'nivel-de-espanhol' => params['spanish_level'],
+      'universidade' => params['university'],
+      'curso' => params['college_course']
     }
   end
 end

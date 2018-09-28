@@ -2609,7 +2609,7 @@ university_list = [
   %w[VIZIVALI\ -\ FACULDADE\ VIZINHANCA\ VALE\ DO\ IGUACU Universidade04746],
   %w[WLASAN\ -\ FACULDADE\ PROF.\ WLADEMIR\ DOS\ SANTOS Universidade04415],
   %w[UNIVIÇOSA\ -\ União\ de\ Ensino\ Superior\ de\ Viçosa Universidade05251],
-  %w[UCEFF\ -\ Unidade\ Central\ De\ Educação\ Faem\ Faculdade],
+  %w[UCEFF\ -\ Unidade\ Central\ De\ Educação\ Faem\ Faculdade Universidade05252],
   %w[OUTRA Universidade05253]
 ]
 
