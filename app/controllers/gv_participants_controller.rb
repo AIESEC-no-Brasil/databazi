@@ -61,8 +61,14 @@ class GvParticipantsController < ApplicationController
       'birthdate' => gv_participant.birthdate,
       'utm_source' => utm_source, 'utm_medium' => utm_medium,
       'utm_campaign' => utm_campaign, 'utm_term' => utm_term,
-      'utm_content' => utm_content, 'podio_app' => 152_908_22
+      'utm_content' => utm_content, 'podio_app' => 152_908_22,
+      'scholarity' => scholarity_human_name
     }
+  end
+
+  def scholarity_human_name
+    ep_scholarity = gv_participant&.exchange_participant&.scholarity
+    ExchangeParticipant.human_enum_name(:scholarity, ep_scholarity)
   end
 
   def utm_source

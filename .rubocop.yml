@@ -16,6 +16,7 @@ Metrics/LineLength:
   Exclude:
     - 'db/seeds/**'
     - 'db/schema.rb'
+    - ''
 Metrics/AbcSize:
   Exclude:
     - 'app/services/expa_sign_up.rb'

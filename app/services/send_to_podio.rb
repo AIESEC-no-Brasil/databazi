@@ -50,7 +50,8 @@ class SendToPodio
       'tag-meio' => params['utm_medium'],
       'tag-campaign' => params['utm_campaign'],
       'tag-termo' => params['utm_term'],
-      'tag-conteudo2' => params['utm_content']
+      'tag-conteudo2' => params['utm_content'],
+      'escolaridade' => params['scholarity']
     }
   end
 end

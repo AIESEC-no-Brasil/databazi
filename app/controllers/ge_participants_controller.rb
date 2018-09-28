@@ -70,8 +70,14 @@ class GeParticipantsController < ApplicationController
       'birthdate' => ge_participant.birthdate,
       'utm_source' => utm_source, 'utm_medium' => utm_medium,
       'utm_campaign' => utm_campaign, 'utm_term' => utm_term,
-      'utm_content' => utm_content, 'podio_app' => 170_576_29
+      'utm_content' => utm_content, 'podio_app' => 170_576_29,
+      'scholarity' => scholarity_human_name
     }
+  end
+
+  def scholarity_human_name
+    ep_scholarity = ge_participant&.exchange_participant&.scholarity
+    ExchangeParticipant.human_enum_name(:scholarity, ep_scholarity)
   end
 
   def utm_source
