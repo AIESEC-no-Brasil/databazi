@@ -14,6 +14,6 @@ unless ENV['TRAVIS_PULL_REQUEST']
   )
 
   # Sign Up Queue
-  sqs.create_queue({queue_name: 'sign_up_queue'})
-  sqs.create_queue({queue_name: 'podio_queue'})
+  sqs.create_queue({queue_name: 'databazi_sign_up_queue'})
+  sqs.create_queue({queue_name: 'databazi_podio_queue'})
 end
