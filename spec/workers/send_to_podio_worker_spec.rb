@@ -4,7 +4,7 @@ RSpec.describe SendToPodioWorker do
   let(:worker) { described_class.new }
 
   before do
-    SendToPodio.stub(:call)
+    allow(SendToPodio).to receive(:call)
     worker.perform(nil, test: 'test')
   end
 

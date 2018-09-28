@@ -32,9 +32,11 @@ RSpec.describe GtParticipantsController, type: :controller do
         college_course_id: exchange_participant.college_course_id,
         university_id: exchange_participant.university_id,
         password: exchange_participant.password,
-        source: campaign.source,
-        medium: campaign.medium,
-        campaign: campaign.campaign
+        utm_source: campaign.utm_source,
+        utm_medium: campaign.utm_medium,
+        utm_campaign: campaign.utm_campaign,
+        utm_term: campaign.utm_term,
+        utm_content: campaign.utm_content
       }
     end
     let(:response) { JSON.parse(subject.body) }
@@ -42,7 +44,7 @@ RSpec.describe GtParticipantsController, type: :controller do
     it { is_expected.to be_successful }
 
     context 'when successful' do
-      before { SignUpWorker.stub(:perform_async) }
+      before { allow(SignUpWorker).to receive(:perform_async) }
 
       it { expect { do_create }.to change(ExchangeParticipant, :count).by 1 }
       it { expect { do_create }.to change(GtParticipant, :count).by 1 }
