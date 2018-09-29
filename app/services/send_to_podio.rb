@@ -60,6 +60,9 @@ class SendToPodio
       params['curso'] = podio_helper_find_item_by_unique_id(sqs_params['college_course'], 'curso') if sqs_params['college_course']
       params['sub-produto'] = sqs_params['experience'] if sqs_params['experience']
 
+      params['nivel-de-ingles'] = 5 if params['nivel-de-ingles'] == 0
+      params['nivel-de-espanhol'] = 5 if params['nivel-de-espanhol'] == 0
+
       params
   end
 
