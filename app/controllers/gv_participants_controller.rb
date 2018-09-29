@@ -63,9 +63,9 @@ class GvParticipantsController < ApplicationController
       'utm_campaign' => utm_campaign, 'utm_term' => utm_term,
       'utm_content' => utm_content, 'podio_app' => 152_908_22,
       'scholarity' => scholarity_human_name,
-      'local_committee' => gv_participant.exchange_participant.local_committee.podio_id,
-      'university' => gv_participant.exchange_participant.university.podio_id,
-      'college_course' => gv_participant.exchange_participant.college_course.podio_id
+      'local_committee' => gv_participant.exchange_participant&.local_committee&.podio_id,
+      'university' => gv_participant.exchange_participant&.university&.podio_id,
+      'college_course' => gv_participant.exchange_participant&.college_course&.podio_id
     }
   end
 

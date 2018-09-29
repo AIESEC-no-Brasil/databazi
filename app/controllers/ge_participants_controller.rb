@@ -72,11 +72,11 @@ class GeParticipantsController < ApplicationController
       'utm_campaign' => utm_campaign, 'utm_term' => utm_term,
       'utm_content' => utm_content, 'podio_app' => 170_576_29,
       'scholarity' => scholarity_human_name,
-      'local_committee' => ge_participant.exchange_participant.local_committee.podio_id,
+      'local_committee' => ge_participant.exchange_participant&.local_committee&.podio_id,
       'spanish_level' => ge_participant.read_attribute_before_type_cast(:spanish_level),
       'english_level' => ge_participant&.english_level.read_attribute_before_type_cast(:english_level),
-      'university' => ge_participant.exchange_participant.university.podio_id,
-      'college_course' => ge_participant.exchange_participant.college_course.podio_id
+      'university' => ge_participant.exchange_participant&.university&.podio_id,
+      'college_course' => ge_participant.exchange_participant&.college_course&.podio_id
     }
   end
 
