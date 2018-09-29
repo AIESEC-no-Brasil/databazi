@@ -56,7 +56,8 @@ class SendToPodio
       'nivel-de-ingles' => params['english_level'],
       'nivel-de-espanhol' => params['spanish_level'],
       'universidade' => params['university'],
-      'curso' => params['college_course']
+      'curso' => params['college_course'],
+      'sub-produto' => params['experience']
     }
   end
 end
