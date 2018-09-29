@@ -37,27 +37,47 @@ class SendToPodio
     )
   end
 
-  def podio_item_fields(params)
-    {
+  def podio_item_fields(sqs_params)
+    params = {
       'data-inscricao' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
-      'title' => params['fullname'],
-      'email' => [{ 'type' => 'home', 'value' => params['email'] }],
-      'telefone' => [{ 'type' => 'home', 'value' => params['cellphone'] }],
+      'title' => sqs_params['fullname'],
+      'email' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
+      'telefone' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
       'data-de-nascimento' => {
-        start: Date.parse(params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
+        start: Date.parse(sqs_params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
       },
-      'tag-origem' => params['utm_source'],
-      'tag-meio' => params['utm_medium'],
-      'tag-campanha' => params['utm_campaign'],
-      'tag-termo' => params['utm_term'],
-      'tag-conteudo2' => params['utm_content'],
-      'escolaridade' => params['scholarity'],
-      'cl-marcado-no-expa-nao-conta-expansao-ainda' => params['local_committee'],
-      'nivel-de-ingles' => params['english_level'],
-      'nivel-de-espanhol' => params['spanish_level'],
-      'universidade' => params['university'],
-      'curso' => params['college_course'],
-      'sub-produto' => params['experience']
     }
+      params['tag-origem'] = sqs_params['utm_source'] if sqs_params['utm_source']
+      params['tag-meio'] = sqs_params['utm_medium'] if sqs_params['utm_medium']
+      params['tag-campanha'] = sqs_params['utm_campaign'] if sqs_params['utm_campaign']
+      params['tag-termo'] = sqs_params['utm_term'] if sqs_params['utm_term']
+      params['tag-conteudo-2'] = sqs_params['utm_content'] if sqs_params['utm_content']
+      params['escolaridade'] = sqs_params['scholarity'] if sqs_params['scholarity']
+      params['cl-marcado-no-expa-nao-conta-expansao-ainda'] = sqs_params['local_committee'] if sqs_params['local_committee']
+      params['nivel-de-ingles'] = sqs_params['english_level'] if sqs_params['english_level']
+      params['nivel-de-espanhol'] = sqs_params['spanish_level'] if sqs_params['spanish_level']
+      params['universidade'] = podio_helper_find_item_by_unique_id(sqs_params['university'], 'universidade') if sqs_params['university']
+      params['curso'] = podio_helper_find_item_by_unique_id(sqs_params['college_course'], 'curso') if sqs_params['college_course']
+      params['sub-produto'] = sqs_params['experience'] if sqs_params['experience']
+
+      params
+  end
+
+  def podio_helper_find_item_by_unique_id(unique_id, option)
+    attributes = {:sort_by => 'last_edit_on'}
+    if option == 'universidade'
+      app_id = 14568134
+      attributes[:filters] = {117992837 => unique_id}
+    elsif option == 'curso'
+      app_id = 14568143
+      attributes[:filters] = {117992834 => unique_id}
+    end
+
+    response = Podio.connection.post do |req|
+      req.url "/item/app/#{app_id}/filter/"
+      req.body = attributes
+    end
+
+    JSON.parse(Podio::Item.collection(response.body).first.to_json)[0]["id"]
   end
 end
