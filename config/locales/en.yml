@@ -30,4 +30,14 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    attributes:
+      exchange_participant:
+        scholarities:
+          highschool: "Ensino Médio completo"
+          incomplete_graduation: "Graduação incompleta"
+          graduating: "Estudante de Graduação"
+          post_graduated: "Mestrado ou Pós"
+          almost_graduated: "Graduado em até 1,5 anos"
+          graduated: "Graduado há mais de 2 anos"
+          other: "Outro"

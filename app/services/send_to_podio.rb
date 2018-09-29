@@ -46,9 +46,18 @@ class SendToPodio
       'data-de-nascimento' => {
         start: Date.parse(params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
       },
-      'tag-origem' => params['source'],
-      'tag-meio' => params['medium'],
-      'tag-campanha' => params['campaign']
+      'tag-origem' => params['utm_source'],
+      'tag-meio' => params['utm_medium'],
+      'tag-campanha' => params['utm_campaign'],
+      'tag-termo' => params['utm_term'],
+      'tag-conteudo2' => params['utm_content'],
+      'escolaridade' => params['scholarity'],
+      'cl-marcado-no-expa-nao-conta-expansao-ainda' => params['local_committee'],
+      'nivel-de-ingles' => params['english_level'],
+      'nivel-de-espanhol' => params['spanish_level'],
+      'universidade' => params['university'],
+      'curso' => params['college_course'],
+      'sub-produto' => params['experience']
     }
   end
 end

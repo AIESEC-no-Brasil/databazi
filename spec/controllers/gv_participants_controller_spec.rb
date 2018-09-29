@@ -21,9 +21,11 @@ RSpec.describe GvParticipantsController, type: :controller do
         university_id: exchange_participant.university_id,
         password: exchange_participant.password,
         scholarity: gv_participant.scholarity,
-        source: campaign.source,
-        medium: campaign.medium,
-        campaign: campaign.campaign
+        utm_source: campaign.utm_source,
+        utm_medium: campaign.utm_medium,
+        utm_campaign: campaign.utm_campaign,
+        utm_term: campaign.utm_term,
+        utm_content: campaign.utm_content
       }
     end
     let(:response) { JSON.parse(subject.body) }
@@ -31,9 +33,9 @@ RSpec.describe GvParticipantsController, type: :controller do
     it { is_expected.to be_successful }
     context 'when successful' do
       before do
-        SignUpWorker.stub(:perform_async)
-        SendToPodioWorker.stub(:perform_async)
-        SendToPodio.stub(:call)
+        allow(SignUpWorker).to receive(:perform_async)
+        allow(SendToPodioWorker).to receive(:perform_async)
+        allow(SendToPodio).to receive(:call)
       end
 
       it { expect { do_create }.to change(ExchangeParticipant, :count).by 1 }

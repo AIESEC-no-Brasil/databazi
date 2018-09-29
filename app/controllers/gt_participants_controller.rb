@@ -6,17 +6,27 @@ class GtParticipantsController < ApplicationController
   expose :exchange_participantable, -> { gt_participant }
   expose :ep_fields, -> { gt_participant_fields }
   expose :campaign, lambda {
-    Campaign.where(source: params[:gt_participant][:source],
-                   medium: params[:gt_participant][:medium],
-                   campaign: params[:gt_participant][:campaign]).first_or_create
+    Campaign.where(utm_source: params[:gt_participant][:utm_source],
+                   utm_medium: params[:gt_participant][:utm_medium],
+                   utm_campaign: params[:gt_participant][:utm_campaign],
+                   utm_term: params[:gt_participant][:utm_term],
+                   utm_content: params[:gt_participant][:utm_content])
+            .first_or_create
   }
 
   private
 
   def campaign_sign_up
-    params[:gt_participant][:source] && params[:gt_participant][:medium] &&
-      params[:gt_participant][:campaign] &&
+    params_filled &&
       gt_participant.exchange_participant.campaign = campaign
+  end
+
+  def params_filled
+    params[:gt_participant][:utm_source] &&
+      params[:gt_participant][:utm_medium] &&
+      params[:gt_participant][:utm_campaign] &&
+      params[:gt_participant][:utm_term] &&
+      params[:gt_participant][:utm_content]
   end
 
   def gt_participant_params
@@ -71,25 +81,44 @@ class GtParticipantsController < ApplicationController
   end
 
   def gt_participant_fields
-    source = nil
-    medium = nil
-    campaign = nil
-
-    if gt_participant.exchange_participant.campaign
-      source = gt_participant.exchange_participant.campaign.source
-      medium = gt_participant.exchange_participant.campaign.medium
-      campaign = gt_participant.exchange_participant.campaign.campaign
-    end
-
     {
-      'email' => gt_participant.email,
-      'fullname' => gt_participant.fullname,
+      'email' => gt_participant.email, 'fullname' => gt_participant.fullname,
       'cellphone' => gt_participant.cellphone,
       'birthdate' => gt_participant.birthdate,
-      'source' => source,
-      'medium' => medium,
-      'campaign' => campaign,
-      'podio_app' => 170_570_01
+      'utm_source' => utm_source, 'utm_medium' => utm_medium,
+      'utm_campaign' => utm_campaign, 'utm_term' => utm_term,
+      'utm_content' => utm_content, 'podio_app' => 170_570_01,
+      'scholarity' => scholarity_human_name,
+      'local_committee' => gt_participant.exchange_participant.local_committee.podio_id,
+      'english_level' => gt_participant&.english_level.read_attribute_before_type_cast(:english_level),
+      'university' => gt_participant.exchange_participant.university.podio_id,
+      'college_course' => gt_participant.exchange_participant.college_course.podio_id,
+      'experience' => gt_participant.experience.for_podio
     }
+  end
+
+  def scholarity_human_name
+    ep_scholarity = gt_participant.exchange_participant.scholarity
+    ExchangeParticipant.human_enum_name(:scholarity, ep_scholarity)
+  end
+
+  def utm_source
+    gt_participant&.exchange_participant&.campaign&.utm_source
+  end
+
+  def utm_medium
+    gt_participant&.exchange_participant&.campaign&.utm_medium
+  end
+
+  def utm_campaign
+    gt_participant&.exchange_participant&.campaign&.utm_campaign
+  end
+
+  def utm_term
+    gt_participant&.exchange_participant&.campaign&.utm_term
+  end
+
+  def utm_content
+    gt_participant&.exchange_participant&.campaign&.utm_content
   end
 end

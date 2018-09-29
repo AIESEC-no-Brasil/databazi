@@ -4,7 +4,7 @@ RSpec.describe SignUpWorker do
   let(:worker) { described_class.new }
 
   before do
-    ExpaSignUp.stub(:call)
+    allow(ExpaSignUp).to receive(:call)
     worker.perform(nil, test: 'test')
   end
 

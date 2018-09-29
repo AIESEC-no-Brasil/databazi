@@ -2,15 +2,25 @@ module ExchangeParticipantable
   extend ActiveSupport::Concern
   def create
     if exchange_participantable.save
-      SendToPodioWorker.perform_async(ep_fields)
-      SignUpWorker.perform_async(exchange_participantable.as_sqs)
+      perform_on_workers
       render json: { status: :success }
     else
-      campaign.destroy
+      remove_campaign
       render json: {
         status: :failure,
         messages: exchange_participantable.errors.messages
       }
     end
+  end
+
+  private
+
+  def perform_on_workers
+    SendToPodioWorker.perform_async(ep_fields)
+    SignUpWorker.perform_async(exchange_participantable.as_sqs)
+  end
+
+  def remove_campaign
+    campaign.destroy
   end
 end
