@@ -11,6 +11,10 @@ class SendToPodio
   end
 
   def call
+    Shoryuken.logger.info("============================")
+    Shoryuken.logger.info("#{@params}")
+    Shoryuken.logger.info("============================")
+
     @status = send_to_podio(@params)
   end
 
