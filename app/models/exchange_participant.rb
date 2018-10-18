@@ -1,4 +1,7 @@
 class ExchangeParticipant < ApplicationRecord
+  include ActiveModel::Validations
+  validates_with YouthValidator
+
   before_save :encrypted_password
 
   validates :fullname, presence: true
