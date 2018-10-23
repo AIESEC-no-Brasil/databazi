@@ -1,4 +1,6 @@
 class SendToPodio
+  @@expires_at = nil
+
   def self.call(params)
     new(params).call
   end
@@ -22,9 +24,12 @@ class SendToPodio
 
   def send_to_podio(params)
     params['podio_app'] ||= 152_908_22
-    setup_podio
-    authenticate_podio
-    Podio::Item.create(params['podio_app'], fields: podio_item_fields(params))
+
+    if Podio.client.nil? || @@expires_at.nil? || @@expires_at < (Time.now + 600)
+      setup_podio
+      auth = authenticate_podio
+      @@expires_at = auth.expires_at
+    end
   end
 
   def authenticate_podio
