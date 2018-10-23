@@ -13,9 +13,7 @@ class SendToPodio
   end
 
   def call
-    Shoryuken.logger.info('============================')
-    Shoryuken.logger.info(@params.to_s)
-    Shoryuken.logger.info('============================')
+    Shoryuken.logger.info("=>SQS PARAMS:\n=>#{@params}\n=>SQS PARAMS END")
 
     @status = send_to_podio(@params)
   end
