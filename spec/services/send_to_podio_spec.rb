@@ -13,9 +13,11 @@ RSpec.describe SendToPodio do
   end
   let(:service) { described_class.new(params) }
   let(:client_double) { instance_double(Podio::Client) }
+  let(:oauth_double) { instance_double(Podio::OAuthToken) }
 
   before do
-    client_double.stub(:authenticate_with_credentials)
+    client_double.stub(:authenticate_with_credentials) { oauth_double }
+    allow(oauth_double).to receive(:expires_at).and_return(Time.now)
     Podio.stub(:client) { client_double }
     Podio.stub(:setup)
     Podio::Item.stub(:create) { instance_double(Podio::Item) }
