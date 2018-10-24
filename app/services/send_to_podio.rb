@@ -101,7 +101,7 @@ class SendToPodio
     return nil unless university_id.present?
     return university_id if university_id.match? UNIVERSITY_ID_PATTERN
 
-    university = University.find("name like :suffix", suffix: "%#{university_id}")
+    university = University.find('name like :suffix', suffix: "%#{university_id}")
     university.podio_id
   end
 end
