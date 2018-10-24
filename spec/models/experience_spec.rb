@@ -17,8 +17,7 @@ RSpec.describe Experience, type: :model do
       let(:gt_participant) { create(:gt_participant) }
       let(:experience) do
         create(:experience, gt_participant: gt_participant,
-          marketing: true, language: true
-          )
+                            marketing: true, language: true)
       end
 
       it 'returns an array containing matching podio IDs' do

@@ -77,4 +77,28 @@ RSpec.describe ExchangeParticipant, type: :model do
       it { is_expected.to match_array expected }
     end
   end
+
+  describe '#custom_validations' do
+    describe 'age validation' do
+      let(:younger_than_18) do
+        build(:exchange_participant,
+              birthdate: 18.years.ago + 1.day,
+              registerable: build(:gv_participant))
+      end
+      let(:older_than_30) do
+        build(:exchange_participant,
+              birthdate: 30.years.ago - 1.day,
+              registerable: build(:gv_participant))
+      end
+      let(:youth) do
+        build(:exchange_participant, registerable: build(:gv_participant))
+      end
+
+      it { expect(younger_than_18).not_to be_valid }
+
+      it { expect(older_than_30).not_to be_valid }
+
+      it { expect(youth).to be_valid }
+    end
+  end
 end

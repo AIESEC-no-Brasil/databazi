@@ -7,7 +7,9 @@ class ExpaSignUp
 
   def initialize(params)
     @status = true
-    @exchange_participant = ExchangeParticipant.find_by(id: params["exchange_participant_id"])
+    @exchange_participant = ExchangeParticipant.find_by(
+      id: params['exchange_participant_id']
+    )
   end
 
   def call
