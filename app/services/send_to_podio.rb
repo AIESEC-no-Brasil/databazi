@@ -1,4 +1,6 @@
 class SendToPodio
+  UNIVERSITY_ID_PATTERN = /^Universidade[0-9]*$/
+
   def self.call(params)
     new(params).call
   end
@@ -60,7 +62,7 @@ class SendToPodio
       params['cl-marcado-no-expa-nao-conta-expansao-ainda'] = sqs_params['local_committee'] if sqs_params['local_committee']
       params['nivel-de-ingles'] = sqs_params['english_level'] if sqs_params['english_level']
       params['nivel-de-espanhol'] = sqs_params['spanish_level'] if sqs_params['spanish_level']
-      params['universidade'] = podio_helper_find_item_by_unique_id(sqs_params['university'], 'universidade') if sqs_params['university']
+      params['universidade'] = podio_helper_find_item_by_unique_id(fix_university_id(sqs_params['university']), 'universidade') if sqs_params['university']
       params['curso'] = podio_helper_find_item_by_unique_id(sqs_params['college_course'], 'curso') if sqs_params['college_course']
       params['sub-produto'] = sqs_params['experience'] if sqs_params['experience']
 
@@ -86,5 +88,13 @@ class SendToPodio
     end
 
     JSON.parse(Podio::Item.collection(response.body).first.to_json)[0]["id"]
+  end
+
+  def fix_university_id(university_id)
+    return nil unless university_id.present?
+    return university_id if university_id.match? UNIVERSITY_ID_PATTERN
+
+    university = University.find("name like :suffix", suffix: "%#{university_id}")
+    university.podio_id
   end
 end
