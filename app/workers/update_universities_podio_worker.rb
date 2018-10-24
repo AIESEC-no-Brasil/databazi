@@ -1,7 +1,7 @@
-class UpdateUniversitiesPodioWorker
+class SendToPodioWorker
   include Shoryuken::Worker
 
-  QUEUE_NAME = 'databazi_podio_deadletter_queue_new'.freeze
+  QUEUE_NAME = 'databazi_podio_queue_new'.freeze
 
   shoryuken_options queue: QUEUE_NAME,
                     auto_delete: false,
