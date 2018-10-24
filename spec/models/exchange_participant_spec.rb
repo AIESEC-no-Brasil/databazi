@@ -88,9 +88,11 @@ RSpec.describe ExchangeParticipant, type: :model do
       let(:older_than_30) do
         build(:exchange_participant,
               birthdate: 30.years.ago - 1.day,
-              registerable: build(:gv_participant) )
+              registerable: build(:gv_participant))
       end
-      let(:youth) { build(:exchange_participant, registerable: build(:gv_participant)) }
+      let(:youth) do
+        build(:exchange_participant, registerable: build(:gv_participant))
+      end
 
       it { expect(younger_than_18).not_to be_valid }
 

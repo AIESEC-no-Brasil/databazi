@@ -16,15 +16,35 @@ Metrics/LineLength:
   Exclude:
     - 'db/seeds/**'
     - 'db/schema.rb'
+    - 'app/services/send_to_podio.rb'
+    - 'app/controllers/gv_participants_controller.rb'
+    - 'app/controllers/ge_participants_controller.rb'
+    - 'app/controllers/gt_participants_controller.rb'
 Metrics/AbcSize:
   Exclude:
     - 'app/services/expa_sign_up.rb'
+    - 'app/services/send_to_podio.rb'
     - 'app/controllers/gv_participants_controller.rb'
     - 'app/controllers/ge_participants_controller.rb'
     - 'app/controllers/gt_participants_controller.rb'
 Metrics/MethodLength:
   Exclude:
     - 'app/services/expa_sign_up.rb'
+    - 'app/services/send_to_podio.rb'
+    - 'app/controllers/gv_participants_controller.rb'
+    - 'app/controllers/ge_participants_controller.rb'
+    - 'app/controllers/gt_participants_controller.rb'
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'app/services/send_to_podio.rb'
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'app/services/send_to_podio.rb'
+Metrics/ClassLength:
+  Exclude:
+    - 'app/controllers/gt_participants_controller.rb'
+Style/ClassVars:
+  Exclude:
     - 'app/services/send_to_podio.rb'
 RSpec/NestedGroups:
   Max: 4
