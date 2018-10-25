@@ -24,15 +24,17 @@ class SendToPodio
   def send_to_podio(params)
     params['podio_app'] ||= 152_908_22
 
-    return unless expired_token?
+    if expired_token?
+      setup_podio
+      auth = authenticate_podio
+      @@expires_at = auth.expires_at
+    end
 
-    setup_podio
-    auth = authenticate_podio
-    @@expires_at = auth.expires_at
+    Podio::Item.create(params['podio_app'], fields: podio_item_fields(params))
   end
 
   def expired_token?
-    Podio.client || @@expires_at.zero? || @@expires_at < (Time.now + 600)
+    Podio.client.nil? || @@expires_at == 0 || @@expires_at < (Time.now + 600)
   end
 
   def authenticate_podio
@@ -73,9 +75,12 @@ class SendToPodio
     params['universidade'] = podio_helper_find_item_by_unique_id(fix_university_id(sqs_params['university']), 'universidade') if sqs_params['university']
     params['curso'] = podio_helper_find_item_by_unique_id(sqs_params['college_course'], 'curso') if sqs_params['college_course']
     params['sub-produto'] = sqs_params['experience'] if sqs_params['experience']
-    params['nivel-de-ingles'] = 5 if params['nivel-de-ingles'].zero?
-    params['nivel-de-espanhol'] = 5 if params['nivel-de-espanhol'].zero?
-
+    if params['nivel-de-ingles']
+      params['nivel-de-ingles'] = 5 if params['nivel-de-ingles'].zero?
+    end
+    if params['nivel-de-espanhol']
+      params['nivel-de-espanhol'] = 5 if params['nivel-de-espanhol'].zero?
+    end
     params
   end
 
