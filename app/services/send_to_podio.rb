@@ -75,9 +75,12 @@ class SendToPodio
     params['universidade'] = podio_helper_find_item_by_unique_id(fix_university_id(sqs_params['university']), 'universidade') if sqs_params['university']
     params['curso'] = podio_helper_find_item_by_unique_id(sqs_params['college_course'], 'curso') if sqs_params['college_course']
     params['sub-produto'] = sqs_params['experience'] if sqs_params['experience']
-    params['nivel-de-ingles'] = 5 if params['nivel-de-ingles'].zero?
-    params['nivel-de-espanhol'] = 5 if params['nivel-de-espanhol'].zero?
-
+    if params['nivel-de-ingles']
+      params['nivel-de-ingles'] = 5 if params['nivel-de-ingles'].zero?
+    end
+    if params['nivel-de-espanhol']
+      params['nivel-de-espanhol'] = 5 if params['nivel-de-espanhol'].zero?
+    end
     params
   end
 
