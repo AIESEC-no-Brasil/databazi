@@ -24,15 +24,17 @@ class SendToPodio
   def send_to_podio(params)
     params['podio_app'] ||= 152_908_22
 
-    return unless expired_token?
+    if expired_token?
+      setup_podio
+      auth = authenticate_podio
+      @@expires_at = auth.expires_at
+    end
 
-    setup_podio
-    auth = authenticate_podio
-    @@expires_at = auth.expires_at
+    Podio::Item.create(params['podio_app'], fields: podio_item_fields(params))
   end
 
   def expired_token?
-    Podio.client || @@expires_at.zero? || @@expires_at < (Time.now + 600)
+    Podio.client.nil? || @@expires_at == 0 || @@expires_at < (Time.now + 600)
   end
 
   def authenticate_podio
