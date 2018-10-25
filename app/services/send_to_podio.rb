@@ -32,7 +32,7 @@ class SendToPodio
   end
 
   def expired_token?
-    Podio.client || @@expires_at.zero? || @@expires_at < (Time.now + 600)
+    Podio.client || @@expires_at == 0 || @@expires_at < (Time.now + 600)
   end
 
   def authenticate_podio
