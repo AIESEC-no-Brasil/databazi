@@ -16,30 +16,51 @@ RSpec.describe UniversitiesController, type: :controller do
         expect(response.first.keys).to match_array(%w[id name])
       end
 
-      context 'with no params' do
-        it do
-          expect(response).to match_array(
-            University.all.as_json(only: %i[id name])
-          )
+      context 'when filtered by name' do
+        context 'with no name param' do
+          it do
+            expect(response).to match_array(
+              University.all.as_json(only: %i[id name])
+            )
+          end
+          it { expect(response.size).to eq University.count }
         end
-        it { expect(response.size).to eq University.count }
+
+        context 'with name param' do
+          subject(:do_index) { get :index, params: { name: 'Óutrã' } }
+
+          let!(:first_university) do
+            create(:university, name: 'University of Outra')
+          end
+          let!(:second_university) do
+            create(:university, name: 'Outra University')
+          end
+          let!(:other_university) do
+            create(:university, name: 'OUTRA')
+          end
+
+          it do
+            expected = [second_university, first_university, other_university]
+            expect(response).to eq(expected.as_json(only: %i[id name]))
+          end
+          it { expect(response.size).to eq 3 }
+        end
       end
 
-      context 'with name param' do
-        subject(:do_index) { get :index, params: { name: 'abc' } }
+      context 'when filtered by limit' do
+        let!(:universities) { create_list(:university, 50) }
 
-        let!(:first_university) do
-          create(:university, name: 'ABC University')
-        end
-        let!(:second_university) do
-          create(:university, name: 'University of abc')
+        context 'with param limit' do
+          subject(:do_index) { get :index, params: { limit: 30 } }
+
+          it { expect(response.size).to eq(30) }
         end
 
-        it do
-          expected = [first_university, second_university]
-          expect(response).to eq(expected.as_json(only: %i[id name]))
+        context 'with no param limit' do
+          subject(:do_index) { get :index }
+
+          it { expect(response.size).to eq(University.all.count) }
         end
-        it { expect(response.size).to eq 2 }
       end
     end
   end
