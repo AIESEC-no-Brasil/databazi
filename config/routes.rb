@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   mount SwaggerUiEngine::Engine, at: "/api_docs"
 
+  root 'empty#index'
   get 'exchange_participants' => 'exchange_participants#validate_email'
 
   resources :universities, only: :index
