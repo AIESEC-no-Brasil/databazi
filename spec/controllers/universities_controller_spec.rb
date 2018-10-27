@@ -17,6 +17,16 @@ RSpec.describe UniversitiesController, type: :controller do
       end
 
       context 'when filtered by name' do
+        let!(:first_university) do
+          create(:university, name: 'University of Outra')
+        end
+        let!(:second_university) do
+          create(:university, name: 'Outra University')
+        end
+        let!(:other_university) do
+          create(:university, name: 'OUTRA')
+        end
+
         context 'with no name param' do
           it do
             expect(response).to match_array(
@@ -29,16 +39,6 @@ RSpec.describe UniversitiesController, type: :controller do
         context 'with name param' do
           subject(:do_index) { get :index, params: { name: 'Óutrã' } }
 
-          let!(:first_university) do
-            create(:university, name: 'University of Outra')
-          end
-          let!(:second_university) do
-            create(:university, name: 'Outra University')
-          end
-          let!(:other_university) do
-            create(:university, name: 'OUTRA')
-          end
-
           it do
             expected = [second_university, first_university, other_university]
             expect(response).to eq(expected.as_json(only: %i[id name]))
@@ -48,18 +48,18 @@ RSpec.describe UniversitiesController, type: :controller do
       end
 
       context 'when filtered by limit' do
-        let!(:universities) { create_list(:university, 50) }
+        let!(:universities) { create_list(:university, 10) }
 
         context 'with param limit' do
-          subject(:do_index) { get :index, params: { limit: 30 } }
+          subject(:do_index) { get :index, params: { limit: 10 } }
 
-          it { expect(response.size).to eq(30) }
+          it { expect(response.size).to eq(10) }
         end
 
         context 'with no param limit' do
           subject(:do_index) { get :index }
 
-          it { expect(response.size).to eq(University.all.count) }
+          it { expect(response.size).to eq(University.count) }
         end
       end
     end
