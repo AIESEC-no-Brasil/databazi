@@ -9,7 +9,9 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-ActiveRecord::Schema.define(version: 2018_09_27_172245) do
+
+ActiveRecord::Schema.define(version: 2018_10_29_122311) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -28,6 +30,7 @@ ActiveRecord::Schema.define(version: 2018_09_27_172245) do
     t.string "podio_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "podio_item_id"
   end
 
   create_table "english_levels", force: :cascade do |t|
@@ -100,6 +103,7 @@ ActiveRecord::Schema.define(version: 2018_09_27_172245) do
     t.string "podio_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "podio_item_id"
   end
 
   add_foreign_key "exchange_participants", "college_courses"
