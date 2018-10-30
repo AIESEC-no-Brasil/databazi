@@ -29,7 +29,7 @@ class ExpaSignUp
 
     page = agent.submit(auth_form, auth_form.buttons.first)
 
-    result = EXPAAPI.Client.query(
+    result = EXPAAPI::Client.query(
       ExistsQuery,
       variables: { email: exchange_participant.email }
     )
