@@ -109,6 +109,10 @@ GEM
     formatador (0.2.5)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    graphql (1.8.11)
+    graphql-client (0.14.0)
+      activesupport (>= 3.0, < 6.0)
+      graphql (~> 1.6)
     guard (2.14.2)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -128,6 +132,8 @@ GEM
       rubocop (~> 0.20)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
+    httparty (0.16.2)
+      multi_xml (>= 0.5.2)
     i18n (1.1.0)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.1)
@@ -166,6 +172,7 @@ GEM
     minitest (5.11.3)
     msgpack (1.2.4)
     multi_json (1.13.1)
+    multi_xml (0.6.0)
     multipart-post (2.0.0)
     nenv (0.3.0)
     net-http-digest_auth (1.4.1)
@@ -332,8 +339,10 @@ DEPENDENCIES
   expa (= 0.1.2.10)!
   factory_bot_rails
   faker
+  graphql-client
   guard-rspec
   guard-rubocop
+  httparty
   libnotify
   listen (>= 3.0.5, < 3.2)
   mechanize

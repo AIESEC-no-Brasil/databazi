@@ -17,6 +17,8 @@ gem 'rails', '~> 5.2.0'
 gem 'shoryuken'
 gem 'swagger_ui_engine'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+gem 'graphql-client'
+gem 'httparty'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]

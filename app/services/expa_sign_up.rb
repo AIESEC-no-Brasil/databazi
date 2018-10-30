@@ -1,3 +1,5 @@
+require 'concerns/check_person_present'
+
 class ExpaSignUp
   def self.call(params)
     new(params).call
@@ -26,9 +28,13 @@ class ExpaSignUp
     auth_form = fill_form(page.forms[1], exchange_participant)
 
     page = agent.submit(auth_form, auth_form.buttons.first)
-    page.code.to_i == 200 &&
-      EXPA::Client.new.auth(exchange_participant.email,
-                            exchange_participant.decrypted_password)
+
+    result = EXPAAPI.Client.query(
+      ExistsQuery,
+      variables: { email: exchange_participant.email }
+    )
+
+    result.data&.check_person_present?
   end
 
   def fill_form(auth_form, exchange_participant)
