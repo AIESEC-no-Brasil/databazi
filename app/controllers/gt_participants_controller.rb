@@ -91,8 +91,8 @@ class GtParticipantsController < ApplicationController
       'scholarity' => scholarity_human_name,
       'local_committee' => gt_participant.exchange_participant&.local_committee&.podio_id,
       'english_level' => gt_participant&.english_level&.read_attribute_before_type_cast(:english_level),
-      'university' => gt_participant.exchange_participant&.university&.podio_id,
-      'college_course' => gt_participant.exchange_participant&.college_course&.podio_id,
+      'university' => gt_participant.exchange_participant&.university&.podio_item_id,
+      'college_course' => gt_participant.exchange_participant&.college_course&.podio_item_id,
       'experience' => gt_participant&.experience&.for_podio
     }
   end

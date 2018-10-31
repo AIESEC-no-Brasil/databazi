@@ -71,9 +71,8 @@ class SendToPodio
     params['cl-marcado-no-expa-nao-conta-expansao-ainda'] = sqs_params['local_committee'] if sqs_params['local_committee']
     params['nivel-de-ingles'] = sqs_params['english_level'] if sqs_params['english_level']
     params['nivel-de-espanhol'] = sqs_params['spanish_level'] if sqs_params['spanish_level']
-    params['universidade'] = podio_helper_find_item_by_unique_id(sqs_params['university'], 'universidade') if sqs_params['university']
-    params['universidade'] = podio_helper_find_item_by_unique_id(fix_university_id(sqs_params['university']), 'universidade') if sqs_params['university']
-    params['curso'] = podio_helper_find_item_by_unique_id(sqs_params['college_course'], 'curso') if sqs_params['college_course']
+    params['universidade'] = sqs_params['university'] if sqs_params['university']
+    params['curso'] = sqs_params['college_course'] if sqs_params['college_course']
     params['sub-produto'] = sqs_params['experience'] if sqs_params['experience']
     if params['nivel-de-ingles']
       params['nivel-de-ingles'] = 5 if params['nivel-de-ingles'].zero?
@@ -82,24 +81,6 @@ class SendToPodio
       params['nivel-de-espanhol'] = 5 if params['nivel-de-espanhol'].zero?
     end
     params
-  end
-
-  def podio_helper_find_item_by_unique_id(unique_id, option)
-    attributes = { sort_by: 'last_edit_on' }
-    if option == 'universidade'
-      app_id = 14_568_134
-      attributes[:filters] = { 117_992_837 => unique_id }
-    elsif option == 'curso'
-      app_id = 14_568_143
-      attributes[:filters] = { 117_992_834 => unique_id }
-    end
-
-    response = Podio.connection.post do |req|
-      req.url "/item/app/#{app_id}/filter/"
-      req.body = attributes
-    end
-
-    JSON.parse(Podio::Item.collection(response.body).first.to_json)[0]['id']
   end
 
   def fix_university_id(university_id)
