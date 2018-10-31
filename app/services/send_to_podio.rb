@@ -71,8 +71,8 @@ class SendToPodio
     params['cl-marcado-no-expa-nao-conta-expansao-ainda'] = sqs_params['local_committee'] if sqs_params['local_committee']
     params['nivel-de-ingles'] = sqs_params['english_level'] if sqs_params['english_level']
     params['nivel-de-espanhol'] = sqs_params['spanish_level'] if sqs_params['spanish_level']
-    params['universidade'] = sqs_params['university'] if sqs_params['university']
-    params['curso'] = sqs_params['college_course'] if sqs_params['college_course']
+    params['universidade'] = sqs_params['university'].to_i if sqs_params['university']
+    params['curso'] = sqs_params['college_course'].to_i if sqs_params['college_course']
     params['sub-produto'] = sqs_params['experience'] if sqs_params['experience']
     if params['nivel-de-ingles']
       params['nivel-de-ingles'] = 5 if params['nivel-de-ingles'].zero?
