@@ -49,7 +49,7 @@ class ExpaSignUp
   end
 
   def exchange_participant_present?(exchange_participant)
-    EXPAAPI.Client.query(
+    EXPAAPI::Client.query(
       ExistsQuery,
       variables: { email: exchange_participant.email }
     ).data&.check_person_present?
