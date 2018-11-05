@@ -10,12 +10,12 @@ require 'rails_helper'
 #            fullname: 'Forrest Gump',
 #            registerable: build(:gv_participant))
 #   end
-# 
+#
 #   let(:params) { { exchange_participant_id: exchange_participant.id } }
-# 
+#
 #   it { is_expected.to respond_to(:call) }
-# 
+#
 #   it { is_expected.to respond_to(:exchange_participant) }
-# 
+#
 #   it { is_expected.to respond_to(:status) }
 # end
