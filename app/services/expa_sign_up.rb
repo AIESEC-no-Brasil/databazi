@@ -22,44 +22,33 @@ class ExpaSignUp
 
   private
 
-  def send_data_to_expa(exchange_participant)
-    page = sign_in_page
-
-    auth_form = fill_form(page.forms[1], exchange_participant)
-
-    page = agent.submit(auth_form, auth_form.buttons.first)
-
-    result = EXPAAPI.Client.query(
-      ExistsQuery,
-      variables: { email: exchange_participant.email }
+  def submit_data(exchange_participant)
+    HTTParty.post(
+      'https://auth.aiesec.org/users/',
+      body: {
+        'authenticity_token' => authenticity_token,
+        'utf8' => '✓',
+        'user[email]' => exchange_participant.email,
+        'user[first_name]' => exchange_participant.first_name,
+        'user[last_name]' => exchange_participant.last_name,
+        'user[password]' => exchange_participant.decrypted_password,
+        'user[phone]' => exchange_participant.cellphone,
+        'user[country]' => 'Brazil',
+        'user[mc]' => '1606',
+        'user[lc]' => exchange_participant.local_committee.expa_id,
+        'user[lc_input]' => exchange_participant.local_committee.expa_id,
+        'user[allow_phone_communication]' => exchange_participant.cellphone_contactable
+      }
     )
 
     result.data&.check_person_present?
   end
 
-  def fill_form(auth_form, exchange_participant)
-    auth_form.field_with(name: 'user[email]').value =
-      exchange_participant.email
-    auth_form.field_with(name: 'user[first_name]').value =
-      exchange_participant.first_name
-    auth_form.field_with(name: 'user[last_name]').value =
-      exchange_participant.last_name
-    auth_form.field_with(name: 'user[password]').value =
-      exchange_participant.decrypted_password
-    auth_form.field_with(name: 'user[phone]').value =
-      exchange_participant.cellphone
-    auth_form.field_with(name: 'user[country]').value = 'Brazil'
-    auth_form.field_with(name: 'user[mc]').value = '1606'
-    auth_form.field_with(name: 'user[lc]').value =
-      exchange_participant.local_committee.expa_id
-    auth_form.field_with(name: 'user[lc_input]').value =
-      exchange_participant.local_committee.expa_id
-    auth_form.field_with(name: 'user[allow_phone_communication]').value =
-      exchange_participant.cellphone_contactable
-    auth_form.checkbox_with(name: 'user[allow_phone_communication]').checked =
-      exchange_participant.cellphone_contactable
-
-    auth_form
+  def exchange_participant_present?(exchange_participant)
+    EXPAAPI::Client.query(
+      ExistsQuery,
+      variables: { email: exchange_participant.email }
+    ).data&.check_person_present?
   end
 
   def agent
