@@ -1,4 +1,5 @@
-server 'ec2-54-215-129-93.us-west-1.compute.amazonaws.com', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
+server '52.8.202.239', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
+server '13.52.15.16', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
 
 set :branch, :master
 # server-based syntax
