@@ -46,7 +46,7 @@ class SendToPodio
 
   def setup_podio
     Podio.setup(
-      api_key: Rails.application.credentials[ENV['COUNTRY'].to_sym][ENV['ENV'].to_sym][:podio][:api_key]
+      api_key: Rails.application.credentials[ENV['COUNTRY'].to_sym][ENV['ENV'].to_sym][:podio][:api_key],
       api_secret: Rails.application.credentials[ENV['COUNTRY'].to_sym][ENV['ENV'].to_sym][:podio][:api_secret]
     )
   end

@@ -1,9 +1,10 @@
 require: rubocop-rspec
 AllCops:
   Exclude:
-    - 'config/**/*'
-    - 'script/**/*'
     - 'bin/**/*'
+    - 'config/**/*'
+    - 'lib/tasks/*'
+    - 'script/**/*'
     - 'Vagrantfile'
     - 'Guardfile'
 Metrics/BlockLength:
