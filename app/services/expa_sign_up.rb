@@ -34,8 +34,8 @@ class ExpaSignUp
         'user[last_name]' => exchange_participant.last_name,
         'user[password]' => exchange_participant.decrypted_password,
         'user[phone]' => exchange_participant.cellphone,
-        'user[country]' => 'Brazil',
-        'user[mc]' => '1606',
+        'user[country]' => Rails.application.credentials[ENV['COUNTRY'].to_sym][:country],
+        'user[mc]' => Rails.application.credentials[ENV['COUNTRY'].to_sym][:mc_id],
         'user[lc]' => exchange_participant.local_committee.expa_id,
         'user[lc_input]' => exchange_participant.local_committee.expa_id,
         'user[allow_phone_communication]' => exchange_participant.cellphone_contactable

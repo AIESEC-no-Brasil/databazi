@@ -49,6 +49,7 @@ class ExchangeParticipant < ApplicationRecord
   end
 
   def password_encryptor
+    salt = Rails.application.credentials[ENV['COUNTRY'].to_sym][ENV['ENV'].to_sym][:salt]
     key = ActiveSupport::KeyGenerator.new('password')
                                      .generate_key(ENV['SALT'], 32)
     ActiveSupport::MessageEncryptor.new(key)

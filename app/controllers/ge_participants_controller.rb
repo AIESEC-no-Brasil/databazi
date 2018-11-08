@@ -70,7 +70,7 @@ class GeParticipantsController < ApplicationController
       'birthdate' => ge_participant.birthdate,
       'utm_source' => utm_source, 'utm_medium' => utm_medium,
       'utm_campaign' => utm_campaign, 'utm_term' => utm_term,
-      'utm_content' => utm_content, 'podio_app' => 170_576_29,
+      'utm_content' => utm_content, 'podio_app' => podio_app_id,
       'scholarity' => scholarity_human_name,
       'local_committee' => ge_participant.exchange_participant&.local_committee&.podio_id,
       'spanish_level' => ge_participant.read_attribute_before_type_cast(:spanish_level),
@@ -78,6 +78,10 @@ class GeParticipantsController < ApplicationController
       'university' => ge_participant.exchange_participant&.university&.podio_item_id,
       'college_course' => ge_participant.exchange_participant&.college_course&.podio_item_id
     }
+  end
+
+  def podio_app_id
+    Rails.application.credentials[ENV['COUNTRY'].to_sym][ENV['ENV'].to_sym][:podio][:apps][:oge]
   end
 
   def scholarity_human_name
