@@ -35,7 +35,7 @@ class GvParticipantsController < ApplicationController
       .permit(exchange_participant_attributes: %i[
                 id fullname birthdate email cellphone local_committee_id
                 university_id college_course_id password scholarity
-                campaign_id
+                campaign_id cellphone_contactable
               ])
   end
 
@@ -51,7 +51,7 @@ class GvParticipantsController < ApplicationController
     params[:gv_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
-             :password, :scholarity, :campaign_id)
+             :password, :scholarity, :campaign_id, :cellphone_contactable)
   end
 
   def gv_participant_fields
@@ -65,7 +65,8 @@ class GvParticipantsController < ApplicationController
       'scholarity' => scholarity_human_name,
       'local_committee' => gv_participant.exchange_participant&.local_committee&.podio_id,
       'university' => gv_participant.exchange_participant&.university&.podio_item_id,
-      'college_course' => gv_participant.exchange_participant&.college_course&.podio_item_id
+      'college_course' => gv_participant.exchange_participant&.college_course&.podio_item_id,
+      'cellphone_contactable' => gv_participant.exchange_participant.cellphone_contactable
     }
   end
 
