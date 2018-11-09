@@ -74,10 +74,7 @@ class SendToPodio
     params['universidade'] = sqs_params['university'].to_i if sqs_params['university']
     params['curso'] = sqs_params['college_course'].to_i if sqs_params['college_course']
     params['sub-produto'] = sqs_params['experience'] if sqs_params['experience']
-    if sqs_params['cellphone_contactable']
-      params['gostaria-de-ser-contactado-por-celular'] =
-        cellphone_contactable_option(sqs_params['cellphone_contactable'])
-    end
+    params['gostaria-de-ser-contactado-por-celular'] = cellphone_contactable_option(sqs_params['cellphone_contactable'])
     if params['nivel-de-ingles']
       params['nivel-de-ingles'] = 5 if params['nivel-de-ingles'].zero?
     end
