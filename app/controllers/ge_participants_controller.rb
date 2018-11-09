@@ -35,7 +35,7 @@ class GeParticipantsController < ApplicationController
       exchange_participant_attributes: %i[
         id fullname email birthdate cellphone local_committee_id
         university_id college_course_id password scholarity
-        campaign_id
+        campaign_id cellphone_contactable
       ],
       english_level_attributes: [:english_level]
     )
@@ -55,7 +55,7 @@ class GeParticipantsController < ApplicationController
     params[:ge_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
-             :password, :scholarity, :campaign_id)
+             :password, :scholarity, :campaign_id, :cellphone_contactable)
   end
 
   def english_level_params
@@ -76,7 +76,8 @@ class GeParticipantsController < ApplicationController
       'spanish_level' => ge_participant.read_attribute_before_type_cast(:spanish_level),
       'english_level' => ge_participant&.english_level&.read_attribute_before_type_cast(:english_level),
       'university' => ge_participant.exchange_participant&.university&.podio_item_id,
-      'college_course' => ge_participant.exchange_participant&.college_course&.podio_item_id
+      'college_course' => ge_participant.exchange_participant&.college_course&.podio_item_id,
+      'cellphone_contactable' => ge_participant.exchange_participant.cellphone_contactable
     }
   end
 

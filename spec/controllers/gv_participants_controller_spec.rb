@@ -20,6 +20,7 @@ RSpec.describe GvParticipantsController, type: :controller do
         college_course_id: exchange_participant.college_course_id,
         university_id: exchange_participant.university_id,
         password: exchange_participant.password,
+        cellphone_contactable: exchange_participant.cellphone_contactable,
         scholarity: gv_participant.scholarity,
         utm_source: campaign.utm_source,
         utm_medium: campaign.utm_medium,
