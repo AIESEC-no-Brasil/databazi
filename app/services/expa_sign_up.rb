@@ -1,4 +1,5 @@
 require 'concerns/check_person_present'
+require 'open-uri'
 
 class ExpaSignUp
   def self.call(params)
@@ -40,8 +41,11 @@ class ExpaSignUp
         'user[allow_phone_communication]' => exchange_participant.cellphone_contactable
       }
     )
+  end
 
-    result.data&.check_person_present?
+  def send_data_to_expa(exchange_participant)
+    submit_data(exchange_participant)
+    exchange_participant_present?(exchange_participant)
   end
 
   def exchange_participant_present?(exchange_participant)
@@ -51,14 +55,11 @@ class ExpaSignUp
     ).data&.check_person_present?
   end
 
-  def agent
-    Mechanize.new do |a|
-      a.ssl_version = 'TLSv1'
-      a.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    end
+  def authenticity_token
+    sign_up_page.css('.signup_op [name=authenticity_token]').first['value']
   end
 
-  def sign_in_page
-    agent.get('https://auth.aiesec.org/users/sign_in')
+  def sign_up_page
+    Nokogiri::HTML(open('https://auth.aiesec.org/users/sign_in'))
   end
 end
