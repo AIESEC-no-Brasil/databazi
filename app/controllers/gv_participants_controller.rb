@@ -65,7 +65,8 @@ class GvParticipantsController < ApplicationController
       'scholarity' => scholarity_human_name,
       'local_committee' => gv_participant.exchange_participant&.local_committee&.podio_id,
       'university' => gv_participant.exchange_participant&.university&.podio_item_id,
-      'college_course' => gv_participant.exchange_participant&.college_course&.podio_item_id
+      'college_course' => gv_participant.exchange_participant&.college_course&.podio_item_id,
+      'cellphone_contactable' => gv_participant.exchange_participant.cellphone_contactable
     }
   end
 

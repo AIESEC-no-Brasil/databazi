@@ -93,7 +93,8 @@ class GtParticipantsController < ApplicationController
       'english_level' => gt_participant&.english_level&.read_attribute_before_type_cast(:english_level),
       'university' => gt_participant.exchange_participant&.university&.podio_item_id,
       'college_course' => gt_participant.exchange_participant&.college_course&.podio_item_id,
-      'experience' => gt_participant&.experience&.for_podio
+      'experience' => gt_participant&.experience&.for_podio,
+      'cellphone_contactable' => gt_participant.exchange_participant.cellphone_contactable
     }
   end
 
