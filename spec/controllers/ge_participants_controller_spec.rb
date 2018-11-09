@@ -23,6 +23,7 @@ RSpec.describe GeParticipantsController, type: :controller do
         local_committee_id: exchange_participant.local_committee_id,
         university_id: exchange_participant.university_id,
         college_course_id: exchange_participant.college_course_id,
+        cellphone_contactable: exchange_participant.cellphone_contactable,
         password: exchange_participant.password,
         scholarity: ge_participant.scholarity,
         utm_source: campaign.utm_source,

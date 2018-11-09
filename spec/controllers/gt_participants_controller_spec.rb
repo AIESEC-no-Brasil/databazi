@@ -22,6 +22,7 @@ RSpec.describe GtParticipantsController, type: :controller do
         birthdate: gt_participant.birthdate,
         english_level: gt_participant.english_level.to_s,
         scholarity: gt_participant.scholarity,
+        cellphone_contactable: exchange_participant.cellphone_contactable,
         experience: {
           language: experience.language,
           marketing: experience.marketing,
