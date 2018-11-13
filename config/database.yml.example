@@ -81,5 +81,5 @@ test:
 production:
   <<: *default
   database: databazi_production
-  username: databazi
-  password: <%= ENV['DATABAZI_DATABASE_PASSWORD'] %>
+  username: <%= Rails.application.credentials[ENV['COUNTRY'].to_sym][ENV['ENV'].to_sym][:db][:username] %>
+  password: <%= Rails.application.credentials[ENV['COUNTRY'].to_sym][ENV['ENV'].to_sym][:db][:password] %>

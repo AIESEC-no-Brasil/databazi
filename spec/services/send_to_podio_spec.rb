@@ -29,9 +29,11 @@ RSpec.describe SendToPodio do
 
   it { is_expected.to respond_to(:status) }
 
-  it { expect(described_class.call(params)).to be_truthy }
+  it 'is truthy', podio: true do
+    expect(described_class.call(params)).to be_truthy
+  end
 
-  it 'setups podio' do
+  it 'setups podio', podio: true do
     described_class.call(params)
 
     expect(Podio).to have_received(:setup)

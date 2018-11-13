@@ -87,7 +87,7 @@ class GtParticipantsController < ApplicationController
       'birthdate' => gt_participant.birthdate,
       'utm_source' => utm_source, 'utm_medium' => utm_medium,
       'utm_campaign' => utm_campaign, 'utm_term' => utm_term,
-      'utm_content' => utm_content, 'podio_app' => 170_570_01,
+      'utm_content' => utm_content, 'podio_app' => podio_app_id,
       'scholarity' => scholarity_human_name,
       'local_committee' => gt_participant.exchange_participant&.local_committee&.podio_id,
       'english_level' => gt_participant&.english_level&.read_attribute_before_type_cast(:english_level),
@@ -96,6 +96,10 @@ class GtParticipantsController < ApplicationController
       'experience' => gt_participant&.experience&.for_podio,
       'cellphone_contactable' => gt_participant.exchange_participant.cellphone_contactable
     }
+  end
+
+  def podio_app_id
+    Rails.application.credentials[ENV['COUNTRY'].to_sym][ENV['ENV'].to_sym][:podio][:apps][:ogt]
   end
 
   def scholarity_human_name

@@ -1,7 +1,7 @@
 unless ENV['TRAVIS_PULL_REQUEST']
-  AWS_REGION = ENV['AWS_REGION']
-  AWS_ACCESS_KEY_ID = ENV['AWS_ACCESS_KEY_ID']
-  AWS_SECRET_ACCESS_KEY = ENV['AWS_SECRET_ACCESS_KEY']
+  AWS_REGION = Rails.application.credentials[ENV['COUNTRY'].to_sym][:aws][ENV['ENV'].to_sym][:region]
+  AWS_ACCESS_KEY_ID = Rails.application.credentials[ENV['COUNTRY'].to_sym][:aws][:access_key_id]
+  AWS_SECRET_ACCESS_KEY = Rails.application.credentials[ENV['COUNTRY'].to_sym][:aws][:secret_access_key]
 
   Aws.config.update({
     region:      AWS_REGION,

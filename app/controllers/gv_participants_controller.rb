@@ -61,13 +61,17 @@ class GvParticipantsController < ApplicationController
       'birthdate' => gv_participant.birthdate,
       'utm_source' => utm_source, 'utm_medium' => utm_medium,
       'utm_campaign' => utm_campaign, 'utm_term' => utm_term,
-      'utm_content' => utm_content, 'podio_app' => 152_908_22,
+      'utm_content' => utm_content, 'podio_app' => podio_app_id,
       'scholarity' => scholarity_human_name,
       'local_committee' => gv_participant.exchange_participant&.local_committee&.podio_id,
       'university' => gv_participant.exchange_participant&.university&.podio_item_id,
       'college_course' => gv_participant.exchange_participant&.college_course&.podio_item_id,
       'cellphone_contactable' => gv_participant.exchange_participant.cellphone_contactable
     }
+  end
+
+  def podio_app_id
+    Rails.application.credentials[ENV['COUNTRY'].to_sym][ENV['ENV'].to_sym][:podio][:apps][:ogv]
   end
 
   def scholarity_human_name
