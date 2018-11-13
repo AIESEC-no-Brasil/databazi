@@ -10,7 +10,8 @@ class LocalCommittee < ApplicationRecord
       id: id,
       name: name,
       podio_id: podio_id,
-      expa_id: expa_id
+      expa_id: expa_id,
+      active: active
     }
   end
 end
