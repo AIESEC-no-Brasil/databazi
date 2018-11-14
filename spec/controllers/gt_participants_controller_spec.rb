@@ -37,7 +37,8 @@ RSpec.describe GtParticipantsController, type: :controller do
         utm_medium: campaign.utm_medium,
         utm_campaign: campaign.utm_campaign,
         utm_term: campaign.utm_term,
-        utm_content: campaign.utm_content
+        utm_content: campaign.utm_content,
+        preferred_destination: gt_participant.preferred_destination
       }
     end
     let(:response) { JSON.parse(subject.body) }

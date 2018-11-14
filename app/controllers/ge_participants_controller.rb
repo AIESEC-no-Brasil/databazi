@@ -31,19 +31,23 @@ class GeParticipantsController < ApplicationController
 
   def ge_participant_params
     nested_params.require(:ge_participant).permit(
+      :preferred_destination,
       :spanish_level,
+      :when_can_travel,
+      english_level_attributes: [:english_level],
       exchange_participant_attributes: %i[
         id fullname email birthdate cellphone local_committee_id
         university_id college_course_id password scholarity
         campaign_id cellphone_contactable
-      ],
-      english_level_attributes: [:english_level]
+      ]
     )
   end
 
   def nested_params
     ActionController::Parameters.new(
       ge_participant: {
+        preferred_destination: params[:ge_participant][:preferred_destination],
+        when_can_travel: params[:ge_participant][:when_can_travel],
         spanish_level: params[:ge_participant][:spanish_level],
         exchange_participant_attributes: exchange_participant_params,
         english_level_attributes: english_level_params
