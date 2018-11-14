@@ -12,5 +12,12 @@ class GeParticipant < ApplicationRecord
   enum spanish_level: %i[none basic intermediate advanced fluent],
        _suffix: true
 
+  enum when_can_travel: %i[as_soon_as_possible next_three_months
+                           next_six_months in_one_year]
+
+  enum preferred_destination: %i[brazil mexico peru]
+
   validates :spanish_level, presence: true
+  validates :when_can_travel, presence: true
+  validates :preferred_destination, presence: true
 end

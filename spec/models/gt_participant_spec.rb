@@ -13,6 +13,11 @@ RSpec.describe GtParticipant, type: :model do
     it { is_expected.to accept_nested_attributes_for :exchange_participant }
     it { is_expected.to accept_nested_attributes_for :english_level }
     it { is_expected.to accept_nested_attributes_for :experience }
+    it do
+      expect(GtParticipant.new).to define_enum_for(:preferred_destination)
+        .with(%i[brazil mexico india romania colombia
+                 panama costa_rica hungary])
+    end
   end
 
   describe '#associations' do
@@ -23,5 +28,9 @@ RSpec.describe GtParticipant, type: :model do
 
   describe '#methods' do
     it { is_expected.to delegate_method(:as_sqs).to(:exchange_participant) }
+  end
+
+  describe '#validation' do
+    it { is_expected.to validate_presence_of :preferred_destination }
   end
 end
