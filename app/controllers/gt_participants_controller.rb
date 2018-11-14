@@ -99,7 +99,7 @@ class GtParticipantsController < ApplicationController
   end
 
   def podio_app_id
-    Rails.application.credentials[ENV['COUNTRY'].to_sym][ENV['ENV'].to_sym][:podio][:apps][:ogt]
+    ENV['PODIO_APP_GT']
   end
 
   def scholarity_human_name

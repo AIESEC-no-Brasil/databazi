@@ -22,7 +22,7 @@ class SendToPodio
   private
 
   def send_to_podio(params)
-    params['podio_app'] ||= ENV['PODIO_APP']
+    params['podio_app'] ||= ENV['PODIO_APP_GV']
 
     if expired_token?
       setup_podio
@@ -39,15 +39,14 @@ class SendToPodio
 
   def authenticate_podio
     Podio.client.authenticate_with_credentials(
-      Rails.application.credentials[ENV['COUNTRY'].to_sym][ENV['ENV'].to_sym][:podio][:username],
-      Rails.application.credentials[ENV['COUNTRY'].to_sym][ENV['ENV'].to_sym][:podio][:password]
+      ENV['PODIO_USERNAME'], ENV['PODIO_PASSWORD']
     )
   end
 
   def setup_podio
     Podio.setup(
-      api_key: Rails.application.credentials[ENV['COUNTRY'].to_sym][ENV['ENV'].to_sym][:podio][:api_key],
-      api_secret: Rails.application.credentials[ENV['COUNTRY'].to_sym][ENV['ENV'].to_sym][:podio][:api_secret]
+      api_key: ENV['PODIO_API_KEY'],
+      api_secret: ENV['PODIO_API_SECRET']
     )
   end
 
