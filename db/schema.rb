@@ -100,6 +100,7 @@ ActiveRecord::Schema.define(version: 2018_11_14_182151) do
     t.integer "podio_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "active", default: true
   end
 
   create_table "universities", force: :cascade do |t|
