@@ -31,6 +31,7 @@ class GtParticipantsController < ApplicationController
 
   def gt_participant_params
     nested_params.require(:gt_participant).permit(
+      :preferred_destination,
       english_level_attributes: [:english_level],
       exchange_participant_attributes:
         exchange_participant_permitted_attributes,
@@ -55,6 +56,7 @@ class GtParticipantsController < ApplicationController
   def nested_params
     ActionController::Parameters.new(
       gt_participant: {
+        preferred_destination: params[:gt_participant][:preferred_destination],
         scholarity: params[:gt_participant][:scholarity],
         english_level_attributes: english_level_params,
         exchange_participant_attributes: exchange_participant_params,

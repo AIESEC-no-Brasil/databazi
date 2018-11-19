@@ -26,7 +26,8 @@ RSpec.describe GvParticipantsController, type: :controller do
         utm_medium: campaign.utm_medium,
         utm_campaign: campaign.utm_campaign,
         utm_term: campaign.utm_term,
-        utm_content: campaign.utm_content
+        utm_content: campaign.utm_content,
+        when_can_travel: gv_participant.when_can_travel
       }
     end
     let(:response) { JSON.parse(subject.body) }

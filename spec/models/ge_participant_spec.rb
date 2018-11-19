@@ -20,10 +20,21 @@ RSpec.describe GeParticipant, type: :model do
     end
     it { is_expected.to accept_nested_attributes_for :exchange_participant }
     it { is_expected.to accept_nested_attributes_for :english_level }
+    it do
+      expect(GeParticipant.new).to define_enum_for(:when_can_travel)
+        .with(%i[as_soon_as_possible next_three_months
+                 next_six_months in_one_year])
+    end
+    it do
+      expect(GeParticipant.new).to define_enum_for(:preferred_destination)
+        .with(%i[brazil mexico peru])
+    end
   end
 
   describe '#validation' do
     it { is_expected.to validate_presence_of :spanish_level }
+    it { is_expected.to validate_presence_of :when_can_travel }
+    it { is_expected.to validate_presence_of :preferred_destination }
   end
 
   describe '#methods' do
