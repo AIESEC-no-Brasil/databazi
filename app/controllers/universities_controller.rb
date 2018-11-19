@@ -1,10 +1,9 @@
 class UniversitiesController < ApplicationController
-  expose :universities, {
+  expose :universities, -> {
     University.by_name(query_by_name(params[:name]))
               .limit(limit_response)
               .order(name: :asc)
   }
-  end
 
   def index
     render json: format_response
