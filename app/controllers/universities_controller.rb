@@ -1,8 +1,11 @@
 class UniversitiesController < ApplicationController
   expose :universities, -> do
-    University.by_name(query_by_name(params[:name]))
-              .limit(limit_response)
-              .order(name: :asc)
+    results = University.by_name(query_by_name(params[:name]))
+    if params[:city]
+      results = results.where(city: params[:city])
+    end
+    results.limit(limit_response)
+           .order(name: :asc)
   end
 
   def index

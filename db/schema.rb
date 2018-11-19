@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_29_122311) do
+ActiveRecord::Schema.define(version: 2018_11_19_200151) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,7 @@ ActiveRecord::Schema.define(version: 2018_10_29_122311) do
     t.boolean "cellphone_contactable", default: false
     t.integer "scholarity"
     t.integer "campaign_id"
+    t.string "other_university"
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
@@ -104,9 +105,13 @@ ActiveRecord::Schema.define(version: 2018_10_29_122311) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "podio_item_id"
+    t.bigint "local_committee_id"
+    t.string "city"
+    t.index ["local_committee_id"], name: "index_universities_on_local_committee_id"
   end
 
   add_foreign_key "exchange_participants", "college_courses"
   add_foreign_key "exchange_participants", "local_committees"
   add_foreign_key "exchange_participants", "universities"
+  add_foreign_key "universities", "local_committees"
 end
