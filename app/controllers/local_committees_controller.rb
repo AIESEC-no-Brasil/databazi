@@ -2,9 +2,9 @@ class LocalCommitteesController < ApplicationController
   expose :local_committees, -> do
     if params[:university_id]
       university = University.find(params[:university_id])
-      LocalCommittee.where(id: university.local_committee.id)
+      LocalCommittee.active.where(id: university.local_committee.id)
     else
-      LocalCommittee.all
+      LocalCommittee.active
     end
   end
 
