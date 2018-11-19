@@ -1,6 +1,7 @@
 class GeParticipant < ApplicationRecord
   has_one :exchange_participant, as: :registerable, dependent: :destroy
   has_one :english_level, as: :englishable, dependent: :destroy
+  has_one_attached :curriculum
 
   delegate :as_sqs, :fullname, :cellphone, :email, :birthdate,
            :first_name, :last_name, :scholarity,
@@ -20,4 +21,16 @@ class GeParticipant < ApplicationRecord
   validates :spanish_level, presence: true
   validates :when_can_travel, presence: true
   validates :preferred_destination, presence: true
+
+  validate :correct_document_mime_type
+
+  private
+
+  def correct_document_mime_type
+    if curriculum.attached? && !curriculum.content_type.in?(%w(application/pdf))
+      errors.add(:curriculum, 'Must be a PDF file')
+      curriculum.purge
+    end
+  end
+
 end

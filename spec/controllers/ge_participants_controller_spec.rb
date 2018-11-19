@@ -32,10 +32,11 @@ RSpec.describe GeParticipantsController, type: :controller do
         utm_term: campaign.utm_term,
         utm_content: campaign.utm_content,
         when_can_travel: ge_participant.when_can_travel,
-        preferred_destination: ge_participant.preferred_destination
+        preferred_destination: ge_participant.preferred_destination,
+        curriculum: ge_participant.curriculum
       }
     end
-    
+
     let(:response) { JSON.parse(subject.body) }
 
     it { is_expected.to be_successful }
