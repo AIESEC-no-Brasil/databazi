@@ -33,7 +33,7 @@ RSpec.describe GeParticipantsController, type: :controller do
         utm_content: campaign.utm_content,
         when_can_travel: ge_participant.when_can_travel,
         preferred_destination: ge_participant.preferred_destination,
-        curriculum: ge_participant.curriculum
+        curriculum: fixture_file_upload('files/spec.pdf', 'application/pdf')
       }
     end
 
@@ -48,6 +48,7 @@ RSpec.describe GeParticipantsController, type: :controller do
       it { expect { do_create }.to change(GeParticipant, :count).by 1 }
       it { expect { do_create }.to change(EnglishLevel, :count).by 1 }
       it { expect { do_create }.to change(Campaign, :count).by 1 }
+      it { expect { do_create }.to change(ActiveStorage::Attachment, :count).by 1 }
 
       it 'sends message to sqs' do
         do_create
@@ -81,6 +82,7 @@ RSpec.describe GeParticipantsController, type: :controller do
       it { expect { do_create }.not_to change(GeParticipant, :count) }
       it { expect { do_create }.not_to change(EnglishLevel, :count) }
       it { expect { do_create }.not_to change(Campaign, :count) }
+      it { expect { do_create }.not_to change(ActiveStorage::Attachment, :count) }
 
       describe 'response' do
         it { expect(response['status']).to eq 'failure' }

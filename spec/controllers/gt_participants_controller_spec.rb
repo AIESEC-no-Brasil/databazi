@@ -38,7 +38,8 @@ RSpec.describe GtParticipantsController, type: :controller do
         utm_campaign: campaign.utm_campaign,
         utm_term: campaign.utm_term,
         utm_content: campaign.utm_content,
-        preferred_destination: gt_participant.preferred_destination
+        preferred_destination: gt_participant.preferred_destination,
+        curriculum: fixture_file_upload('files/spec.pdf', 'application/pdf')
       }
     end
     let(:response) { JSON.parse(subject.body) }
@@ -53,6 +54,7 @@ RSpec.describe GtParticipantsController, type: :controller do
       it { expect { do_create }.to change(EnglishLevel, :count).by 1 }
       it { expect { do_create }.to change(Experience, :count).by 1 }
       it { expect { do_create }.to change(Campaign, :count).by 1 }
+      it { expect { do_create }.to change(ActiveStorage::Attachment, :count).by 1 }
 
       it 'sends message to sqs' do
         do_create
@@ -87,6 +89,7 @@ RSpec.describe GtParticipantsController, type: :controller do
       it { expect { do_create }.not_to change(EnglishLevel, :count) }
       it { expect { do_create }.not_to change(Experience, :count) }
       it { expect { do_create }.not_to change(Campaign, :count) }
+      it { expect { do_create }.not_to change(ActiveStorage::Attachment, :count) }
 
       describe 'response' do
         it { expect(response['status']).to eq 'failure' }

@@ -66,7 +66,7 @@ class GeParticipantsController < ApplicationController
 
   def english_level_params
     params[:ge_participant]
-      .slice(:english_level).to_s.to_i
+      .slice(:english_level.to_s.to_i)
   end
 
   def ge_participant_fields
