@@ -51,7 +51,36 @@ class SendToPodio
     )
   end
 
-  def podio_item_fields(sqs_params)
+  def podio_item_fields(params)
+    ENV['COUNTRY'] == 'bra'
+      podio_item_fields_bra(params)
+    else
+      podio_item_fields_arg(params)
+    end
+  end
+
+  def podio_item_fields_arg(sqs_params)
+    if sqs_params['podio_app'] == ENV['PODIO_APP_GV']
+      podio_item_fields_arg_gv(sqs_params)
+    elsif sqs_params['podio_app'] == ENV['PODIO_APP_GT']
+      podio_item_fields_arg_gt(sqs_params)
+    elsif sqs_params['podio_app'] == ENV['PODIO_APP_GE']
+      podio_item_fields_arg_ge(sqs_params)
+    else
+      podio_item_fields_arg_gv(sqs_params)
+    end
+  end
+
+  def podio_item_fields_arg_gv(sqs_params)
+  end
+
+  def podio_item_fields_arg_gt(sqs_params)
+  end
+
+  def podio_item_fields_arg_ge(sqs_params)
+  end
+
+  def podio_item_fields_bra(sqs_params)
     params = {
       'data-inscricao' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
       'title' => sqs_params['fullname'],
