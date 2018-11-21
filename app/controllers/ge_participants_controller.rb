@@ -1,5 +1,6 @@
 class GeParticipantsController < ApplicationController
   include ExchangeParticipantable
+  include GeParticipantFields
   before_action :campaign_sign_up
 
   expose :ge_participant
@@ -67,24 +68,6 @@ class GeParticipantsController < ApplicationController
   def english_level_params
     params[:ge_participant]
       .slice(:english_level.to_s.to_i)
-  end
-
-  def ge_participant_fields
-    {
-      'email' => ge_participant.email, 'fullname' => ge_participant.fullname,
-      'cellphone' => ge_participant.cellphone,
-      'birthdate' => ge_participant.birthdate,
-      'utm_source' => utm_source, 'utm_medium' => utm_medium,
-      'utm_campaign' => utm_campaign, 'utm_term' => utm_term,
-      'utm_content' => utm_content, 'podio_app' => 170_576_29,
-      'scholarity' => scholarity_human_name,
-      'local_committee' => ge_participant.exchange_participant&.local_committee&.podio_id,
-      'spanish_level' => ge_participant.read_attribute_before_type_cast(:spanish_level),
-      'english_level' => ge_participant&.english_level&.read_attribute_before_type_cast(:english_level),
-      'university' => ge_participant.exchange_participant&.university&.podio_item_id,
-      'college_course' => ge_participant.exchange_participant&.college_course&.podio_item_id,
-      'cellphone_contactable' => ge_participant.exchange_participant.cellphone_contactable
-    }
   end
 
   def scholarity_human_name

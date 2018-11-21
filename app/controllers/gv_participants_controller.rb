@@ -1,5 +1,6 @@
 class GvParticipantsController < ApplicationController
   include ExchangeParticipantable
+  include GvParticipantFields
   before_action :campaign_sign_up
 
   expose :gv_participant
@@ -56,22 +57,6 @@ class GvParticipantsController < ApplicationController
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
              :password, :scholarity, :campaign_id, :cellphone_contactable)
-  end
-
-  def gv_participant_fields
-    {
-      'email' => gv_participant.email, 'fullname' => gv_participant.fullname,
-      'cellphone' => gv_participant.cellphone,
-      'birthdate' => gv_participant.birthdate,
-      'utm_source' => utm_source, 'utm_medium' => utm_medium,
-      'utm_campaign' => utm_campaign, 'utm_term' => utm_term,
-      'utm_content' => utm_content, 'podio_app' => 152_908_22,
-      'scholarity' => scholarity_human_name,
-      'local_committee' => gv_participant.exchange_participant&.local_committee&.podio_id,
-      'university' => gv_participant.exchange_participant&.university&.podio_item_id,
-      'college_course' => gv_participant.exchange_participant&.college_course&.podio_item_id,
-      'cellphone_contactable' => gv_participant.exchange_participant.cellphone_contactable
-    }
   end
 
   def scholarity_human_name

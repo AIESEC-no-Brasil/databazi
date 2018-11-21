@@ -1,5 +1,6 @@
 class GtParticipantsController < ApplicationController
   include ExchangeParticipantable
+  include GtParticipantFields
   before_action :campaign_sign_up
 
   expose :gt_participant
@@ -82,24 +83,6 @@ class GtParticipantsController < ApplicationController
   def experience_params
     params[:gt_participant][:experience]
       .slice(:id, :language, :marketing, :information_technology, :management)
-  end
-
-  def gt_participant_fields
-    {
-      'email' => gt_participant.email, 'fullname' => gt_participant.fullname,
-      'cellphone' => gt_participant.cellphone,
-      'birthdate' => gt_participant.birthdate,
-      'utm_source' => utm_source, 'utm_medium' => utm_medium,
-      'utm_campaign' => utm_campaign, 'utm_term' => utm_term,
-      'utm_content' => utm_content, 'podio_app' => 170_570_01,
-      'scholarity' => scholarity_human_name,
-      'local_committee' => gt_participant.exchange_participant&.local_committee&.podio_id,
-      'english_level' => gt_participant&.english_level&.read_attribute_before_type_cast(:english_level),
-      'university' => gt_participant.exchange_participant&.university&.podio_item_id,
-      'college_course' => gt_participant.exchange_participant&.college_course&.podio_item_id,
-      'experience' => gt_participant&.experience&.for_podio,
-      'cellphone_contactable' => gt_participant.exchange_participant.cellphone_contactable
-    }
   end
 
   def scholarity_human_name
