@@ -15,9 +15,9 @@ class GtParticipant < ApplicationRecord
   enum preferred_destination: %i[brazil mexico india romania colombia
   								 panama costa_rica hungary]
 
-  validates :preferred_destination, presence: true
+  validates :preferred_destination, presence: true, if: :argentina?
 
-  validate :correct_document_mime_type
+  validate :correct_document_mime_type, if: :argentina?
 
   private
 

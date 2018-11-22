@@ -9,6 +9,8 @@ RSpec.describe ApplicationController, type: :controller do
     end
 
     context 'when nothing is set' do
+      before { allow(ENV).to receive(:[]).with('COUNTRY').and_return(nil) }
+
       it { expect{ controller.application_region }.to raise_error KeyError }
     end
   end

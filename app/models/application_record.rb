@@ -9,7 +9,7 @@ class ApplicationRecord < ActiveRecord::Base
   private
 
   def application_region
-    raise KeyError unless ENV['COUNTRY'].present?
+    raise KeyError 'COUNTRY variable must be declared' unless ENV['COUNTRY'].present?
 
     ENV['COUNTRY']
   end

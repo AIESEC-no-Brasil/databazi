@@ -10,5 +10,5 @@ class GvParticipant < ApplicationRecord
   enum when_can_travel: %i[as_soon_as_possible next_three_months
                            next_six_months in_one_year]
 
-  validates :when_can_travel, presence: true
+  validates :when_can_travel, presence: true, if: :argentina?
 end
