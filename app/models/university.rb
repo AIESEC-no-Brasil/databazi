@@ -5,6 +5,7 @@ class University < ApplicationRecord
   end
 
   has_many :exchange_participants
+  belongs_to :local_committee, optional: true
 
   validates :podio_id, presence: true
   validates :name, presence: true

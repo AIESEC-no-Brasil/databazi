@@ -32,6 +32,24 @@ RSpec.describe LocalCommitteesController, type: :controller do
           expect(LocalCommittee).to have_received(:active)
         end
       end
+
+      context 'with university_id param' do
+        subject(:do_index) { get :index, params: params }
+
+        let(:params) do
+          { limit: 10, university_id: university.id }
+        end
+        let(:local_committee) { create(:local_committee) }
+        let(:university) { create(:university, local_committee: local_committee) }
+
+        before do
+          create_list(:local_committee, 5)
+        end
+
+        it 'returns committees that belong to the university' do
+          expect(response.size).to eq 1
+        end
+      end
     end
   end
 end

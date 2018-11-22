@@ -31,6 +31,8 @@ class GtParticipantsController < ApplicationController
 
   def gt_participant_params
     nested_params.require(:gt_participant).permit(
+      :curriculum,
+      :preferred_destination,
       english_level_attributes: [:english_level],
       exchange_participant_attributes:
         exchange_participant_permitted_attributes,
@@ -55,7 +57,9 @@ class GtParticipantsController < ApplicationController
   def nested_params
     ActionController::Parameters.new(
       gt_participant: {
-        scholarity: params[:gt_participant][:scholarity],
+        preferred_destination: gt_params[:preferred_destination].to_i,
+        scholarity: gt_params[:scholarity].to_i,
+        curriculum: gt_params[:curriculum],
         english_level_attributes: english_level_params,
         exchange_participant_attributes: exchange_participant_params,
         experience_attributes: experience_params
@@ -63,16 +67,20 @@ class GtParticipantsController < ApplicationController
     )
   end
 
+  def gt_params
+    params[:gt_participant]
+  end
+
   def english_level_params
     params[:gt_participant]
-      .slice(:english_level)
+      .slice(:english_level.to_s.to_i)
   end
 
   def exchange_participant_params
     params[:gt_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
-             :password, :scholarity, :campaign_id, :cellphone_contactable)
+             :password, :scholarity.to_s.to_i, :campaign_id, :cellphone_contactable)
   end
 
   def experience_params

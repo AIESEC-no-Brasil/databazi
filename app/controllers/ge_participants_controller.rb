@@ -31,36 +31,46 @@ class GeParticipantsController < ApplicationController
 
   def ge_participant_params
     nested_params.require(:ge_participant).permit(
+      :preferred_destination,
       :spanish_level,
+      :when_can_travel,
+      :curriculum,
+      english_level_attributes: [:english_level],
       exchange_participant_attributes: %i[
         id fullname email birthdate cellphone local_committee_id
         university_id college_course_id password scholarity
         campaign_id cellphone_contactable
-      ],
-      english_level_attributes: [:english_level]
+      ]
     )
   end
 
   def nested_params
     ActionController::Parameters.new(
       ge_participant: {
-        spanish_level: params[:ge_participant][:spanish_level],
+        preferred_destination: ge_params[:preferred_destination].to_i,
+        when_can_travel: ge_params[:when_can_travel].to_i,
+        spanish_level: ge_params[:spanish_level].to_i,
+        curriculum: ge_params[:curriculum],
         exchange_participant_attributes: exchange_participant_params,
         english_level_attributes: english_level_params
       }
     )
   end
 
+  def ge_params
+    params[:ge_participant]
+  end
+
   def exchange_participant_params
     params[:ge_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
-             :password, :scholarity, :campaign_id, :cellphone_contactable)
+             :password, :scholarity.to_s.to_i, :campaign_id, :cellphone_contactable)
   end
 
   def english_level_params
     params[:ge_participant]
-      .slice(:english_level)
+      .slice(:english_level.to_s.to_i)
   end
 
   def ge_participant_fields

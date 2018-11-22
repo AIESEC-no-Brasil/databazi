@@ -62,6 +62,23 @@ RSpec.describe UniversitiesController, type: :controller do
           it { expect(response.size).to eq(University.count) }
         end
       end
+
+      context 'with city param' do
+        subject(:do_index) { get :index, params: params }
+
+        let(:params) do
+          { limit: 10, city: 'Limeira' }
+        end
+
+        before do
+          create_list(:university, 5)
+          create_list(:university, 3, city: 'Limeira')
+        end
+
+        it 'returns universities that belong to the committee' do
+          expect(response.size).to eq 3
+        end
+      end
     end
   end
 end
