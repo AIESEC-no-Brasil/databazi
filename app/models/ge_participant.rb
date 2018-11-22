@@ -19,10 +19,10 @@ class GeParticipant < ApplicationRecord
   enum preferred_destination: %i[brazil mexico peru]
 
   validates :spanish_level, presence: true
-  validates :when_can_travel, presence: true
-  validates :preferred_destination, presence: true
+  validates :when_can_travel, presence: true, if: :argentina?
+  validates :preferred_destination, presence: true, if: :argentina?
 
-  validate :correct_document_mime_type
+  validate :correct_document_mime_type, if: :argentina?
 
   private
 
