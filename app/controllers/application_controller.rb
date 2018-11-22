@@ -1,7 +1,5 @@
 class ApplicationController < ActionController::API
   def application_region
-    raise KeyError unless ENV['COUNTRY'].present?
-
-    ENV['COUNTRY']
+    ENV['COUNTRY'] or raise KeyError.new 'COUNTRY variable must be declared'
   end
 end
