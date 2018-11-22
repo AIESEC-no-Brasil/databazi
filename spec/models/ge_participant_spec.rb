@@ -33,8 +33,20 @@ RSpec.describe GeParticipant, type: :model do
 
   describe '#validation' do
     it { is_expected.to validate_presence_of :spanish_level }
-    it { is_expected.to validate_presence_of :when_can_travel }
-    it { is_expected.to validate_presence_of :preferred_destination }
+
+    context 'when in Argentina' do
+      before { allow(subject).to receive(:argentina?).and_return true }
+
+      it { is_expected.to validate_presence_of :when_can_travel }
+      it { is_expected.to validate_presence_of :preferred_destination }
+    end
+
+    context 'when not in Argentina' do
+      before { allow(subject).to receive(:argentina?).and_return false }
+
+      it { is_expected.not_to validate_presence_of :when_can_travel }
+      it { is_expected.not_to validate_presence_of :preferred_destination }
+    end
   end
 
   describe '#methods' do
