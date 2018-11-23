@@ -39,15 +39,15 @@ class SendToPodio
 
   def authenticate_podio
     Podio.client.authenticate_with_credentials(
-      Rails.application.credentials.podio_username,
-      Rails.application.credentials.podio_password
+      ENV['PODIO_USERNAME'],
+      ENV['PODIO_PASSWORD']
     )
   end
 
   def setup_podio
     Podio.setup(
-      api_key: Rails.application.credentials.podio_api_key,
-      api_secret: Rails.application.credentials.podio_api_secret
+      api_key: ENV['PODIO_API_KEY'],
+      api_secret: ENV['PODIO_API_SECRET']
     )
   end
 
