@@ -52,7 +52,7 @@ class SendToPodio
   end
 
   def podio_item_fields(params)
-    ENV['COUNTRY'] == 'bra'
+    if ENV['COUNTRY'] == 'bra'
       podio_item_fields_bra(params)
     else
       podio_item_fields_arg(params)
