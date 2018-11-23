@@ -72,12 +72,73 @@ class SendToPodio
   end
 
   def podio_item_fields_arg_gv(sqs_params)
+    params = {
+      'fecha-de-inscripicion' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
+      'nombre-completo' => sqs_params['fullname'],
+      'mail' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
+      'telefono' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
+      'fecha-de-nacimiento' => {
+        start: Date.parse(sqs_params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
+      }
+    }
+
+    params['nivel-de-escolaridad'] = sqs_params['scholarity'] if sqs_params['scholarity']
+    params['local-committee'] = sqs_params['local_committee'] if sqs_params['local_committee']
+    params['universidad'] = sqs_params['university'].to_i if sqs_params['university']
+    params['otra-universidad'] = sqs_params['other_university'] if sqs_params['other_university']
+    params['campo-de-estudio'] = sqs_params['college_course'].to_i if sqs_params['college_course']
+    params['cuando-usted-puede-viajar'] = sqs_params['when_can_travel'].to_i if sqs_params['when_can_travel']
+
+    params
   end
 
   def podio_item_fields_arg_gt(sqs_params)
+    params = {
+      'fecha-de-inscripicion' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
+      'titulo' => sqs_params['fullname'],
+      'mail' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
+      'telefono' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
+      'fecha-de-nacimiento' => {
+        start: Date.parse(sqs_params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
+      }
+    }
+
+    params['nivel-de-escolaridad'] = sqs_params['scholarity'] if sqs_params['scholarity']
+    params['segmentacion-caba'] = sqs_params['local_committee'] if sqs_params['local_committee']
+    params['nivel-de-ingles'] = sqs_params['english_level'] if sqs_params['english_level']
+    params['nivel-de-espanhol'] = sqs_params['spanish_level'] if sqs_params['spanish_level']
+    params['universidad'] = sqs_params['university'].to_i if sqs_params['university']
+    params['otra-universidad'] = sqs_params['other_university'] if sqs_params['other_university']
+    params['campo-de-estudio-2'] = sqs_params['college_course'].to_i if sqs_params['college_course']
+    params['cv'] = sqs_params['curriculum'] if sqs_params['curriculum']
+    params['destino-de-preferencia'] = sqs_params['preferred_destination'] if sqs_params['preferred_destination']
+
+    params
   end
 
   def podio_item_fields_arg_ge(sqs_params)
+    params = {
+      'fecha-de-inscripicion' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
+      'titulo' => sqs_params['fullname'],
+      'mail' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
+      'telefono' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
+      'fecha-de-nacimiento' => {
+        start: Date.parse(sqs_params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
+      }
+    }
+
+    params['nivel-de-escolaridad'] = sqs_params['scholarity'] if sqs_params['scholarity']
+    params['oficina-de-aiesec-mas-cercana'] = sqs_params['local_committee'] if sqs_params['local_committee']
+    params['nivel-de-ingles'] = sqs_params['english_level'] if sqs_params['english_level']
+    params['nivel-de-espanhol'] = sqs_params['spanish_level'] if sqs_params['spanish_level']
+    params['universidad'] = sqs_params['university'].to_i if sqs_params['university']
+    params['otra-universidad'] = sqs_params['other_university'] if sqs_params['other_university']
+    params['campo-de-estudio-2'] = sqs_params['college_course'].to_i if sqs_params['college_course']
+    params['adjuntaste-tu-cv-preferible-cv-de-1-pagina'] = sqs_params['curriculum'] if sqs_params['curriculum']
+    params['donde-te-gustaria-vivir-esa-esa-experiencia'] = sqs_params['preferred_destination'] if sqs_params['preferred_destination']
+    params['fechas-de-disponibilidad'] = sqs_params['when_can_travel'].to_i if sqs_params['when_can_travel']
+
+    params
   end
 
   def podio_item_fields_bra(sqs_params)
