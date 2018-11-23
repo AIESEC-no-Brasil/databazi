@@ -75,7 +75,7 @@ class SendToPodio
     params = {
       'fecha-de-inscripicion' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
       'nombre-completo' => sqs_params['fullname'],
-      'mail' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
+      'e-mail' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
       'telefono' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
       'fecha-de-nacimiento' => {
         start: Date.parse(sqs_params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
@@ -96,7 +96,7 @@ class SendToPodio
     params = {
       'fecha-de-inscripicion' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
       'titulo' => sqs_params['fullname'],
-      'mail' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
+      'e-mail' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
       'telefono' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
       'fecha-de-nacimiento' => {
         start: Date.parse(sqs_params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
@@ -120,7 +120,7 @@ class SendToPodio
     params = {
       'fecha-de-inscripicion' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
       'titulo' => sqs_params['fullname'],
-      'mail' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
+      'e-mail' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
       'telefono' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
       'fecha-de-nacimiento' => {
         start: Date.parse(sqs_params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
