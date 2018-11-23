@@ -9,7 +9,7 @@ module EXPAAPI
   end
 
   def self.token_token
-    Rails.application.credentials.api_authenticity_token
+    ENV['API_AUTHENTICITY_TOKEN']
   end
 
   HTTP = GraphQL::Client::HTTP.new("https://gis-api.aiesec.org/graphql?access_token=#{access_token}")
