@@ -72,16 +72,9 @@ class SendToPodio
   end
 
   def podio_item_fields_arg_gv(sqs_params)
-    params = {
-      'fecha-de-inscripicion' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
-      'nombre-completo' => sqs_params['fullname'],
-      'e-mail' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
-      'telefono' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
-      'fecha-de-nacimiento' => {
-        start: Date.parse(sqs_params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
-      }
-    }
+    params = default_params_arg(sqs_params)
 
+    params['fecha-de-inscripicion'] = { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') }
     params['nivel-de-escolaridad'] = sqs_params['scholarity'] if sqs_params['scholarity']
     params['local-committee'] = sqs_params['local_committee'] if sqs_params['local_committee']
     params['universidad'] = sqs_params['university'].to_i if sqs_params['university']
@@ -93,15 +86,7 @@ class SendToPodio
   end
 
   def podio_item_fields_arg_gt(sqs_params)
-    params = {
-      'fecha-de-inscripicion' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
-      'titulo' => sqs_params['fullname'],
-      'e-mail' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
-      'telefono' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
-      'fecha-de-nacimiento' => {
-        start: Date.parse(sqs_params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
-      }
-    }
+    params = default_params_arg(sqs_params)
 
     params['nivel-de-escolaridad'] = sqs_params['scholarity'] if sqs_params['scholarity']
     params['segmentacion-caba'] = sqs_params['local_committee'] if sqs_params['local_committee']
@@ -117,15 +102,7 @@ class SendToPodio
   end
 
   def podio_item_fields_arg_ge(sqs_params)
-    params = {
-      'fecha-de-inscripicion' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
-      'titulo' => sqs_params['fullname'],
-      'e-mail' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
-      'telefono' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
-      'fecha-de-nacimiento' => {
-        start: Date.parse(sqs_params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
-      }
-    }
+    params = default_params_arg(sqs_params)
 
     params['nivel-de-escolaridad'] = sqs_params['scholarity'] if sqs_params['scholarity']
     params['oficina-de-aiesec-mas-cercana'] = sqs_params['local_committee'] if sqs_params['local_committee']
@@ -139,6 +116,17 @@ class SendToPodio
     params['fechas-de-disponibilidad'] = sqs_params['when_can_travel'].to_i if sqs_params['when_can_travel']
 
     params
+  end
+
+  def default_params_arg(sqs_params)
+    {
+      'titulo' => sqs_params['fullname'],
+      'e-mail' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
+      'telefono' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
+      'fecha-de-nacimiento' => {
+        start: Date.parse(sqs_params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
+      }
+    }
   end
 
   def podio_item_fields_bra(sqs_params)
