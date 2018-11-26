@@ -94,7 +94,6 @@ class SendToPodio
 
   def podio_item_fields_arg_gt(sqs_params)
     params = {
-      'fecha-de-inscripicion' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
       'titulo' => sqs_params['fullname'],
       'e-mail' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
       'telefono' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
@@ -118,7 +117,6 @@ class SendToPodio
 
   def podio_item_fields_arg_ge(sqs_params)
     params = {
-      'fecha-de-inscripicion' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
       'titulo' => sqs_params['fullname'],
       'e-mail' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
       'telefono' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
