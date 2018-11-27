@@ -48,8 +48,8 @@ class GeParticipantsController < ApplicationController
   def nested_params
     ActionController::Parameters.new(
       ge_participant: {
-        preferred_destination: ge_params[:preferred_destination].to_i,
-        when_can_travel: ge_params[:when_can_travel].to_i,
+        preferred_destination: ge_params[:preferred_destination],
+        when_can_travel: ge_params[:when_can_travel],
         spanish_level: ge_params[:spanish_level].to_i,
         curriculum: ge_params[:curriculum],
         exchange_participant_attributes: exchange_participant_params,

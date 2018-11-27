@@ -58,7 +58,7 @@ class GtParticipantsController < ApplicationController
   def nested_params
     ActionController::Parameters.new(
       gt_participant: {
-        preferred_destination: gt_params[:preferred_destination].to_i,
+        preferred_destination: gt_params[:preferred_destination],
         scholarity: gt_params[:scholarity].to_i,
         curriculum: gt_params[:curriculum],
         english_level_attributes: english_level_params,

@@ -48,7 +48,7 @@ module GtParticipantFields
       'university' => gt_participant.exchange_participant&.university&.podio_item_id,
       'college_course' => gt_participant.exchange_participant&.college_course&.podio_item_id,
       'experience' => gt_participant&.experience&.for_podio,
-      'preferred_destination' => gt_participant.preferred_destination,
+      'preferred_destination' => gt_participant.preferred_destination_before_type_cast,
       'cv' => 0
     }
   end

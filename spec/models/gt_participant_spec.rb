@@ -15,8 +15,16 @@ RSpec.describe GtParticipant, type: :model do
     it { is_expected.to accept_nested_attributes_for :experience }
     it do
       expect(GtParticipant.new).to define_enum_for(:preferred_destination)
-        .with(%i[brazil mexico india romania colombia
-                 panama costa_rica hungary])
+        .with({
+          brazil: 1,
+          mexico: 3,
+          india: 6,
+          romania: 8,
+          colombia: 9,
+          panama: 10,
+          costa_rica: 11,
+          hungary: 12
+        })
     end
   end
 

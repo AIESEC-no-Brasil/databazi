@@ -22,12 +22,20 @@ RSpec.describe GeParticipant, type: :model do
     it { is_expected.to accept_nested_attributes_for :english_level }
     it do
       expect(GeParticipant.new).to define_enum_for(:when_can_travel)
-        .with(%i[as_soon_as_possible next_three_months
-                 next_six_months in_one_year])
+        .with({
+          as_soon_as_possible: 13,
+          next_three_months: 14,
+          next_six_months: 15,
+          in_one_year: 16
+        })
     end
     it do
       expect(GeParticipant.new).to define_enum_for(:preferred_destination)
-        .with(%i[brazil mexico peru])
+        .with({
+          brazil: 1,
+          mexico: 2,
+          peru: 3
+        })
     end
   end
 

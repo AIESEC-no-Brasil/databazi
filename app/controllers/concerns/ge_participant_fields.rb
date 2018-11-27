@@ -43,8 +43,8 @@ module GeParticipantFields
       'university' => ge_participant.exchange_participant&.university&.podio_item_id,
       'college_course' => ge_participant.exchange_participant&.college_course&.podio_item_id,
       'other_university' => "",
-      'when_can_travel' => ge_participant.when_can_travel,
-      'preferred_destination' => ge_participant.preferred_destination
+      'when_can_travel' => ge_participant.when_can_travel_before_type_cast,
+      'preferred_destination' => ge_participant.preferred_destination_before_type_cast
     }
   end
 
