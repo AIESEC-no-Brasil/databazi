@@ -1,5 +1,5 @@
 # BRA
-server 'qa.databazi.aiesec.org.br', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
+server '52.8.184.67', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
 
 # ARG
 server '13.52.15.180', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true

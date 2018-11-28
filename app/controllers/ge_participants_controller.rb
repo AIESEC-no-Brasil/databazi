@@ -48,9 +48,9 @@ class GeParticipantsController < ApplicationController
   def nested_params
     ActionController::Parameters.new(
       ge_participant: {
-        preferred_destination: ge_params[:preferred_destination].to_i,
-        when_can_travel: ge_params[:when_can_travel].to_i,
-        spanish_level: ge_params[:spanish_level].to_i,
+        preferred_destination: ge_params[:preferred_destination],
+        when_can_travel: ge_params[:when_can_travel],
+        spanish_level: ge_params[:spanish_level],
         curriculum: ge_params[:curriculum],
         exchange_participant_attributes: exchange_participant_params,
         english_level_attributes: english_level_params
@@ -66,7 +66,7 @@ class GeParticipantsController < ApplicationController
     params[:ge_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
-             :password, :scholarity.to_s.to_i, :campaign_id, :cellphone_contactable)
+             :password, :scholarity, :campaign_id, :cellphone_contactable)
   end
 
   def english_level_params
