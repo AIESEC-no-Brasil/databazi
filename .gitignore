@@ -33,3 +33,6 @@ config/local_env.yml
 
 # Ignore coverage reports
 /coverage/*
+
+# Ignore files created/uploaded
+/files/*
