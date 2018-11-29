@@ -2,9 +2,9 @@ require 'rails_helper'
 
 # RSpec.describe ExpaSignUp do
 #   subject { service }
-# 
+#
 #   let(:service) { described_class.new(params) }
-# 
+#
 #   let(:exchange_participant) do
 #     create(:exchange_participant,
 #            fullname: 'Forrest Gump',

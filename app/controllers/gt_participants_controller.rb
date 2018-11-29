@@ -61,8 +61,8 @@ class GtParticipantsController < ApplicationController
         preferred_destination: gt_params[:preferred_destination],
         scholarity: gt_params[:scholarity],
         curriculum: gt_params[:curriculum],
-        english_level_attributes: english_level_params,
-        exchange_participant_attributes: exchange_participant_params,
+        english_level_attributes: normalized_english_level_params,
+        exchange_participant_attributes: normalized_exchange_participant_params,
         experience_attributes: experience_params
       }
     )
@@ -75,6 +75,20 @@ class GtParticipantsController < ApplicationController
   def english_level_params
     params[:gt_participant]
       .slice(:english_level)
+  end
+
+  def normalized_english_level_params
+    params = english_level_params
+    params[:english_level] = params[:english_level].to_i
+
+    params
+  end
+
+  def normalized_exchange_participant_params
+    params = exchange_participant_params
+    params[:scholarity] = params[:scholarity].to_i
+
+    params
   end
 
   def exchange_participant_params

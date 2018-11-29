@@ -27,11 +27,13 @@ RSpec.describe GvParticipant, type: :model do
   describe '#validation' do
     context 'when in Argentina' do
       before { allow(subject).to receive(:argentina?).and_return true }
+
       it { is_expected.to validate_presence_of :when_can_travel }
     end
 
     context 'when not in Argentina' do
       before { allow(subject).to receive(:argentina?).and_return false }
+
       it { is_expected.not_to validate_presence_of :when_can_travel }
     end
   end

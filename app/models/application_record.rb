@@ -9,7 +9,7 @@ class ApplicationRecord < ActiveRecord::Base
   private
 
   def application_region
-    ENV['COUNTRY'] or raise KeyError.new 'COUNTRY variable must be declared'
+    ENV['COUNTRY'] || raise(KeyError.new 'COUNTRY variable must be declared')
   end
 
   def argentina?
