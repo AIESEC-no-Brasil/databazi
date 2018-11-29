@@ -1,5 +1,4 @@
 module GtParticipantFields
-
   def gt_participant_fields
     if ENV['COUNTRY'] == 'bra'
       gt_participant_fields_bra
@@ -52,5 +51,4 @@ module GtParticipantFields
       'cv' => 0
     }
   end
-
 end

@@ -1,5 +1,4 @@
 module GeParticipantFields
-
   def ge_participant_fields
     if ENV['COUNTRY'] == 'bra'
       ge_participant_fields_bra
@@ -47,5 +46,4 @@ module GeParticipantFields
       'preferred_destination' => ge_participant.preferred_destination
     }
   end
-
 end

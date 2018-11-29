@@ -1,5 +1,4 @@
 module GvParticipantFields
-
   def gv_participant_fields
     if ENV['COUNTRY'] == 'bra'
       gv_participant_fields_bra
@@ -47,5 +46,4 @@ module GvParticipantFields
       'when_can_travel' => gv_participant.when_can_travel
     }
   end
-
 end
