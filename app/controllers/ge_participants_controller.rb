@@ -40,7 +40,7 @@ class GeParticipantsController < ApplicationController
       exchange_participant_attributes: %i[
         id fullname email birthdate cellphone local_committee_id
         university_id college_course_id password scholarity
-        campaign_id cellphone_contactable
+        campaign_id cellphone_contactable other_university
       ]
     )
   end
@@ -48,8 +48,8 @@ class GeParticipantsController < ApplicationController
   def nested_params
     ActionController::Parameters.new(
       ge_participant: {
-        preferred_destination: ge_params[:preferred_destination],
-        when_can_travel: ge_params[:when_can_travel],
+        preferred_destination: ge_params[:preferred_destination].to_i,
+        when_can_travel: ge_params[:when_can_travel].to_i,
         spanish_level: ge_params[:spanish_level].to_i,
         curriculum: ge_params[:curriculum],
         exchange_participant_attributes: normalized_exchange_participant_params,
@@ -85,7 +85,8 @@ class GeParticipantsController < ApplicationController
     params[:ge_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
-             :password, :scholarity, :campaign_id, :cellphone_contactable)
+             :password, :scholarity, :campaign_id, :cellphone_contactable,
+             :other_university)
   end
 
   def scholarity_human_name

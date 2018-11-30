@@ -43,14 +43,14 @@ class GvParticipantsController < ApplicationController
     %i[
       id fullname birthdate email cellphone local_committee_id
       university_id college_course_id password scholarity
-      campaign_id cellphone_contactable
+      campaign_id cellphone_contactable other_university
     ]
   end
 
   def nested_params
     ActionController::Parameters.new(
       gv_participant: {
-        when_can_travel: params[:gv_participant][:when_can_travel],
+        when_can_travel: params[:gv_participant][:when_can_travel].to_i,
         exchange_participant_attributes: normalized_exchange_participant_params
       }
     )
@@ -60,7 +60,8 @@ class GvParticipantsController < ApplicationController
     params[:gv_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
-             :password, :scholarity, :campaign_id, :cellphone_contactable)
+             :password, :scholarity, :campaign_id, :cellphone_contactable,
+             :other_university)
   end
 
   def normalized_exchange_participant_params

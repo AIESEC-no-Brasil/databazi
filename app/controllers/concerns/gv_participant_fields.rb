@@ -41,9 +41,10 @@ module GvParticipantFields
       'podio_app' => ENV['PODIO_APP_GV'],
       'scholarity' => scholarity_human_name,
       'local_committee' => gv_participant.exchange_participant&.local_committee&.podio_id,
-      'university' => gv_participant.exchange_participant&.university&.podio_item_id,
-      'college_course' => gv_participant.exchange_participant&.college_course&.podio_item_id,
-      'when_can_travel' => gv_participant.when_can_travel
+      'university' => gv_participant.exchange_participant&.university&.podio_id,
+      'college_course' => gv_participant.exchange_participant&.college_course&.podio_id,
+      'when_can_travel' => gv_participant.when_can_travel,
+      'other_university' => gv_participant.exchange_participant&.other_university,
     }
   end
 end
