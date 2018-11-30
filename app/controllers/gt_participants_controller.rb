@@ -45,7 +45,7 @@ class GtParticipantsController < ApplicationController
     %i[
       id fullname email birthdate cellphone local_committee_id
       university_id college_course_id password scholarity
-      campaign_id cellphone_contactable
+      campaign_id cellphone_contactable other_university
     ]
   end
 
@@ -58,7 +58,7 @@ class GtParticipantsController < ApplicationController
   def nested_params
     ActionController::Parameters.new(
       gt_participant: {
-        preferred_destination: gt_params[:preferred_destination],
+        preferred_destination: gt_params[:preferred_destination].to_i,
         scholarity: gt_params[:scholarity],
         curriculum: gt_params[:curriculum],
         english_level_attributes: normalized_english_level_params,
@@ -95,12 +95,13 @@ class GtParticipantsController < ApplicationController
     params[:gt_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
-             :password, :scholarity, :campaign_id, :cellphone_contactable)
+             :password, :scholarity, :campaign_id, :cellphone_contactable,
+             :other_university)
   end
 
   def experience_params
     params[:gt_participant][:experience]
-      .slice(:id, :language, :marketing, :information_technology, :management)
+      .slice(:id, :language, :marketing, :information_technology, :management) if params[:gt_participant][:experience]
   end
 
   def scholarity_human_name
