@@ -22,7 +22,7 @@ class GeParticipant < ApplicationRecord
   validates :when_can_travel, presence: true, if: :argentina?
   validates :preferred_destination, presence: true, if: :argentina?
 
-  # validate :correct_document_mime_type, if: :argentina?
+  validate :correct_document_mime_type, if: :argentina?
 
   private
 
