@@ -17,8 +17,8 @@ class UniversitiesController < ApplicationController
   end
 
   def format_response
-    universities.as_json(only: %i[id name]) +
-      other_university.as_json(only: %i[id name])
+    universities.as_json(only: %i[id name local_committee_id]) +
+      other_university.as_json(only: %i[id name local_committee_id])
   end
 
   def diacritic_trim(param)
