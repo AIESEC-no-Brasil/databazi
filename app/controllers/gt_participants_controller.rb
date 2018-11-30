@@ -45,7 +45,7 @@ class GtParticipantsController < ApplicationController
     %i[
       id fullname email birthdate cellphone local_committee_id
       university_id college_course_id password scholarity
-      campaign_id cellphone_contactable
+      campaign_id cellphone_contactable other_university
     ]
   end
 
@@ -59,10 +59,10 @@ class GtParticipantsController < ApplicationController
     ActionController::Parameters.new(
       gt_participant: {
         preferred_destination: gt_params[:preferred_destination].to_i,
-        scholarity: gt_params[:scholarity].to_i,
+        scholarity: gt_params[:scholarity],
         curriculum: gt_params[:curriculum],
-        english_level_attributes: english_level_params,
-        exchange_participant_attributes: exchange_participant_params,
+        english_level_attributes: normalized_english_level_params,
+        exchange_participant_attributes: normalized_exchange_participant_params,
         experience_attributes: experience_params
       }
     )
@@ -74,19 +74,34 @@ class GtParticipantsController < ApplicationController
 
   def english_level_params
     params[:gt_participant]
-      .slice(:english_level.to_s.to_i)
+      .slice(:english_level)
+  end
+
+  def normalized_english_level_params
+    params = english_level_params
+    params[:english_level] = params[:english_level].to_i
+
+    params
+  end
+
+  def normalized_exchange_participant_params
+    params = exchange_participant_params
+    params[:scholarity] = params[:scholarity].to_i
+
+    params
   end
 
   def exchange_participant_params
     params[:gt_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
-             :password, :scholarity.to_s.to_i, :campaign_id, :cellphone_contactable)
+             :password, :scholarity, :campaign_id, :cellphone_contactable,
+             :other_university)
   end
 
   def experience_params
     params[:gt_participant][:experience]
-      .slice(:id, :language, :marketing, :information_technology, :management)
+      .slice(:id, :language, :marketing, :information_technology, :management) if params[:gt_participant][:experience]
   end
 
   def scholarity_human_name

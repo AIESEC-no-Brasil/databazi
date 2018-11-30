@@ -1,9 +1,11 @@
 require: rubocop-rspec
 AllCops:
   Exclude:
-    - 'config/**/*'
-    - 'script/**/*'
     - 'bin/**/*'
+    - 'db/migrate/*'
+    - 'config/**/*'
+    - 'lib/**/*'
+    - 'script/**/*'
     - 'Vagrantfile'
     - 'Guardfile'
 Metrics/BlockLength:
@@ -12,6 +14,16 @@ Metrics/BlockLength:
     - context
   Exclude:
     - 'db/schema.rb'
+Metrics/AbcSize:
+  Exclude:
+    - 'app/services/expa_sign_up.rb'
+    - 'app/services/send_to_podio.rb'
+    - 'app/controllers/gv_participants_controller.rb'
+    - 'app/controllers/ge_participants_controller.rb'
+    - 'app/controllers/gt_participants_controller.rb'
+    - 'app/controllers/concerns/gv_participant_fields.rb'
+    - 'app/controllers/concerns/ge_participant_fields.rb'
+    - 'app/controllers/concerns/gt_participant_fields.rb'
 Metrics/LineLength:
   Exclude:
     - 'db/seeds/**'
@@ -20,13 +32,9 @@ Metrics/LineLength:
     - 'app/controllers/gv_participants_controller.rb'
     - 'app/controllers/ge_participants_controller.rb'
     - 'app/controllers/gt_participants_controller.rb'
-Metrics/AbcSize:
-  Exclude:
-    - 'app/services/expa_sign_up.rb'
-    - 'app/services/send_to_podio.rb'
-    - 'app/controllers/gv_participants_controller.rb'
-    - 'app/controllers/ge_participants_controller.rb'
-    - 'app/controllers/gt_participants_controller.rb'
+    - 'app/controllers/concerns/gv_participant_fields.rb'
+    - 'app/controllers/concerns/ge_participant_fields.rb'
+    - 'app/controllers/concerns/gt_participant_fields.rb'
 Metrics/MethodLength:
   Exclude:
     - 'app/services/expa_sign_up.rb'
@@ -34,6 +42,9 @@ Metrics/MethodLength:
     - 'app/controllers/gv_participants_controller.rb'
     - 'app/controllers/ge_participants_controller.rb'
     - 'app/controllers/gt_participants_controller.rb'
+    - 'app/controllers/concerns/gv_participant_fields.rb'
+    - 'app/controllers/concerns/ge_participant_fields.rb'
+    - 'app/controllers/concerns/gt_participant_fields.rb'
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'app/services/send_to_podio.rb'
@@ -44,6 +55,9 @@ Metrics/ClassLength:
   Exclude:
     - 'app/controllers/gt_participants_controller.rb'
 Style/ClassVars:
+  Exclude:
+    - 'app/services/send_to_podio.rb'
+Style/NumericPredicate:
   Exclude:
     - 'app/services/send_to_podio.rb'
 RSpec/NestedGroups:

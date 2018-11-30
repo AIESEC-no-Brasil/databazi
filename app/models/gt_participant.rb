@@ -13,7 +13,7 @@ class GtParticipant < ApplicationRecord
   accepts_nested_attributes_for :experience
 
   enum preferred_destination: %i[brazil mexico india romania colombia
-  								 panama costa_rica hungary]
+								                 panama costa_rica hungary]
 
   validates :preferred_destination, presence: true, if: :argentina?
 
@@ -22,10 +22,10 @@ class GtParticipant < ApplicationRecord
   private
 
   def correct_document_mime_type
-    if curriculum.attached? && !curriculum.content_type.in?(%w(application/pdf))
+    if curriculum.attached? &&
+        !curriculum.content_type.in?(%w[application/pdf])
       errors.add(:curriculum, 'Must be a PDF file')
       curriculum.purge
     end
   end
-
 end

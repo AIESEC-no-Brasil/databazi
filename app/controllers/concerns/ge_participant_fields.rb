@@ -1,5 +1,4 @@
 module GeParticipantFields
-
   def ge_participant_fields
     if ENV['COUNTRY'] == 'bra'
       ge_participant_fields_bra
@@ -40,12 +39,11 @@ module GeParticipantFields
       'podio_app' => ENV['PODIO_APP_GE'],
       'scholarity' => scholarity_human_name,
       'local_committee' => ge_participant.exchange_participant&.local_committee&.podio_id,
-      'university' => ge_participant.exchange_participant&.university&.podio_item_id,
-      'college_course' => ge_participant.exchange_participant&.college_course&.podio_item_id,
-      'other_university' => "",
-      'when_can_travel' => ge_participant.when_can_travel,
-      'preferred_destination' => ge_participant.preferred_destination
+      'university' => ge_participant.exchange_participant&.university&.podio_id,
+      'college_course' => ge_participant.exchange_participant&.college_course&.podio_id,
+      'other_university' => ge_participant.exchange_participant&.other_university,
+      'when_can_travel' => ge_participant&.read_attribute_before_type_cast(:when_can_travel),
+      'preferred_destination' => ge_participant&.read_attribute_before_type_cast(:preferred_destination)
     }
   end
-
 end

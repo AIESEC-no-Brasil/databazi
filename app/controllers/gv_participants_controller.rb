@@ -35,19 +35,23 @@ class GvParticipantsController < ApplicationController
       .require(:gv_participant)
       .permit(
         :when_can_travel,
-        exchange_participant_attributes: %i[
-          id fullname birthdate email cellphone local_committee_id
-          university_id college_course_id password scholarity
-          campaign_id cellphone_contactable
-        ]
+        exchange_participant_attributes: exchange_participant_permitted_attributes
     )
+  end
+
+  def exchange_participant_permitted_attributes
+    %i[
+      id fullname birthdate email cellphone local_committee_id
+      university_id college_course_id password scholarity
+      campaign_id cellphone_contactable other_university
+    ]
   end
 
   def nested_params
     ActionController::Parameters.new(
       gv_participant: {
-        when_can_travel: params[:gv_participant][:when_can_travel],
-        exchange_participant_attributes: exchange_participant_params
+        when_can_travel: params[:gv_participant][:when_can_travel].to_i,
+        exchange_participant_attributes: normalized_exchange_participant_params
       }
     )
   end
@@ -56,7 +60,15 @@ class GvParticipantsController < ApplicationController
     params[:gv_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
-             :password, :scholarity, :campaign_id, :cellphone_contactable)
+             :password, :scholarity, :campaign_id, :cellphone_contactable,
+             :other_university)
+  end
+
+  def normalized_exchange_participant_params
+    params = exchange_participant_params
+    params[:scholarity] = params[:scholarity].to_i
+
+    params
   end
 
   def scholarity_human_name

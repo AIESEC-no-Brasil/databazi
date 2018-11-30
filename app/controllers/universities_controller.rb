@@ -1,9 +1,7 @@
 class UniversitiesController < ApplicationController
   expose :universities, -> do
     results = University.by_name(query_by_name(params[:name]))
-    if params[:city]
-      results = results.where(city: params[:city])
-    end
+    results = results.where(city: params[:city]) if params[:city]
     results.limit(limit_response)
            .order(name: :asc)
   end

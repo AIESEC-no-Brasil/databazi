@@ -40,7 +40,7 @@ class GeParticipantsController < ApplicationController
       exchange_participant_attributes: %i[
         id fullname email birthdate cellphone local_committee_id
         university_id college_course_id password scholarity
-        campaign_id cellphone_contactable
+        campaign_id cellphone_contactable other_university
       ]
     )
   end
@@ -52,8 +52,8 @@ class GeParticipantsController < ApplicationController
         when_can_travel: ge_params[:when_can_travel].to_i,
         spanish_level: ge_params[:spanish_level].to_i,
         curriculum: ge_params[:curriculum],
-        exchange_participant_attributes: exchange_participant_params,
-        english_level_attributes: english_level_params
+        exchange_participant_attributes: normalized_exchange_participant_params,
+        english_level_attributes: normalized_english_level_params
       }
     )
   end
@@ -62,16 +62,31 @@ class GeParticipantsController < ApplicationController
     params[:ge_participant]
   end
 
+  def english_level_params
+    params[:ge_participant]
+      .slice(:english_level)
+  end
+
+  def normalized_english_level_params
+    params = english_level_params
+    params[:english_level] = params[:english_level].to_i
+
+    params
+  end
+
+  def normalized_exchange_participant_params
+    params = exchange_participant_params
+    params[:scholarity] = params[:scholarity].to_i
+
+    params
+  end
+
   def exchange_participant_params
     params[:ge_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
-             :password, :scholarity.to_s.to_i, :campaign_id, :cellphone_contactable)
-  end
-
-  def english_level_params
-    params[:ge_participant]
-      .slice(:english_level.to_s.to_i)
+             :password, :scholarity, :campaign_id, :cellphone_contactable,
+             :other_university)
   end
 
   def scholarity_human_name

@@ -27,10 +27,9 @@ class GeParticipant < ApplicationRecord
   private
 
   def correct_document_mime_type
-    if curriculum.attached? && !curriculum.content_type.in?(%w(application/pdf))
+    if curriculum.attached? && !curriculum.content_type.in?(%w[application/pdf])
       errors.add(:curriculum, 'Must be a PDF file')
       curriculum.purge
     end
   end
-
 end
