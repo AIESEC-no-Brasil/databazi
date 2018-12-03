@@ -6,10 +6,11 @@ class SendToPodio
     new(params).call
   end
 
-  attr_reader :params, :status
+  attr_reader :params, :gx_participant, :status
 
   def initialize(params)
     @params = params
+    @gx_participant = ExchangeParticipant.find_by(id: params['exchange_participant_id']).registerable
     @status = true
   end
 
@@ -22,6 +23,7 @@ class SendToPodio
   private
 
   def send_to_podio(params)
+    podio_id = nil
     params['podio_app'] ||= 152_908_22
 
     if expired_token?
@@ -30,7 +32,24 @@ class SendToPodio
       @@expires_at = auth.expires_at
     end
 
-    Podio::Item.create(params['podio_app'], fields: podio_item_fields(params))
+    podio_id = Podio::Item.create(params['podio_app'], fields: podio_item_fields(params)).item_id
+
+    update_participant(podio_id) if podio_id
+
+    podio_id
+  end
+
+  def update_participant(podio_id)
+    @gx_participant.update_attributes(podio_id: podio_id)
+
+    upload_files(podio_id, @gx_participant) if gx_participant.try(:curriculum)&.attached?
+  end
+
+  def upload_files(podio_id, gx_participant)
+    link = Rails.application.routes.url_helpers.rails_blob_path(gx_participant.curriculum, only_path: true)
+    uploaded_file = Podio::FileAttachment.upload_from_url("#{ENV['BASE_URL']}#{link}")
+
+    Podio::FileAttachment.attach(uploaded_file.file_id, 'item', podio_id)
   end
 
   def expired_token?
@@ -71,19 +90,24 @@ class SendToPodio
       'local-committee' => sqs_params['local_committee']
     }
 
-      # params['scholarity'] = sqs_params['scholarity'] if sqs_params['scholarity']
-      params['university'] = sqs_params['university'].to_i if sqs_params['university']
-      params['college-course'] = sqs_params['college_course'].to_i if sqs_params['college_course']
-      params['other-university'] = sqs_params['other_university'] if sqs_params['other_university']
-      params['english-level'] = sqs_params['english_level'] if sqs_params['english_level']
-      # params['cellphone-contactable'] = cellphone_contactable_option(sqs_params['cellphone_contactable'])
-      params['utm-source'] = sqs_params['utm_source'] if sqs_params['utm_source']
-      params['utm-medium'] = sqs_params['utm_medium'] if sqs_params['utm_medium']
-      params['utm-campaign'] = sqs_params['utm_campaign'] if sqs_params['utm_campaign']
-      params['utm-term'] = sqs_params['utm_term'] if sqs_params['utm_term']
-      params['utm-content'] = sqs_params['utm_content'] if sqs_params['utm_content']
+    # params['scholarity'] = sqs_params['scholarity'] if sqs_params['scholarity']
+    params['university'] = sqs_params['university'].to_i if sqs_params['university']
+    params['college-course'] = sqs_params['college_course'].to_i if sqs_params['college_course']
+    params['other-university'] = sqs_params['other_university'] if sqs_params['other_university']
+    params['english-level'] = sqs_params['english_level'] if sqs_params['english_level']
+    params['cellphone-contactable'] = cellphone_contactable_option(sqs_params['cellphone_contactable'])
+    params['utm-source'] = sqs_params['utm_source'] if sqs_params['utm_source']
+    params['utm-medium'] = sqs_params['utm_medium'] if sqs_params['utm_medium']
+    params['utm-campaign'] = sqs_params['utm_campaign'] if sqs_params['utm_campaign']
+    params['utm-term'] = sqs_params['utm_term'] if sqs_params['utm_term']
+    params['utm-content'] = sqs_params['utm_content'] if sqs_params['utm_content']
+    params['when-can-travel'] = sqs_params['when_can_travel'] + 1 if sqs_params['when_can_travel']
+    params['preferred-destination'] = sqs_params['preferred_destination'] + 1 if sqs_params['preferred_destination']
+    unless @gx_participant.class.name == 'GvParticipant'
+      params['curriculum'] = @gx_participant.try(:curriculum)&.attached? ? 1 : 2
+    end
 
-      params
+    params
   end
 
   def podio_item_fields_bra(sqs_params)

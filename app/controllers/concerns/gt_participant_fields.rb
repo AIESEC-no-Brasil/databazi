@@ -9,6 +9,7 @@ module GtParticipantFields
 
   def gt_participant_fields_bra
     {
+      'exchange_participant_id' => gt_participant.exchange_participant.id,
       'email' => gt_participant.email,
       'fullname' => gt_participant.fullname,
       'cellphone' => gt_participant.cellphone,
@@ -31,6 +32,7 @@ module GtParticipantFields
 
   def gt_participant_fields_arg
     {
+      'exchange_participant_id' => gt_participant.exchange_participant.id,
       'email' => gt_participant.email,
       'fullname' => gt_participant.fullname,
       'cellphone' => gt_participant.cellphone,
@@ -46,8 +48,9 @@ module GtParticipantFields
       'university' => gt_participant.exchange_participant&.university&.podio_id,
       'college_course' => gt_participant.exchange_participant&.college_course&.podio_id,
       'other_university' => gt_participant.exchange_participant&.other_university,
-      'preferred_destination' => gt_participant.preferred_destination,
+      'preferred_destination' => gt_participant&.read_attribute_before_type_cast(:preferred_destination),
       'english_level' => gt_participant&.english_level&.read_attribute_before_type_cast(:english_level),
+      'cellphone_contactable' => gt_participant.exchange_participant.cellphone_contactable
     }
   end
 end

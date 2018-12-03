@@ -9,6 +9,7 @@ module GeParticipantFields
 
   def ge_participant_fields_bra
     {
+      'exchange_participant_id' => ge_participant.exchange_participant.id,
       'email' => ge_participant.email, 'fullname' => ge_participant.fullname,
       'cellphone' => ge_participant.cellphone,
       'birthdate' => ge_participant.birthdate,
@@ -27,6 +28,7 @@ module GeParticipantFields
 
   def ge_participant_fields_arg
     {
+      'exchange_participant_id' => ge_participant.exchange_participant.id,
       'email' => ge_participant.email,
       'fullname' => ge_participant.fullname,
       'cellphone' => ge_participant.cellphone,
@@ -43,7 +45,8 @@ module GeParticipantFields
       'college_course' => ge_participant.exchange_participant&.college_course&.podio_id,
       'other_university' => ge_participant.exchange_participant&.other_university,
       'when_can_travel' => ge_participant&.read_attribute_before_type_cast(:when_can_travel),
-      'preferred_destination' => ge_participant&.read_attribute_before_type_cast(:preferred_destination)
+      'preferred_destination' => ge_participant&.read_attribute_before_type_cast(:preferred_destination),
+      'cellphone_contactable' => ge_participant.exchange_participant.cellphone_contactable
     }
   end
 end
