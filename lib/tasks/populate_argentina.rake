@@ -1,6 +1,7 @@
 namespace :fetch_podio do
   desc "Retrieve Universities, Courses and Committees from Podio"
-
+  @universities = ''
+  @cities = ''
   task universities: :environment do
     desc "Create universities on local database and export to a csv file"
 
@@ -8,19 +9,28 @@ namespace :fetch_podio do
 
     setup_podio
     authenticate_podio
+    loadJSON
 
-    page = Podio::Item.find_all(UNIVERSITY_APP_ID, :limit => 20)
-    entry_count = page.count
-    page_index = 1
+    # TODO: Importar universidade - Task Diego
+    # DONE: vincular city < texto
+    # TODO:: vincular local_committee_id <<< Importante
+    # TODO: adicionar o local_committee_id na criação da pessoa > Expa e/o Podio?
 
     CSV.open('files/arg_universities.csv', 'a+') do |csv|
+      # CSV title columns
       csv << ['podio_id', 'name']
-      create_university_page(page.all, csv)
-
-      while (offset(page_index) < entry_count) do
+      
+      # Loop through Podio
+      page_index = 1
+      continue = true
+      while (continue) do
         page = Podio::Item.find_all(UNIVERSITY_APP_ID, :limit => 20, offset: offset(page_index))
-        page_index += 1
+        entry_count = page.count
+                
         create_university_page(page.all, csv)
+       
+        continue = offset(page_index) < entry_count
+        page_index += 1
       end
     end
   end
@@ -83,6 +93,7 @@ def create_university_page(entries, csv)
   entries.each do |entry|
     university['podio_id'] = entry.item_id
     university['name'] = strip_html_tags(entry.fields[0]['values'][0]['value'])
+    university['city'] = get_city_name(university['name'])
     row = university.each_with_index.map { |(k,v), index| v }
     csv << row
 
@@ -91,6 +102,16 @@ def create_university_page(entries, csv)
     end
   end
 end
+
+# Use the github JSON of citys to join city name to the universities - uses university json too
+def get_city_name(universityName)
+  university = @universities.select {|university| university["nombre_universidad"] == universityName }[0]
+  # TODO: What to do when university not found by name in JSON of github? 
+  return nil? if university.nil?
+  city = @cities.select {|city| city["id_ciudad"] == university["id_ciudad"] }[0]
+  city["nombre_ciudad"]
+end
+
 
 def create_course_page(entries, csv)
   course = {}
@@ -140,3 +161,16 @@ def setup_podio
   )
 end
 
+# Load JSON from Github to join with Podio Data
+def loadJSON
+  @cities = HTTParty
+    .get("https://raw.githubusercontent.com/aiesec-argentina/forms/master/A"\
+      "IESECserver_new/data/ciudades.json")
+    .body
+  @universities = HTTParty
+    .get("https://raw.githubusercontent.com/aiesec-argentina/forms/master/A"\
+      "IESECserver_new/data/universidades.json")
+    .body
+  @universities = JSON.parse(@universities)
+  @cities = JSON.parse(@cities)    
+end
