@@ -13,7 +13,7 @@ RSpec.describe UniversitiesController, type: :controller do
       before { create_list(:university, 3) }
 
       it 'is properly formatted' do
-        expect(response.first.keys).to match_array(%w[id name local_committee_id])
+        expect(response.first.keys).to match_array(%w[id name local_committee_id city])
       end
 
       context 'when filtered by name' do
@@ -30,7 +30,7 @@ RSpec.describe UniversitiesController, type: :controller do
         context 'with no name param' do
           it do
             expect(response).to match_array(
-              University.all.as_json(only: %i[id name local_committee_id])
+              University.all.as_json(only: %i[id name local_committee_id city])
             )
           end
           it { expect(response.size).to eq University.count }
@@ -41,7 +41,7 @@ RSpec.describe UniversitiesController, type: :controller do
 
           it do
             expected = [second_university, first_university, other_university]
-            expect(response).to eq(expected.as_json(only: %i[id name local_committee_id]))
+            expect(response).to eq(expected.as_json(only: %i[id name local_committee_id city]))
           end
           it { expect(response.size).to eq 3 }
         end
