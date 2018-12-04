@@ -18,7 +18,7 @@ namespace :fetch_podio do
       page = Podio::Item.find_all(UNIVERSITY_APP_ID, :limit => 20, offset: offset(page_index))
       entry_count = page.count
 
-      update_university_podio_id(page.all, csv)
+      update_university_podio_id(page.all)
 
       continue = offset(page_index) < entry_count
       page_index += 1
@@ -61,15 +61,12 @@ namespace :fetch_podio do
     entry_count = page.count
     page_index = 1
 
-    CSV.open('files/arg_local_committees.csv', 'a+') do |csv|
-      csv << ['podio_id', 'name']
-      create_committee_page(page.all, csv)
+    create_committee_page(page.all)
 
-      while (offset(page_index) < entry_count) do
-        page = Podio::Item.find_all(COMMITTEE_APP_ID, :limit => 20, offset: offset(page_index))
-        page_index += 1
-        create_committee_page(page.all, csv)
-      end
+    while (offset(page_index) < entry_count) do
+      page = Podio::Item.find_all(COMMITTEE_APP_ID, :limit => 20, offset: offset(page_index))
+      page_index += 1
+      create_committee_page(page.all)
     end
   end
 end
@@ -105,7 +102,7 @@ def create_course_page(entries, csv)
   end
 end
 
-def update_committee_podio_id(entries, csv)
+def update_committee_podio_id(entries)
   committee = {}
   entries.each do |entry|
     committee['podio_id'] = entry.item_id
