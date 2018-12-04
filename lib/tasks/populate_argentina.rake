@@ -61,7 +61,7 @@ namespace :fetch_podio do
     entry_count = page.count
     page_index = 1
 
-    create_committee_page(page.all)
+    update_committee_podio_id(page.all)
 
     while (offset(page_index) < entry_count) do
       page = Podio::Item.find_all(COMMITTEE_APP_ID, :limit => 20, offset: offset(page_index))
