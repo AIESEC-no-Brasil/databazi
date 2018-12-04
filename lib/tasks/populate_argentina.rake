@@ -88,7 +88,7 @@ def update_university_podio_id(entries)
   end
 end
 
-def create_course_page(entries)
+def create_course_page(entries, csv)
   course = {}
   entries.each do |entry|
     course['podio_id'] = entry.item_id
