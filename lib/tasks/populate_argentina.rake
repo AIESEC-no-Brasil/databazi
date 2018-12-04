@@ -91,7 +91,7 @@ def update_university_podio_id(entries)
   end
 end
 
-def create_course_page(entries, csv)
+def create_course_page(entries)
   course = {}
   entries.each do |entry|
     course['podio_id'] = entry.item_id
@@ -105,7 +105,7 @@ def create_course_page(entries, csv)
   end
 end
 
-def update_committee_podio_id(entries, csv)
+def update_committee_podio_id(entries)
   committee = {}
   entries.each do |entry|
     committee['podio_id'] = entry.item_id
