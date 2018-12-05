@@ -1,10 +1,12 @@
 class UniversitiesController < ApplicationController
   expose :universities, -> do
     results = University.by_name(query_by_name(params[:name]))
-    results = results.where(city: params[:city]) if params[:city]
+    results = results.where('unaccent(city) ILIKE unaccent(?)', params[:city]) if params[:city]
     results.limit(limit_response)
            .order(name: :asc)
   end
+
+  expose :other, -> { other_university(params[:city]) }
 
   def index
     render json: format_response
@@ -18,7 +20,7 @@ class UniversitiesController < ApplicationController
 
   def format_response
     universities.as_json(only: %i[id name local_committee_id city]) +
-      other_university.as_json(only: %i[id name local_committee_id city])
+      other.as_json(only: %i[id name local_committee_id city])
   end
 
   def diacritic_trim(param)
@@ -31,7 +33,11 @@ class UniversitiesController < ApplicationController
     diacritic_trim(param)
   end
 
-  def other_university
-    University.where('lower(name) = ?', 'outra')
+  def other_university(city)
+    if ENV['COUNTRY'] == 'arg'
+      University.where('unaccent(name) ILIKE unaccent(?)', "otras - #{city}")
+    else
+      University.where('lower(name) = ?', 'outra')
+    end
   end
 end
