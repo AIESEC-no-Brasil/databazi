@@ -90,11 +90,11 @@ class SendToPodio
       'local-committee' => sqs_params['local_committee']
     }
 
-    # params['scholarity'] = sqs_params['scholarity'] if sqs_params['scholarity']
+    # params['scholarity'] = sqs_params['scholarity'] + 1 if sqs_params['scholarity']
     params['university'] = sqs_params['university'].to_i if sqs_params['university']
     params['college-course'] = sqs_params['college_course'].to_i if sqs_params['college_course']
     params['other-university'] = sqs_params['other_university'] if sqs_params['other_university']
-    params['english-level'] = sqs_params['english_level'] if sqs_params['english_level']
+    params['english-level'] = sqs_params['english_level'] + 1 if sqs_params['english_level']
     params['cellphone-contactable'] = cellphone_contactable_option(sqs_params['cellphone_contactable'])
     params['utm-source'] = sqs_params['utm_source'] if sqs_params['utm_source']
     params['utm-medium'] = sqs_params['utm_medium'] if sqs_params['utm_medium']
