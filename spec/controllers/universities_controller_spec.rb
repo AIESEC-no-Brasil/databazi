@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe UniversitiesController, type: :controller do
   describe '#index' do
+    ENV['COUNTRY'] = 'bra'
     subject(:do_index) { get :index }
 
     let(:response) { JSON.parse(subject.body) }

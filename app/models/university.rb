@@ -10,5 +10,6 @@ class University < ApplicationRecord
   def self.query_by_name(name)
     where('unaccent(name) ILIKE unaccent(?)', "%#{name}%")
       .where.not('name = ?', 'OUTRA')
+      .where.not('unaccent(name) ILIKE unaccent(?)', 'otras')
   end
 end
