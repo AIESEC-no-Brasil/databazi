@@ -5,55 +5,26 @@ class ExpaApplicationSync
     new.call
   end
 
-  def initialize
-  end
-
   def call
-    # DONE get access token
-    # access_token
     load_applications.each do |application|
+      ep = exchange_participant_by_expa_id(application.person.id)
+      next unless ep
+
+      ep.update_attributes(expa_id: application.person.id)
       Expa::Application.create(
         expa_id: application.id,
-        status: application.status
+        status: application.status,
+        exchange_participant_id: ep.id
       )
-      
-      # TODO: Get ID of Attendee
-      # TODO: Exists on our database?
-      # TODO: If not, search the 
     end
-
-
-
-
-    # Considering that EP already has expa_id
-
-    # Fetch number of pages
-    # Send SQS message (page_number, filters)
-    # Fetch page applications
-    # Application.create
-    # SendApplicationToPodio
-
-    # Get Applications In graphql
-    # Join Applications with EPS
-    # Saving Application into PG
-    # Saving Application into Podio
-    
   end
-  
+
   private
 
-  def access_token
-    res = HTTParty
-      .get("http://token.aiesec.org.br/" \
-        "get_token.php?token=#{token_token}"
-      )
-      .body
-    raise RuntimeError.new('Error fetching Authenticity Token') if res.empty?
-    res
-  end
-
-  def token_token
-    ENV['API_AUTHENTICITY_TOKEN']
+  def exchange_participant_by_expa_id(expa_id)
+    ExchangeParticipant.find_by(
+      expa_id: expa_id
+    )
   end
 
   def load_applications

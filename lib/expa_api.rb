@@ -42,6 +42,8 @@ LoadApplications = EXPAAPI::Client.parse <<~'GRAPHQL'
         host_lc_name
         person {
           id
+          full_name
+          phone
           home_mc {
             name
           }
