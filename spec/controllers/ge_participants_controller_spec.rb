@@ -32,7 +32,7 @@ RSpec.describe GeParticipantsController, type: :controller do
         utm_term: campaign.utm_term,
         utm_content: campaign.utm_content,
         when_can_travel: ge_participant.when_can_travel,
-        preferred_destination: ge_participant.preferred_destination,
+        preferred_destination: ge_participant.read_attribute_before_type_cast(:preferred_destination),
         curriculum: fixture_file_upload('files/spec.pdf', 'application/pdf')
       }
     end

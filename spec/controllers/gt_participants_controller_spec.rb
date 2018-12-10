@@ -38,7 +38,7 @@ RSpec.describe GtParticipantsController, type: :controller do
         utm_campaign: campaign.utm_campaign,
         utm_term: campaign.utm_term,
         utm_content: campaign.utm_content,
-        preferred_destination: gt_participant.preferred_destination,
+        preferred_destination: gt_participant.read_attribute_before_type_cast(:preferred_destination),
         curriculum: fixture_file_upload('files/spec.pdf', 'application/pdf')
       }
     end
