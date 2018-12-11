@@ -100,13 +100,19 @@ class SendToPodio
     params['utm-campaign'] = sqs_params['utm_campaign'] if sqs_params['utm_campaign']
     params['utm-term'] = sqs_params['utm_term'] if sqs_params['utm_term']
     params['utm-content'] = sqs_params['utm_content'] if sqs_params['utm_content']
-    # Podio starts counting at 1 instead of 0, so we increment our enum indexes to match its category field in the podio app.
     params['english-level'] = sqs_params['english_level'] if sqs_params['english_level']
+    # Podio starts counting at 1 instead of 0, so we increment our enum indexes to match its category field in the podio app.
     params['when-can-travel'] = sqs_params['when_can_travel'] + 1 if sqs_params['when_can_travel']
-    params['preferred-destination'] = sqs_params['preferred_destination'] + 1 if sqs_params['preferred_destination']
+    if @gx_participant.class.name == 'GtParticipant'
+      params['preferred-destination'] = sqs_params['preferred_destination'] if sqs_params['preferred_destination']
+    else
+      params['preferred-destination'] = sqs_params['preferred_destination'] + 1 if sqs_params['preferred_destination']
+    end
     unless @gx_participant.class.name == 'GvParticipant'
       params['curriculum'] = @gx_participant.try(:curriculum)&.attached? ? 1 : 2
     end
+
+    byebug
 
     params
   end
