@@ -30,8 +30,11 @@ ExistsQuery = EXPAAPI::Client.parse <<~'GRAPHQL'
 GRAPHQL
 
 LoadApplications = EXPAAPI::Client.parse <<~'GRAPHQL'
-  query {
-    allOpportunityApplication(filters:{person_home_mc: 1606}) {
+  query($from: DateTime, $to: DateTime, $page: Int) {
+    allOpportunityApplication(page: $page, filters:{
+      person_home_mc: 1606,
+      last_interaction: {from: $from, to: $to}
+    }) {
       paging {
         total_pages
       }

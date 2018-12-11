@@ -1,12 +1,12 @@
 require "#{Rails.root}/lib/expa_api"
 
 class ExpaApplicationSync
-  def self.call
-    new.call
+  def self.call(from, to, page)
+    new.call(from, to, page)
   end
 
-  def call
-    load_applications.each do |application|
+  def call(from, to, page)
+    load_applications(from, to, page).each do |application|
       ep = exchange_participant_by_expa_id(application.person.id)
       next unless ep
 
@@ -27,9 +27,14 @@ class ExpaApplicationSync
     )
   end
 
-  def load_applications
+  def load_applications(from, to, page)
     EXPAAPI::Client.query(
-      LoadApplications
+      LoadApplications,
+      variables: {
+        to: to,
+        from: from,
+        page: page
+      }
     ).data.all_opportunity_application.data
   end
 end

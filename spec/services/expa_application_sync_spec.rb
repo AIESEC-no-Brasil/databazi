@@ -4,7 +4,7 @@ RSpec.describe ExpaApplicationSync do
   subject {ExpaApplicationSync.new}
 
   before do
-    applications = described_class.new.send(:load_applications)
+    applications = described_class.new.send(:load_applications, '2018-10-01', '2018-10-30', 1)
     create(
       :gt_participant,
       exchange_participant: build(
@@ -15,7 +15,9 @@ RSpec.describe ExpaApplicationSync do
   end
 
   it 'creates applications' do
-    expect { described_class.call }.to change(Expa::Application, :count)
+    expect {
+      described_class.call('2018-10-01', '2018-10-30', 1)
+    }.to change(Expa::Application, :count)
       .by_at_least(1)
   end
 
