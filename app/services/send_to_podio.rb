@@ -103,16 +103,16 @@ class SendToPodio
     params['english-level'] = sqs_params['english_level'] if sqs_params['english_level']
     # Podio starts counting at 1 instead of 0, so we increment our enum indexes to match its category field in the podio app.
     params['when-can-travel'] = sqs_params['when_can_travel'] + 1 if sqs_params['when_can_travel']
-    if @gx_participant.class.name == 'GtParticipant'
+
+    if gt_participant?
       params['preferred-destination'] = sqs_params['preferred_destination'] if sqs_params['preferred_destination']
     else
       params['preferred-destination'] = sqs_params['preferred_destination'] + 1 if sqs_params['preferred_destination']
     end
-    unless @gx_participant.class.name == 'GvParticipant'
+
+    unless gv_participant?
       params['curriculum'] = @gx_participant.try(:curriculum)&.attached? ? 1 : 2
     end
-
-    byebug
 
     params
   end
@@ -152,5 +152,17 @@ class SendToPodio
 
   def cellphone_contactable_option(value)
     value ? 1 : 2
+  end
+
+  def registerable_class_name
+    @gx_participant.class.name
+  end
+
+  def gt_participant?
+    registerable_class_name == 'GtParticipant'
+  end
+
+  def gv_participant?
+    registerable_class_name == 'GvParticipant'
   end
 end
