@@ -1,6 +1,6 @@
 # Databazi
-To restart the webserver, from within your local application directory run:
-$ cap production puma:restart
+- To restart the webserver, from within your local application directory run:
+`$ cap production puma:restart`
 
 # Periodic tasks
 
