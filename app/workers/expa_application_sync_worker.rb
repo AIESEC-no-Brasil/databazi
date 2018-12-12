@@ -8,6 +8,8 @@ class ExpaApplicationSyncWorker
                     body_parser: JSON
 
   def perform(sqs_msg, body)
-    sqs_msg.delete if ExpaApplicationSync.call(body)
+    puts "ExpaApplicationSyncWorker.perform"
+    puts "body #{body}"
+    sqs_msg.delete if ExpaApplicationSync.call(body['from'], body['to'], body['page'])
   end
 end
