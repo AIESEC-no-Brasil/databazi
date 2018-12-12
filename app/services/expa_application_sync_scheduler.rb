@@ -27,23 +27,4 @@ class ExpaApplicationSyncScheduler
       break if page > total
     end
   end
-
-  private
-
-  def exchange_participant_by_expa_id(expa_id)
-    ExchangeParticipant.find_by(
-      expa_id: expa_id
-    )
-  end
-
-  def load_applications(from, to, page)
-    EXPAAPI::Client.query(
-      LoadApplications,
-      variables: {
-        to: to,
-        from: from,
-        page: page
-      }
-    ).data.all_opportunity_application.data
-  end
 end
