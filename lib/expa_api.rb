@@ -61,3 +61,16 @@ LoadApplications = EXPAAPI::Client.parse <<~'GRAPHQL'
     }
   }
 GRAPHQL
+
+CountApplications = EXPAAPI::Client.parse <<~'GRAPHQL'
+  query($from: DateTime, $to: DateTime) {
+    allOpportunityApplication(filters:{
+      person_home_mc: 1606,
+      last_interaction: {from: $from, to: $to}
+    }) {
+      paging {
+        total_pages
+      }
+    }
+  }
+GRAPHQL
