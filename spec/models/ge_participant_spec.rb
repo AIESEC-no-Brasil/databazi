@@ -27,7 +27,7 @@ RSpec.describe GeParticipant, type: :model do
     end
     it do
       expect(GeParticipant.new).to define_enum_for(:preferred_destination)
-        .with(%i[brazil mexico peru])
+        .with({ brazil: 1, mexico: 2, peru: 3 })
     end
   end
 
