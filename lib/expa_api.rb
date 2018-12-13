@@ -23,8 +23,9 @@ end
 ExistsQuery = EXPAAPI::Client.parse <<~'GRAPHQL'
     query($email: String) {
       checkPersonPresent(email: $email) {
-      full_name
-      email
+        id
+        full_name
+        email
     }
 }
 GRAPHQL
