@@ -7,25 +7,15 @@ class ExpaApplicationSync
 
   def call(from, to, page)
     load_applications(from, to, page).each do |application|
-      ep = exchange_participant_by_expa_id(application.person.id)
+      ep = ExchangeParticipant.find_by_expa_id(application.person.id)
       next unless ep
 
-      ep.update_attributes(expa_id: application.person.id)
-      Expa::Application.create(
-        expa_id: application.id,
-        status: application.status,
-        exchange_participant_id: ep.id
-      )
+      ep.expa_applications.create(expa_id: application.id,
+                                  status: application.status)
     end
   end
 
   private
-
-  def exchange_participant_by_expa_id(expa_id)
-    ExchangeParticipant.find_by(
-      expa_id: expa_id
-    )
-  end
 
   def load_applications(from, to, page)
     EXPAAPI::Client.query(
