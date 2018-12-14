@@ -1,3 +1,4 @@
+require 'slack-notifier'
 require 'concerns/check_person_present'
 require 'open-uri'
 
@@ -18,10 +19,21 @@ class ExpaSignUp
   def call
     @status = send_data_to_expa(@exchange_participant)
 
+    notify_slack("Error synching EP:\n#{@exchange_participant}") unless @status
+
     @status
   end
 
   private
+
+  def notify_slack(message)
+    notifier = Slack::Notifier.new ENV['SLACK_WEBHOOK_URL'] do
+      defaults channel: "##{ENV['SLACK_CHANNEL']}",
+               username: "notifier"
+    end
+
+    notifier.ping(message)
+  end
 
   def submit_data(exchange_participant)
     HTTParty.post(
@@ -49,11 +61,11 @@ class ExpaSignUp
     true if exchange_participant.update_attributes(expa_id: id)
   end
 
-  def exchange_participant_present?(exchange_participant)
+  def exchange_participant_expa_id(exchange_participant)
     EXPAAPI::Client.query(
       ExistsQuery,
       variables: { email: exchange_participant.email }
-    ).data.check_person_present.id
+    ).data&.check_person_present.id
   end
 
   def authenticity_token

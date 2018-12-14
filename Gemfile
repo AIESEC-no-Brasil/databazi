@@ -8,6 +8,8 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'decent_exposure'
 gem 'expa', '0.1.2.10', git: 'http://github.com/AIESEC-no-Brasil/expa-rb'
 gem 'faker'
+gem 'graphql-client'
+gem 'httparty'
 gem 'mechanize'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'podio'
@@ -15,10 +17,9 @@ gem 'puma', '~> 3.11'
 gem 'rack-cors'
 gem 'rails', '~> 5.2.0'
 gem 'shoryuken'
+gem 'slack-notifier'
 gem 'swagger_ui_engine'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
-gem 'graphql-client'
-gem 'httparty'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
