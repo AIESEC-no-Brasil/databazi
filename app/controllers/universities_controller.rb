@@ -1,10 +1,13 @@
 class UniversitiesController < ApplicationController
-  expose :universities, -> do
+  expose :universities, lambda {
     results = University.by_name(query_by_name(params[:name]))
-    results = results.where('unaccent(city) ILIKE unaccent(?)', params[:city]) if params[:city]
+    # TODO: refactor this piece of code into an scope on its model
+    if params[:city]
+      results = results.where('unaccent(city) ILIKE unaccent(?)', params[:city])
+    end
     results.limit(limit_response)
            .order(name: :asc)
-  end
+  }
 
   expose :other, -> { other_university(params[:city]) }
 
@@ -35,7 +38,8 @@ class UniversitiesController < ApplicationController
 
   def other_university(city)
     if ENV['COUNTRY'] == 'arg'
-      University.where('unaccent(name) ILIKE unaccent(?)', "otras - #{city}")
+      University.where('unaccent(name) ILIKE unaccent(?)', 'otras - %')
+                .where('unaccent(city) ILIKE unaccent(?)', city)
     else
       University.where('lower(name) = ?', 'outra')
     end

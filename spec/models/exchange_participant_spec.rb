@@ -25,6 +25,8 @@ RSpec.describe ExchangeParticipant, type: :model do
   end
 
   describe '#associations' do
+    it { is_expected.to have_many :expa_applications }
+
     it { is_expected.to belong_to :registerable }
     it { is_expected.to belong_to :campaign }
     it { is_expected.to belong_to :local_committee }
