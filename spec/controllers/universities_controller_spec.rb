@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe UniversitiesController, type: :controller do
   describe '#index' do
+    ENV['COUNTRY'] = 'bra'
     subject(:do_index) { get :index }
 
     let(:response) { JSON.parse(subject.body) }
@@ -13,7 +14,7 @@ RSpec.describe UniversitiesController, type: :controller do
       before { create_list(:university, 3) }
 
       it 'is properly formatted' do
-        expect(response.first.keys).to match_array(%w[id name])
+        expect(response.first.keys).to match_array(%w[id name local_committee_id city])
       end
 
       context 'when filtered by name' do
@@ -30,7 +31,7 @@ RSpec.describe UniversitiesController, type: :controller do
         context 'with no name param' do
           it do
             expect(response).to match_array(
-              University.all.as_json(only: %i[id name])
+              University.all.as_json(only: %i[id name local_committee_id city])
             )
           end
           it { expect(response.size).to eq University.count }
@@ -41,7 +42,7 @@ RSpec.describe UniversitiesController, type: :controller do
 
           it do
             expected = [second_university, first_university, other_university]
-            expect(response).to eq(expected.as_json(only: %i[id name]))
+            expect(response).to eq(expected.as_json(only: %i[id name local_committee_id city]))
           end
           it { expect(response.size).to eq 3 }
         end
@@ -60,6 +61,23 @@ RSpec.describe UniversitiesController, type: :controller do
           subject(:do_index) { get :index }
 
           it { expect(response.size).to eq(University.count) }
+        end
+      end
+
+      context 'with city param' do
+        subject(:do_index) { get :index, params: params }
+
+        let(:params) do
+          { limit: 10, city: 'Limeira' }
+        end
+
+        before do
+          create_list(:university, 5)
+          create_list(:university, 3, city: 'Limeira')
+        end
+
+        it 'returns universities that belong to the committee' do
+          expect(response.size).to eq 3
         end
       end
     end

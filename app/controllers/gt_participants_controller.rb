@@ -1,5 +1,6 @@
 class GtParticipantsController < ApplicationController
   include ExchangeParticipantable
+  include GtParticipantFields
   before_action :campaign_sign_up
 
   expose :gt_participant
@@ -31,6 +32,8 @@ class GtParticipantsController < ApplicationController
 
   def gt_participant_params
     nested_params.require(:gt_participant).permit(
+      :curriculum,
+      :preferred_destination,
       english_level_attributes: [:english_level],
       exchange_participant_attributes:
         exchange_participant_permitted_attributes,
@@ -42,7 +45,7 @@ class GtParticipantsController < ApplicationController
     %i[
       id fullname email birthdate cellphone local_committee_id
       university_id college_course_id password scholarity
-      campaign_id cellphone_contactable
+      campaign_id cellphone_contactable other_university
     ]
   end
 
@@ -55,12 +58,18 @@ class GtParticipantsController < ApplicationController
   def nested_params
     ActionController::Parameters.new(
       gt_participant: {
-        scholarity: params[:gt_participant][:scholarity],
-        english_level_attributes: english_level_params,
-        exchange_participant_attributes: exchange_participant_params,
+        preferred_destination: gt_params[:preferred_destination].to_i,
+        scholarity: gt_params[:scholarity],
+        curriculum: gt_params[:curriculum],
+        english_level_attributes: normalized_english_level_params,
+        exchange_participant_attributes: normalized_exchange_participant_params,
         experience_attributes: experience_params
       }
     )
+  end
+
+  def gt_params
+    params[:gt_participant]
   end
 
   def english_level_params
@@ -68,34 +77,31 @@ class GtParticipantsController < ApplicationController
       .slice(:english_level)
   end
 
+  def normalized_english_level_params
+    params = english_level_params
+    params[:english_level] = params[:english_level].to_i
+
+    params
+  end
+
+  def normalized_exchange_participant_params
+    params = exchange_participant_params
+    params[:scholarity] = params[:scholarity].to_i
+
+    params
+  end
+
   def exchange_participant_params
     params[:gt_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
-             :password, :scholarity, :campaign_id, :cellphone_contactable)
+             :password, :scholarity, :campaign_id, :cellphone_contactable,
+             :other_university)
   end
 
   def experience_params
     params[:gt_participant][:experience]
-      .slice(:id, :language, :marketing, :information_technology, :management)
-  end
-
-  def gt_participant_fields
-    {
-      'email' => gt_participant.email, 'fullname' => gt_participant.fullname,
-      'cellphone' => gt_participant.cellphone,
-      'birthdate' => gt_participant.birthdate,
-      'utm_source' => utm_source, 'utm_medium' => utm_medium,
-      'utm_campaign' => utm_campaign, 'utm_term' => utm_term,
-      'utm_content' => utm_content, 'podio_app' => 170_570_01,
-      'scholarity' => scholarity_human_name,
-      'local_committee' => gt_participant.exchange_participant&.local_committee&.podio_id,
-      'english_level' => gt_participant&.english_level&.read_attribute_before_type_cast(:english_level),
-      'university' => gt_participant.exchange_participant&.university&.podio_item_id,
-      'college_course' => gt_participant.exchange_participant&.college_course&.podio_item_id,
-      'experience' => gt_participant&.experience&.for_podio,
-      'cellphone_contactable' => gt_participant.exchange_participant.cellphone_contactable
-    }
+      .slice(:id, :language, :marketing, :information_technology, :management) if params[:gt_participant][:experience]
   end
 
   def scholarity_human_name

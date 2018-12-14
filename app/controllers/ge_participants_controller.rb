@@ -1,5 +1,6 @@
 class GeParticipantsController < ApplicationController
   include ExchangeParticipantable
+  include GeParticipantFields
   before_action :campaign_sign_up
 
   expose :ge_participant
@@ -31,31 +32,34 @@ class GeParticipantsController < ApplicationController
 
   def ge_participant_params
     nested_params.require(:ge_participant).permit(
+      :preferred_destination,
       :spanish_level,
+      :when_can_travel,
+      :curriculum,
+      english_level_attributes: [:english_level],
       exchange_participant_attributes: %i[
         id fullname email birthdate cellphone local_committee_id
         university_id college_course_id password scholarity
-        campaign_id cellphone_contactable
-      ],
-      english_level_attributes: [:english_level]
+        campaign_id cellphone_contactable other_university
+      ]
     )
   end
 
   def nested_params
     ActionController::Parameters.new(
       ge_participant: {
-        spanish_level: params[:ge_participant][:spanish_level],
-        exchange_participant_attributes: exchange_participant_params,
-        english_level_attributes: english_level_params
+        preferred_destination: ge_params[:preferred_destination].to_i,
+        when_can_travel: ge_params[:when_can_travel].to_i,
+        spanish_level: ge_params[:spanish_level].to_i,
+        curriculum: ge_params[:curriculum],
+        exchange_participant_attributes: normalized_exchange_participant_params,
+        english_level_attributes: normalized_english_level_params
       }
     )
   end
 
-  def exchange_participant_params
+  def ge_params
     params[:ge_participant]
-      .slice(:id, :birthdate, :fullname, :email, :cellphone,
-             :local_committee_id, :university_id, :college_course_id,
-             :password, :scholarity, :campaign_id, :cellphone_contactable)
   end
 
   def english_level_params
@@ -63,22 +67,26 @@ class GeParticipantsController < ApplicationController
       .slice(:english_level)
   end
 
-  def ge_participant_fields
-    {
-      'email' => ge_participant.email, 'fullname' => ge_participant.fullname,
-      'cellphone' => ge_participant.cellphone,
-      'birthdate' => ge_participant.birthdate,
-      'utm_source' => utm_source, 'utm_medium' => utm_medium,
-      'utm_campaign' => utm_campaign, 'utm_term' => utm_term,
-      'utm_content' => utm_content, 'podio_app' => 170_576_29,
-      'scholarity' => scholarity_human_name,
-      'local_committee' => ge_participant.exchange_participant&.local_committee&.podio_id,
-      'spanish_level' => ge_participant.read_attribute_before_type_cast(:spanish_level),
-      'english_level' => ge_participant&.english_level&.read_attribute_before_type_cast(:english_level),
-      'university' => ge_participant.exchange_participant&.university&.podio_item_id,
-      'college_course' => ge_participant.exchange_participant&.college_course&.podio_item_id,
-      'cellphone_contactable' => ge_participant.exchange_participant.cellphone_contactable
-    }
+  def normalized_english_level_params
+    params = english_level_params
+    params[:english_level] = params[:english_level].to_i
+
+    params
+  end
+
+  def normalized_exchange_participant_params
+    params = exchange_participant_params
+    params[:scholarity] = params[:scholarity].to_i
+
+    params
+  end
+
+  def exchange_participant_params
+    params[:ge_participant]
+      .slice(:id, :birthdate, :fullname, :email, :cellphone,
+             :local_committee_id, :university_id, :college_course_id,
+             :password, :scholarity, :campaign_id, :cellphone_contactable,
+             :other_university)
   end
 
   def scholarity_human_name

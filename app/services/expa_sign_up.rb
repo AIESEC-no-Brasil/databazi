@@ -38,7 +38,8 @@ class ExpaSignUp
         'user[mc]' => '1606',
         'user[lc]' => exchange_participant.local_committee.expa_id,
         'user[lc_input]' => exchange_participant.local_committee.expa_id,
-        'user[allow_phone_communication]' => exchange_participant.cellphone_contactable
+        'user[allow_phone_communication]' =>
+          exchange_participant.cellphone_contactable
       }
     )
   end
