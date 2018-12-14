@@ -45,14 +45,15 @@ class ExpaSignUp
 
   def send_data_to_expa(exchange_participant)
     submit_data(exchange_participant)
-    exchange_participant_present?(exchange_participant)
+    id = exchange_participant_expa_id(exchange_participant)
+    true if exchange_participant.update_attributes(expa_id: id)
   end
 
   def exchange_participant_present?(exchange_participant)
     EXPAAPI::Client.query(
       ExistsQuery,
       variables: { email: exchange_participant.email }
-    ).data&.check_person_present?
+    ).data.check_person_present.id
   end
 
   def authenticity_token
