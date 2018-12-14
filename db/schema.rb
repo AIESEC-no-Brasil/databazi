@@ -79,7 +79,11 @@ ActiveRecord::Schema.define(version: 2018_12_04_203849) do
     t.boolean "cellphone_contactable", default: false
     t.integer "scholarity"
     t.integer "campaign_id"
+<<<<<<< HEAD
     t.string "other_university"
+=======
+    t.integer "expa_id"
+>>>>>>> expa-id
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
