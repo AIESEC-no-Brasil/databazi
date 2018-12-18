@@ -14,7 +14,7 @@ describe EpPodioIdSync do
 
     let(:field_name) { { 'field_id' => 133_074_857, 'values' => [{ 'value' => 'Foo bar' }] } }
     let(:field_email) { { 'field_id' => 133_074_860, 'values' => [{ 'value' => 'foo@bar.com' }] } }
-    let(:item) { double('fields', fields: [field_name, field_email], app_item_id: fake_podio_id) }
+    let(:item) { double('fields', fields: [field_name, field_email], item_id: fake_podio_id) }
     let(:ret) { double('Podio::Item', all: [item], count: 100) }
 
     before do
