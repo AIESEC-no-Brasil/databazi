@@ -60,6 +60,52 @@ describe EpPodioIdSync do
         .with(podio_id: fake_podio_id)
     end
 
+    context 'multiples offset' do
+      before do
+        storage.transaction do
+          storage[:ge_offset] = 10
+          storage[:gv_offset] = 20
+          storage[:gt_offset] = 30
+        end
+      end
+      context 'ge' do
+        it 'ge offset' do
+          described_class.call(params)
+          expect(Podio::Item).to have_received(:find_by_filter_values)
+            .with('17057629', anything, hash_including(offset: 10))
+        end
+      end
+
+      context 'gv' do
+        before do
+          storage.transaction do
+            storage[:ge_offset_done] = true
+          end
+        end
+
+        it 'offset' do
+          described_class.call(params)
+          expect(Podio::Item).to have_received(:find_by_filter_values)
+            .with('15290822', anything, hash_including(offset: 20))
+        end
+      end
+
+      context 'gt' do
+        before do
+          storage.transaction do
+            storage[:ge_offset_done] = true
+            storage[:gv_offset_done] = true
+          end
+        end
+
+        it 'gt offset' do
+          described_class.call(params)
+          expect(Podio::Item).to have_received(:find_by_filter_values)
+            .with('17057001', anything, hash_including(offset: 30))
+        end
+      end
+
+    end
     # it 'load an ep without podio_id' do
     #   described_class.call
     #   expect(GeParticipant).to have_received(:find_by_podio_id)
