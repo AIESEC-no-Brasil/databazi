@@ -6,14 +6,14 @@ class EpPodioIdSync
   end
 
   def initialize
-    Podio.setup(
-      api_key: ENV['PODIO_API_KEY'],
-      api_secret: ENV['PODIO_API_SECRET']
-    )
-    Podio.client.authenticate_with_credentials(
-      ENV['PODIO_USERNAME'],
-      ENV['PODIO_PASSWORD']
-    )
+    # Podio.setup(
+    #   api_key: ENV['PODIO_API_KEY'],
+    #   api_secret: ENV['PODIO_API_SECRET']
+    # )
+    # Podio.client.authenticate_with_credentials(
+    #   ENV['PODIO_USERNAME'],
+    #   ENV['PODIO_PASSWORD']
+    # )
   end
 
   def call(**args)
@@ -42,7 +42,22 @@ class EpPodioIdSync
       end
     end
     logger.info ret.inspect
-    storage.transaction { storage[:ge_offset] = offset + 1 }
+    ep_type = podio_ep_type(storage)
+    storage.transaction do
+      offset += 1
+      if (offset + 1) * 20 > ret.count
+        case ep_type
+        when :ge_offset
+          done = :ge_offset_done
+        when :gv_offset
+          done = :gv_offset_done
+        when :gt_offset
+          done = :gt_offset_done
+        end
+        storage[done] = true
+      end
+      storage[ep_type] = offset
+    end
   end
 
   private

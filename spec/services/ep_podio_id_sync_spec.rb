@@ -15,7 +15,7 @@ describe EpPodioIdSync do
     let(:field_name) { { 'field_id' => 133_074_857, 'values' => [{ 'value' => 'Foo bar' }] } }
     let(:field_email) { { 'field_id' => 133_074_860, 'values' => [{ 'value' => 'foo@bar.com' }] } }
     let(:item) { double('fields', fields: [field_name, field_email], app_item_id: fake_podio_id) }
-    let(:ret) { double('all', all: [item]) }
+    let(:ret) { double('Podio::Item', all: [item], count: 100) }
 
     before do
       allow(GeParticipant).to receive(:find_by)
@@ -74,6 +74,18 @@ describe EpPodioIdSync do
           expect(Podio::Item).to have_received(:find_by_filter_values)
             .with('17057629', anything, hash_including(offset: 10))
         end
+
+        it 'ge offset done start false' do
+          done = storage.transaction{ storage.fetch(:ge_offset_done, false) }
+          expect(done).to be false
+        end
+
+        it 'end offsets' do
+          storage.transaction{ storage[:ge_offset] = 9 }
+          described_class.call(params)
+          done = storage.transaction{ storage.fetch(:ge_offset_done, false) }
+          expect(done).to be true
+        end
       end
 
       context 'gv' do
@@ -87,6 +99,13 @@ describe EpPodioIdSync do
           described_class.call(params)
           expect(Podio::Item).to have_received(:find_by_filter_values)
             .with('15290822', anything, hash_including(offset: 20))
+        end
+
+        it 'end offsets' do
+          storage.transaction{ storage[:gv_offset] = 9 }
+          described_class.call(params)
+          done = storage.transaction{ storage.fetch(:gv_offset_done, false) }
+          expect(done).to be true
         end
       end
 
@@ -103,12 +122,15 @@ describe EpPodioIdSync do
           expect(Podio::Item).to have_received(:find_by_filter_values)
             .with('17057001', anything, hash_including(offset: 30))
         end
+
+        it 'end offsets' do
+          storage.transaction{ storage[:gt_offset] = 9 }
+          described_class.call(params)
+          done = storage.transaction{ storage.fetch(:gt_offset_done, false) }
+          expect(done).to be true
+        end
       end
 
     end
-    # it 'load an ep without podio_id' do
-    #   described_class.call
-    #   expect(GeParticipant).to have_received(:find_by_podio_id)
-    # end
   end
 end
