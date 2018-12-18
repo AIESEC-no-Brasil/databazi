@@ -24,7 +24,6 @@ class EpPodioIdSync
     offset = 0
     storage.transaction { offset = storage.fetch(:ge_offset, 0) }
     logger.info 'EpPodioIdSync.call'
-    ep = GeParticipant.find_by_podio_id(nil)
 
     ret = Podio::Item.find_by_filter_values(
       '17057629',

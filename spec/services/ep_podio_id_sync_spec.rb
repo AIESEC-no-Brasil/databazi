@@ -20,9 +20,12 @@ describe EpPodioIdSync do
     let(:fixture) { JSON.parse(File.read("#{Rails.root}/spec/services/json_fixture.json")) }
 
     before do
-      allow(GeParticipant).to receive(:find_by).with(any_args).and_return(ge)
-      allow(GvParticipant).to receive(:find_by).with(any_args).and_return(gv)
-      allow(GtParticipant).to receive(:find_by).with(any_args).and_return(gt)
+      allow(GeParticipant).to receive(:find_by)
+        .with(hash_including(podio_id: nil)).and_return(ge)
+      allow(GvParticipant).to receive(:find_by)
+        .with(hash_including(podio_id: nil)).and_return(gv)
+      allow(GtParticipant).to receive(:find_by)
+        .with(hash_including(podio_id: nil)).and_return(gt)
       # allow(Podio::Item).to receive(:find_by_filter_values).and_call_original
       allow(Podio::Item).to receive(:find_by_filter_values).and_return(ret)
 
