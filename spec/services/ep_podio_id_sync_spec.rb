@@ -54,6 +54,18 @@ describe EpPodioIdSync do
         .with(podio_id: fake_podio_id)
     end
 
+    context 'when ep in podio does not exists on databazi' do
+      before do
+        allow(GeParticipant).to receive(:find_by)
+          .with(hash_including(podio_id: nil)).and_return(nil)
+      end
+
+      it 'does not have anything to save' do
+        expect(ge).not_to receive(:update_attributes)
+        described_class.call(params)
+      end
+    end
+
     context 'multiples offset' do
       before do
         storage.transaction do

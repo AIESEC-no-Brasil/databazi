@@ -36,7 +36,10 @@ class EpPodioIdSync
         podio_id = item.app_item_id
         logger.debug "Name #{name} Email #{email}"
         ep = find_ep(email, storage)
-        ep.update_attributes(podio_id: podio_id)
+        ep&.update_attributes(podio_id: podio_id)
+        if ep.nil?
+          logger.warn "Couldn't find ep from podio: Name #{name} Email #{email}"
+        end
       rescue StandardError => ex
         logger.error ex
       end
