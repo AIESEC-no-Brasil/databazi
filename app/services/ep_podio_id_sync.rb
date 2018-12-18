@@ -35,7 +35,7 @@ class EpPodioIdSync
         email = item.fields.select{ |field| field['field_id'] == 133074860 }[0]['values'][0]['value']
         podio_id = item.app_item_id
         logger.debug "Name #{name} Email #{email}"
-        ep = GeParticipant.find_by(email: email, podio_id: nil)
+        ep = find_ep(email, storage)
         ep.update_attributes(podio_id: podio_id)
       rescue StandardError => ex
         logger.error ex
@@ -61,6 +61,18 @@ class EpPodioIdSync
   end
 
   private
+
+  def find_ep(email, storage)
+    case podio_ep_type(storage)
+    when :ge_offset
+      ep = GeParticipant.find_by(email: email, podio_id: nil)
+    when :gv_offset
+      ep = GvParticipant.find_by(email: email, podio_id: nil)
+    when :gt_offset
+      ep = GtParticipant.find_by(email: email, podio_id: nil)
+    end
+    ep
+  end
 
   def podio_app_id(storage)
     case podio_ep_type(storage)

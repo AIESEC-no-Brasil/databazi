@@ -48,12 +48,6 @@ describe EpPodioIdSync do
         .with(anything, anything, hash_including(offset: 1))
     end
 
-    it 'search a podio item in database' do
-      described_class.call(params)
-      expect(GeParticipant).to have_received(:find_by)
-        .with(email: 'foo@bar.com', podio_id: nil)
-    end
-
     it 'update podio_id of ep' do
       described_class.call(params)
       expect(ge).to have_received(:update_attributes)
@@ -86,6 +80,12 @@ describe EpPodioIdSync do
           done = storage.transaction{ storage.fetch(:ge_offset_done, false) }
           expect(done).to be true
         end
+
+        it 'search a podio item in database' do
+          described_class.call(params)
+          expect(GeParticipant).to have_received(:find_by)
+            .with(email: 'foo@bar.com', podio_id: nil)
+        end
       end
 
       context 'gv' do
@@ -106,6 +106,12 @@ describe EpPodioIdSync do
           described_class.call(params)
           done = storage.transaction{ storage.fetch(:gv_offset_done, false) }
           expect(done).to be true
+        end
+
+        it 'search a podio item in database' do
+          described_class.call(params)
+          expect(GvParticipant).to have_received(:find_by)
+            .with(email: 'foo@bar.com', podio_id: nil)
         end
       end
 
@@ -128,6 +134,12 @@ describe EpPodioIdSync do
           described_class.call(params)
           done = storage.transaction{ storage.fetch(:gt_offset_done, false) }
           expect(done).to be true
+        end
+
+        it 'search a podio item in database' do
+          described_class.call(params)
+          expect(GtParticipant).to have_received(:find_by)
+            .with(email: 'foo@bar.com', podio_id: nil)
         end
       end
 
