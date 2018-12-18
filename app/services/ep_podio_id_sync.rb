@@ -36,8 +36,10 @@ class EpPodioIdSync
         logger.debug "Keys of fields #{item.fields[0].keys}"
         name = item.fields.select{ |field| field['field_id'] == 133074857 }[0]['values'][0]['value']
         email = item.fields.select{ |field| field['field_id'] == 133074860 }[0]['values'][0]['value']
+        podio_id = item.app_item_id
         logger.debug "Name #{name} Email #{email}"
-        GeParticipant.find_by(email: email, podio_id: nil)
+        ep = GeParticipant.find_by(email: email, podio_id: nil)
+        ep.update_attributes(podio_id: podio_id)
       rescue StandardError => ex
         logger.error ex
       end

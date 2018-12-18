@@ -3,10 +3,9 @@ require 'rails_helper'
 # require "#{Rails.root}/lib/expa_api"
 
 describe EpPodioIdSync do
-  before do
-  end
 
   describe '#call' do
+    let(:fake_podio_id) { 12345 }
     let(:ge) { build(:ge_participant) }
     let(:gv) { build(:gv_participant) }
     let(:gt) { build(:gt_participant) }
@@ -15,9 +14,8 @@ describe EpPodioIdSync do
 
     let(:field_name) { { 'field_id' => 133_074_857, 'values' => [{ 'value' => 'Foo bar' }] } }
     let(:field_email) { { 'field_id' => 133_074_860, 'values' => [{ 'value' => 'foo@bar.com' }] } }
-    let(:item) { double('fields', fields: [field_name, field_email]) }
+    let(:item) { double('fields', fields: [field_name, field_email], app_item_id: fake_podio_id) }
     let(:ret) { double('all', all: [item]) }
-    let(:fixture) { JSON.parse(File.read("#{Rails.root}/spec/services/json_fixture.json")) }
 
     before do
       allow(GeParticipant).to receive(:find_by)
@@ -28,7 +26,7 @@ describe EpPodioIdSync do
         .with(hash_including(podio_id: nil)).and_return(gt)
       # allow(Podio::Item).to receive(:find_by_filter_values).and_call_original
       allow(Podio::Item).to receive(:find_by_filter_values).and_return(ret)
-
+      allow(ge).to receive(:update_attributes)
       #   Clear Pstore
       storage.transaction do
         storage.roots.each do |root|
@@ -54,6 +52,12 @@ describe EpPodioIdSync do
       described_class.call(params)
       expect(GeParticipant).to have_received(:find_by)
         .with(email: 'foo@bar.com', podio_id: nil)
+    end
+
+    it 'update podio_id of ep' do
+      described_class.call(params)
+      expect(ge).to have_received(:update_attributes)
+        .with(podio_id: fake_podio_id)
     end
 
     # it 'load an ep without podio_id' do
