@@ -1,7 +1,7 @@
 namespace :podio_sync do
   task ep_podio_id: :environment do
     logger = Logger.new STDOUT
-    logger.level = Logger::WARN
+    # logger.level = Logger::WARN
 
     Podio.setup(
       api_key: ENV['PODIO_API_KEY'],
@@ -14,8 +14,10 @@ namespace :podio_sync do
     # logger = Logger.new 'log/expa_sync.log'
     logger.info 'Start loop'
     loop do
+      logger.info 'Loop'
       EpPodioIdSync.call logger: logger
-      sleep(100)
+      logger.info 'Wait... we cant work that much'
+      sleep(2)
     end
   end
 end
