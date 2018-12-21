@@ -32,6 +32,7 @@ class RepositoryPodio
       return if @@is_podio_initialized
       setup_podio
       authenticate_podio
+      @@is_podio_initialized = true
     end
 
     def authenticate_podio
