@@ -10,7 +10,7 @@ class ExpaSignUp
   attr_reader :exchange_participant, :status
 
   def initialize(params)
-    @status = true
+    @status = false
     @exchange_participant = ExchangeParticipant.find_by(
       id: params['exchange_participant_id']
     )
@@ -65,7 +65,7 @@ class ExpaSignUp
     EXPAAPI::Client.query(
       ExistsQuery,
       variables: { email: exchange_participant.email }
-    ).data&.check_person_present.id
+    ).data&.check_person_present&.id
   end
 
   def authenticity_token
