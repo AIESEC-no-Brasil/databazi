@@ -18,8 +18,9 @@ class EpExpaIdSync
     logger.debug("Found ep in expa #{ep.email.downcase}") unless id.nil?
     logger.warn("Couldn't find ep in expa #{ep.email.downcase}") if id.nil?
     id ||= 0
-    ep.expa_id = id
-    ep.save(validate: false)
+    # ep.expa_id = id
+    # ep.save(validate: false)
+    ep.update_attributes(expa_id: id)
   end
 
   private
