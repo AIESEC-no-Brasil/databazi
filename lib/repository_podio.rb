@@ -12,6 +12,20 @@ class RepositoryPodio
       Podio::Item.delete(id)
     end
 
+    def change_status(id, status)
+      check_podio
+      attrs = {'fields': {
+        'status-expa': status
+      }}
+      item = Podio::Item.update(id, attrs)
+      item
+    end
+
+    def get_item(id)
+      check_podio
+      Podio::Item.find(id)
+    end
+
     private
 
     def check_podio

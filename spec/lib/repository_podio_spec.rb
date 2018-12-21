@@ -14,7 +14,10 @@ RSpec.describe RepositoryPodio do
     RepositoryPodio.delete_ep(@podio_ep.item_id)
   end
 
-  it '1 + 1' do
-    RepositoryPodio.create_ep
+  it '#change_status' do
+    RepositoryPodio.change_status(@podio_ep.item_id, 1)
+    item = RepositoryPodio.get_item(@podio_ep.item_id)
+    field = item.fields.select{ |f| f['external_id'] == 'status-expa' }
+    expect(field[0]['values'][0]['value']['id']).to be_equal(1)
   end
 end
