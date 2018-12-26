@@ -6,6 +6,7 @@ class ExpaApplicationSyncScheduler
   end
 
   def call
+    puts "calling ExpaApplicationSyncScheduler #{Time.now}"
     updated_at = Expa::Application.maximum('updated_at_expa')
     updated_at = Date.new(2018, 1, 1) if updated_at.nil?
     to = Time.now.change(sec: 0)
@@ -17,6 +18,7 @@ class ExpaApplicationSyncScheduler
       }
     ).data.all_opportunity_application.paging.total_pages
     page = 1
+    puts "Pages to schedule #{total}"
     loop do
       ExpaApplicationSyncWorker.perform_async(
         from: updated_at,

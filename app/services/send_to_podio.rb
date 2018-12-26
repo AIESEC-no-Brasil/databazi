@@ -101,8 +101,15 @@ class SendToPodio
     params['utm-term'] = sqs_params['utm_term'] if sqs_params['utm_term']
     params['utm-content'] = sqs_params['utm_content'] if sqs_params['utm_content']
     params['english-level'] = sqs_params['english_level'] if sqs_params['english_level']
-    params['preferred-destination'] = sqs_params['preferred_destination'] if sqs_params['preferred_destination']
-    params['when-can-travel'] = sqs_params['when_can_travel'] if sqs_params['when_can_travel']
+
+    # Podio starts counting at 1 instead of 0, so we increment our enum indexes to match its category field in the podio app.
+    params['when-can-travel'] = sqs_params['when_can_travel'] + 1 if sqs_params['when_can_travel']
+
+    if gt_participant?
+      params['preferred-destination'] = sqs_params['preferred_destination'] if sqs_params['preferred_destination']
+    else
+      params['preferred-destination'] = sqs_params['preferred_destination'] + 1 if sqs_params['preferred_destination']
+    end
 
     unless gv_participant?
       params['curriculum'] = @gx_participant.try(:curriculum)&.attached? ? 1 : 2

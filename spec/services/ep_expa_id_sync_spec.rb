@@ -9,7 +9,7 @@ RSpec.describe EpExpaIdSync do
   let(:ep) { ExchangeParticipant.new(email: 'foo@bar.com') }
 
   before do
-    allow(ep).to receive(:update_attributes)
+    allow(ep).to receive(:save)
     # allow(ep).to receive(:email).and_call_original
     allow(ExchangeParticipant)
       .to receive(:find_by).with(
@@ -35,9 +35,9 @@ RSpec.describe EpExpaIdSync do
 
   it 'update attributes' do
     described_class.call
+    expect(ep).to have_attributes(expa_id: 123)
     expect(ep)
-      .to have_received('update_attributes')
-            .with(expa_id: 123)
+      .to have_received(:save)
   end
 
   context "when don't find ep in expa" do
@@ -50,9 +50,9 @@ RSpec.describe EpExpaIdSync do
 
     it 'update attributes with expa_id 0' do
       described_class.call
+      expect(ep).to have_attributes(expa_id: 0)
       expect(ep)
-        .to have_received('update_attributes')
-              .with(expa_id: 0)
+        .to have_received(:save)
     end
   end
 end
