@@ -17,9 +17,9 @@ class ExpaSignUp
   end
 
   def call
-    @status = send_data_to_expa(@exchange_participant)
+    send_data_to_expa(@exchange_participant)
 
-    notify_slack("Error synching EP:\n#{@exchange_participant}") unless @status
+    notify_slack("Error synching EP:\n#{@exchange_participant} on ENV: #{ENV['ENV']}") unless @status
 
     @status
   end
@@ -59,7 +59,9 @@ class ExpaSignUp
   def send_data_to_expa(exchange_participant)
     submit_data(exchange_participant)
     id = exchange_participant_expa_id(exchange_participant)
-    true if exchange_participant.update_attributes(expa_id: id)
+    unless id.nil?
+      @status = true if exchange_participant.update_attributes(expa_id: id)
+    end
   end
 
   def exchange_participant_expa_id(exchange_participant)
