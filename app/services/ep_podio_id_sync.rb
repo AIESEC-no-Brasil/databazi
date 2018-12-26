@@ -25,7 +25,7 @@ class EpPodioIdSync
     ret = Podio::Item.find_by_filter_values(
       podio_app_id,
       {},
-      sort_by: 'data-inscricao', sort_desc: false, offset: offset
+      sort_by: 'data-inscricao', sort_desc: true, offset: offset
     )
     File.open('json_fixture.json', 'w') { |file| file.write(ret.to_json) }
     ret.all.each do |item|
