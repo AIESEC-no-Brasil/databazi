@@ -46,9 +46,15 @@ class ExchangeParticipant < ApplicationRecord
     { exchange_participant_id: id }
   end
 
-  def current_application(application)
+  def most_actual_application(updated_application)
+    most_actual = updated_application
+    expa_applications.each do |application|
+      if application.updated_at_expa < updated_application.updated_at_expa
+        most_actual = application
+      end
+    end
 
-    nil
+    most_actual
   end
 
   private

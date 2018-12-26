@@ -79,20 +79,44 @@ RSpec.describe ExchangeParticipant, type: :model do
       it { is_expected.to match_array expected }
     end
 
-    describe '#current_application' do
-      let(:ep) do
-        create(:exchange_participant, registerable: build(:gv_participant))
-      end
+    describe '#most_actual_application' do
 
-      context 'without application' do
-        it 'return nil' do
-          expect(ep.current_application).to be_nil
+      let(:application) { build(:application) }
+
+      context 'without applications' do
+        let(:ep) do
+          build(:exchange_participant, registerable: build(:gv_participant))
+        end
+
+        it 'the new application is the most actual' do
+          expect(ep.most_actual_application(application)).to be_equal(application)
         end
       end
 
-      context 'with a single application' do
-        it 'return nil' do
-          expect(ep.current_application).to be_nil
+      context 'with previous applications' do
+        let(:ep) { build(:exchange_participant, expa_applications: [ep_ap]) }
+
+        context 'with a current open application' do
+          let(:ap_open) { { status: 'open', updated_at_expa: 1.month.ago } }
+          let(:ep_ap) { build(:application, ap_open ) }
+
+          context 'with an open application older than previous' do
+            subject { ep.most_actual_application(ap) }
+
+            let(:older) { { status: 'open', updated_at_expa: 2.month.ago } }
+            let(:ap) { build(:application, older) }
+
+            it { is_expected.to be_equal(ap) }
+          end
+
+          context 'with open application newer than previous' do
+            subject { ep.most_actual_application(ap) }
+
+            let(:newer) { { status: 'open', updated_at_expa: 1.day.ago} }
+            let(:ap) { build(:application, newer) }
+
+            it { is_expected.to be_equal(ep_ap) }
+          end
         end
       end
     end
