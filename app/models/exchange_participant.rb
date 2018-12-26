@@ -11,6 +11,8 @@ class ExchangeParticipant < ApplicationRecord
   validates :birthdate, presence: true
   validates :password, presence: true
 
+  has_many :expa_applications, class_name: 'Expa::Application'
+
   belongs_to :registerable, polymorphic: true
   belongs_to :campaign, optional: true
   belongs_to :local_committee

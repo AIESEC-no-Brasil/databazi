@@ -10,6 +10,7 @@
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*
+*.log
 !/log/.keep
 !/tmp/.keep
 
@@ -36,3 +37,5 @@ config/local_env.yml
 
 # Ignore files created/uploaded
 /files/*
+
+/.idea/
