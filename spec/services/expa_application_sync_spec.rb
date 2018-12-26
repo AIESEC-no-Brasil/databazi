@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ExpaApplicationSync do
+RSpec.describe ExpaApplicationSync, aws: true do
   subject {ExpaApplicationSync.new}
 
   before do
