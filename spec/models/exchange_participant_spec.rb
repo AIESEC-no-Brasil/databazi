@@ -83,7 +83,7 @@ RSpec.describe ExchangeParticipant, type: :model do
 
       let(:application) { build(:application) }
 
-      context 'without applications' do
+      context 'without previous applications' do
         let(:ep) do
           build(:exchange_participant, registerable: build(:gv_participant))
         end
@@ -93,39 +93,50 @@ RSpec.describe ExchangeParticipant, type: :model do
         end
       end
 
-      context 'with previous applications' do
-        let(:ep) { build(:exchange_participant, expa_applications: [ep_ap]) }
+      context 'when have previous current open application' do
+        let(:open_a_month) { { status: :open, updated_at_expa: 1.month.ago } }
+        let(:previous_application) { build(:application, open_a_month ) }
+        let(:ep) { build(:exchange_participant, expa_applications: [previous_application]) }
 
-        context 'with a current open application' do
-          let(:ap_open) { { status: :open, updated_at_expa: 1.month.ago } }
-          let(:ep_ap) { build(:application, ap_open ) }
+        context 'with an open application older than previous' do
+          subject { ep.most_actual_application(updated_application) }
 
-          context 'with an open application older than previous' do
-            subject { ep.most_actual_application(ap) }
+          let(:older) { { status: :open, updated_at_expa: 2.month.ago } }
+          let(:updated_application) { build(:application, older) }
 
-            let(:older) { { status: :open, updated_at_expa: 2.month.ago } }
-            let(:ap) { build(:application, older) }
+          it { is_expected.to be_equal(updated_application) }
+        end
 
-            it { is_expected.to be_equal(ap) }
+        context 'with open application newer than previous' do
+          subject { ep.most_actual_application(updated_application) }
+
+          let(:newer) { { status: :open, updated_at_expa: 1.day.ago} }
+          let(:updated_application) { build(:application, newer) }
+
+          it { is_expected.to be_equal(previous_application) }
+        end
+
+        context 'with applied application' do
+          subject { ep.most_actual_application(updated_application) }
+
+          let(:applied) { { status: :applied, updated_at_expa: 1.day.ago} }
+          let(:updated_application) { build(:application, applied) }
+
+          it { is_expected.to be_equal(updated_application) }
+        end
+
+        context 'with another previous application and the first is rejected' do
+          subject { ep.most_actual_application(updated_application) }
+
+          let(:expected_application) { build(:application, open_a_month.merge(updated_at_expa: 1.day.ago)) }
+          let(:rejected) { { id: previous_application.id, status: :rejected } }
+          let(:updated_application) { build(:application, open_a_month.merge(rejected)) }
+
+          before do
+            ep.expa_applications.push(expected_application)
           end
 
-          context 'with open application newer than previous' do
-            subject { ep.most_actual_application(ap) }
-
-            let(:newer) { { status: :open, updated_at_expa: 1.day.ago} }
-            let(:ap) { build(:application, newer) }
-
-            it { is_expected.to be_equal(ep_ap) }
-          end
-
-          context 'with applied application' do
-            subject { ep.most_actual_application(ap) }
-
-            let(:applied) { { status: :applied, updated_at_expa: 1.day.ago} }
-            let(:ap) { build(:application, applied) }
-
-            it { is_expected.to be_equal(ap) }
-          end
+          it { is_expected.to be_equal(expected_application) }
         end
       end
     end
