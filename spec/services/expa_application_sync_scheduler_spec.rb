@@ -1,7 +1,7 @@
 require 'rails_helper'
 require "#{Rails.root}/lib/expa_api"
 
-RSpec.describe ExpaApplicationSyncScheduler do
+RSpec.describe ExpaApplicationSyncScheduler, aws: true do
   subject { described_class.new }
 
   describe '#call', aws: true do

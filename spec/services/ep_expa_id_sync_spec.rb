@@ -1,7 +1,7 @@
 require 'rails_helper'
 require "#{Rails.root}/lib/expa_api"
 
-RSpec.describe EpExpaIdSync do
+RSpec.describe EpExpaIdSync, aws: true do
   subject { described_class.new }
   let(:check_person_present) { double(id: 123) }
   let(:data) { double(check_person_present: check_person_present) }
