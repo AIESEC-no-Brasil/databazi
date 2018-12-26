@@ -41,8 +41,8 @@ RSpec.describe ExchangeParticipant, type: :model do
   describe '#methods' do
     let(:exchange_participant) do
       create(:exchange_participant,
-             fullname: 'Forrest Gump',
-             registerable: build(:gv_participant), password: 'test')
+        fullname: 'Forrest Gump',
+        registerable: build(:gv_participant), password: 'test')
     end
 
     describe '#decrypted_password' do
@@ -78,19 +78,37 @@ RSpec.describe ExchangeParticipant, type: :model do
 
       it { is_expected.to match_array expected }
     end
+
+    describe '#current_application' do
+      let(:ep) do
+        create(:exchange_participant, registerable: build(:gv_participant))
+      end
+
+      context 'without application' do
+        it 'return nil' do
+          expect(ep.current_application).to be_nil
+        end
+      end
+
+      context 'with a single application' do
+        it 'return nil' do
+          expect(ep.current_application).to be_nil
+        end
+      end
+    end
   end
 
   describe '#custom_validations' do
     describe 'age validation' do
       let(:younger_than_18) do
         build(:exchange_participant,
-              birthdate: 18.years.ago + 1.day,
-              registerable: build(:gv_participant))
+          birthdate: 18.years.ago + 1.day,
+          registerable: build(:gv_participant))
       end
       let(:older_than_30) do
         build(:exchange_participant,
-              birthdate: 30.years.ago - 1.day,
-              registerable: build(:gv_participant))
+          birthdate: 30.years.ago - 1.day,
+          registerable: build(:gv_participant))
       end
       let(:youth) do
         build(:exchange_participant, registerable: build(:gv_participant))
