@@ -4,7 +4,7 @@ require "#{Rails.root}/lib/expa_api"
 RSpec.describe ExpaApplicationSyncScheduler do
   subject { described_class.new }
 
-  describe '#call' do
+  describe '#call', aws: true do
     let(:paging) { double('paging', total_pages: 10) }
     let(:all_op) { double('all_opportunity_application', paging: paging) }
     let(:data) { double('data', all_opportunity_application: all_op) }

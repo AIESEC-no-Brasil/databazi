@@ -44,6 +44,7 @@ module GeParticipantFields
       'university' => ge_participant.exchange_participant&.university&.podio_id,
       'college_course' => ge_participant.exchange_participant&.college_course&.podio_id,
       'other_university' => ge_participant.exchange_participant&.other_university,
+      'english_level' => ge_participant&.english_level&.read_attribute_before_type_cast(:english_level),
       'when_can_travel' => ge_participant&.read_attribute_before_type_cast(:when_can_travel),
       'preferred_destination' => ge_participant&.read_attribute_before_type_cast(:preferred_destination),
       'cellphone_contactable' => ge_participant.exchange_participant.cellphone_contactable
