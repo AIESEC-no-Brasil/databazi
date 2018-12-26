@@ -97,13 +97,13 @@ RSpec.describe ExchangeParticipant, type: :model do
         let(:ep) { build(:exchange_participant, expa_applications: [ep_ap]) }
 
         context 'with a current open application' do
-          let(:ap_open) { { status: 'open', updated_at_expa: 1.month.ago } }
+          let(:ap_open) { { status: :open, updated_at_expa: 1.month.ago } }
           let(:ep_ap) { build(:application, ap_open ) }
 
           context 'with an open application older than previous' do
             subject { ep.most_actual_application(ap) }
 
-            let(:older) { { status: 'open', updated_at_expa: 2.month.ago } }
+            let(:older) { { status: :open, updated_at_expa: 2.month.ago } }
             let(:ap) { build(:application, older) }
 
             it { is_expected.to be_equal(ap) }
@@ -112,10 +112,19 @@ RSpec.describe ExchangeParticipant, type: :model do
           context 'with open application newer than previous' do
             subject { ep.most_actual_application(ap) }
 
-            let(:newer) { { status: 'open', updated_at_expa: 1.day.ago} }
+            let(:newer) { { status: :open, updated_at_expa: 1.day.ago} }
             let(:ap) { build(:application, newer) }
 
             it { is_expected.to be_equal(ep_ap) }
+          end
+
+          context 'with applied application' do
+            subject { ep.most_actual_application(ap) }
+
+            let(:applied) { { status: :applied, updated_at_expa: 1.day.ago} }
+            let(:ap) { build(:application, applied) }
+
+            it { is_expected.to be_equal(ap) }
           end
         end
       end

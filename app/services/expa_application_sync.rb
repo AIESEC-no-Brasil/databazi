@@ -10,8 +10,10 @@ class ExpaApplicationSync
       ep = ExchangeParticipant.find_by_expa_id(application.person.id)
       next unless ep
 
+1      send_ep_to_podio_queue(ep) if ep.need_update(application)
+
       ep.expa_applications.create(expa_id: application.id,
-                                  status: application.status)
+        status: application.status)
     end
   end
 
