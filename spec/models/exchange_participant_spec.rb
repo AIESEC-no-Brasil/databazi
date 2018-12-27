@@ -119,6 +119,38 @@ RSpec.describe ExchangeParticipant, type: :model do
         it { is_expected.to be_equal(application) }
       end
 
+      context 'with a current "applied" application compared to an "accepted"' do
+        let(:current_application_params) { { status: :applied, updated_at_expa: 1.month.ago } }
+        let(:expa_applications) { [current_application] }
+        let(:application_params) { { status: :accepted, updated_at_expa: 1.day.ago } }
+
+        it { is_expected.to be_equal(application) }
+      end
+
+      context 'with a current "accepted" application compared to an "approved"' do
+        let(:current_application_params) { { status: :accepted, updated_at_expa: 1.month.ago } }
+        let(:expa_applications) { [current_application] }
+        let(:application_params) { { status: :approved, updated_at_expa: 1.day.ago } }
+
+        it { is_expected.to be_equal(application) }
+      end
+
+      context 'with a current "open" application compared to an "rejected"' do
+        let(:current_application_params) { { status: :open, updated_at_expa: 1.month.ago } }
+        let(:expa_applications) { [current_application] }
+        let(:application_params) { { status: :rejected, updated_at_expa: 1.day.ago } }
+
+        it { is_expected.to be_equal(current_application) }
+      end
+
+      context 'with a current "open" application compared to an "break_approved"' do
+        let(:current_application_params) { { status: :open, updated_at_expa: 1.month.ago } }
+        let(:expa_applications) { [current_application] }
+        let(:application_params) { { status: :break_approved, updated_at_expa: 1.day.ago } }
+
+        it { is_expected.to be_equal(current_application) }
+      end
+
       context 'with two "open" applications compared to the "rejected" current application' do
         let(:current_application_params) { { status: :open, updated_at_expa: 1.month.ago } }
         let(:current_application_2_params) { { status: :open, updated_at_expa: 20.day.ago } }

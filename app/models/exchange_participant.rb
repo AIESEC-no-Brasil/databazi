@@ -47,6 +47,7 @@ class ExchangeParticipant < ApplicationRecord
   end
 
   def most_actual_application(updated_application)
+    status_order = ['break_approved', 'rejected', 'open', 'applied', 'accepted', 'approved']
     applications = expa_applications.map do |application|
       updated_application.id == application.id ? updated_application : application
     end
@@ -59,7 +60,7 @@ class ExchangeParticipant < ApplicationRecord
         next
       end
 
-      if Expa::Application.statuses[application.status] > Expa::Application.statuses[most_actual.status]
+      if status_order.find_index(application.status) > status_order.find_index(most_actual.status)
         most_actual = application
         next
       end
