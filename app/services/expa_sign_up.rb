@@ -43,7 +43,7 @@ class ExpaSignUp
         'utf8' => '✓',
         'user[email]' => exchange_participant.email,
         'user[first_name]' => exchange_participant.first_name,
-        'user[last_name]' => exchange_participant_last_name(exchange_participant),
+        'user[last_name]' => exchange_participant_last_name(exchange_participant.last_name),
         'user[password]' => exchange_participant.decrypted_password,
         'user[phone]' => exchange_participant.cellphone,
         'user[country]' => 'Brazil',
@@ -56,11 +56,11 @@ class ExpaSignUp
     )
   end
 
-  def exchange_participant_last_name(exchange_participant)
-    if exchange_participant.last_name.empty?
-      '-'
+  def exchange_participant_last_name(last_name)
+    unless last_name.empty?
+      last_name
     else
-      exchange_participant.last_name
+      '-'
     end
   end
 
