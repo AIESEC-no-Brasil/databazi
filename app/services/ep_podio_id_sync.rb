@@ -48,8 +48,7 @@ class EpPodioIdSync
     end
     ep_type = podio_ep_type
     @storage.transaction do
-      offset += 20
-      if (offset + 1) * 20 > ret.count
+      if offset + 20 > ret.count
         case ep_type
         when :ge_offset
           done = :ge_offset_done
@@ -60,6 +59,7 @@ class EpPodioIdSync
         end
         @storage[done] = true
       end
+      offset += 20
       logger.debug "Update @storage #{ep_type} with offset #{offset}"
       @storage[ep_type] = offset
     end
