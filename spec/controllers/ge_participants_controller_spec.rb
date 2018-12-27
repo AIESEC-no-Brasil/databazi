@@ -3,11 +3,11 @@ require 'rails_helper'
 RSpec.describe GeParticipantsController, type: :controller do
   let(:english_level) { build(:english_level) }
   let(:exchange_participant) { build(:exchange_participant) }
+  let(:campaign) { build(:campaign) }
   let(:ge_participant) do
     build(:ge_participant, english_level: english_level,
                            exchange_participant: exchange_participant)
   end
-  let(:campaign) { build(:campaign) }
 
   describe '#create', aws: true do
     subject(:do_create) { post :create, params: { ge_participant: ge_params } }
@@ -30,9 +30,13 @@ RSpec.describe GeParticipantsController, type: :controller do
         utm_medium: campaign.utm_medium,
         utm_campaign: campaign.utm_campaign,
         utm_term: campaign.utm_term,
-        utm_content: campaign.utm_content
+        utm_content: campaign.utm_content,
+        when_can_travel: ge_participant.when_can_travel,
+        preferred_destination: ge_participant.read_attribute_before_type_cast(:preferred_destination),
+        curriculum: fixture_file_upload('files/spec.pdf', 'application/pdf')
       }
     end
+
     let(:response) { JSON.parse(subject.body) }
 
     it { is_expected.to be_successful }
@@ -44,6 +48,7 @@ RSpec.describe GeParticipantsController, type: :controller do
       it { expect { do_create }.to change(GeParticipant, :count).by 1 }
       it { expect { do_create }.to change(EnglishLevel, :count).by 1 }
       it { expect { do_create }.to change(Campaign, :count).by 1 }
+      it { expect { do_create }.to change(ActiveStorage::Attachment, :count).by 1 }
 
       it 'sends message to sqs' do
         do_create
@@ -77,6 +82,7 @@ RSpec.describe GeParticipantsController, type: :controller do
       it { expect { do_create }.not_to change(GeParticipant, :count) }
       it { expect { do_create }.not_to change(EnglishLevel, :count) }
       it { expect { do_create }.not_to change(Campaign, :count) }
+      it { expect { do_create }.not_to change(ActiveStorage::Attachment, :count) }
 
       describe 'response' do
         it { expect(response['status']).to eq 'failure' }

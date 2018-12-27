@@ -6,10 +6,11 @@ class SendToPodio
     new(params).call
   end
 
-  attr_reader :params, :status
+  attr_reader :params, :gx_participant, :status
 
   def initialize(params)
     @params = params
+    @gx_participant = ExchangeParticipant.find_by(id: params['exchange_participant_id']).registerable
     @status = true
   end
 
@@ -22,6 +23,7 @@ class SendToPodio
   private
 
   def send_to_podio(params)
+    podio_id = nil
     params['podio_app'] ||= 152_908_22
 
     if expired_token?
@@ -30,7 +32,24 @@ class SendToPodio
       @@expires_at = auth.expires_at
     end
 
-    Podio::Item.create(params['podio_app'], fields: podio_item_fields(params))
+    podio_id = Podio::Item.create(params['podio_app'], fields: podio_item_fields(params)).item_id
+
+    update_participant(podio_id) if podio_id
+
+    podio_id
+  end
+
+  def update_participant(podio_id)
+    @gx_participant.update_attributes(podio_id: podio_id)
+
+    upload_files(podio_id, @gx_participant) if gx_participant.try(:curriculum)&.attached?
+  end
+
+  def upload_files(podio_id, gx_participant)
+    link = Rails.application.routes.url_helpers.rails_blob_path(gx_participant.curriculum, only_path: true)
+    uploaded_file = Podio::FileAttachment.upload_from_url("#{ENV['BASE_URL']}#{link}")
+
+    Podio::FileAttachment.attach(uploaded_file.file_id, 'item', podio_id)
   end
 
   def expired_token?
@@ -39,19 +58,67 @@ class SendToPodio
 
   def authenticate_podio
     Podio.client.authenticate_with_credentials(
-      Rails.application.credentials.podio_username,
-      Rails.application.credentials.podio_password
+      ENV['PODIO_USERNAME'],
+      ENV['PODIO_PASSWORD']
     )
   end
 
   def setup_podio
     Podio.setup(
-      api_key: Rails.application.credentials.podio_api_key,
-      api_secret: Rails.application.credentials.podio_api_secret
+      api_key: ENV['PODIO_API_KEY'],
+      api_secret: ENV['PODIO_API_SECRET']
     )
   end
 
-  def podio_item_fields(sqs_params)
+  def podio_item_fields(params)
+    if ENV['COUNTRY'] == 'bra'
+      podio_item_fields_bra(params)
+    else
+      podio_item_fields_arg(params)
+    end
+  end
+
+  def podio_item_fields_arg(sqs_params)
+    params = {
+      'sign-up-date' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
+      'fullname' => sqs_params['fullname'],
+      'email' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
+      'cellphone' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
+      'birthdate' => {
+        start: Date.parse(sqs_params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
+      },
+      'local-committee' => sqs_params['local_committee']
+    }
+
+    # params['scholarity'] = sqs_params['scholarity'] + 1 if sqs_params['scholarity']
+    params['university'] = sqs_params['university'].to_i if sqs_params['university']
+    params['college-course'] = sqs_params['college_course'].to_i if sqs_params['college_course']
+    params['other-university'] = sqs_params['other_university'] if sqs_params['other_university']
+    params['cellphone-contactable'] = cellphone_contactable_option(sqs_params['cellphone_contactable'])
+    params['utm-source'] = sqs_params['utm_source'] if sqs_params['utm_source']
+    params['utm-medium'] = sqs_params['utm_medium'] if sqs_params['utm_medium']
+    params['utm-campaign'] = sqs_params['utm_campaign'] if sqs_params['utm_campaign']
+    params['utm-term'] = sqs_params['utm_term'] if sqs_params['utm_term']
+    params['utm-content'] = sqs_params['utm_content'] if sqs_params['utm_content']
+    params['english-level'] = sqs_params['english_level'] if sqs_params['english_level']
+
+    # Podio starts counting at 1 instead of 0, so we increment our enum indexes to match its category field in the podio app.
+    params['when-can-travel'] = sqs_params['when_can_travel'] + 1 if sqs_params['when_can_travel']
+
+    if gt_participant?
+      params['preferred-destination'] = sqs_params['preferred_destination'] if sqs_params['preferred_destination']
+    else
+      params['preferred-destination'] = sqs_params['preferred_destination'] + 1 if sqs_params['preferred_destination']
+    end
+
+    unless gv_participant?
+      params['curriculum'] = @gx_participant.try(:curriculum)&.attached? ? 1 : 2
+    end
+
+    params
+  end
+
+  def podio_item_fields_bra(sqs_params)
     params = {
       'data-inscricao' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
       'title' => sqs_params['fullname'],
@@ -86,5 +153,17 @@ class SendToPodio
 
   def cellphone_contactable_option(value)
     value ? 1 : 2
+  end
+
+  def registerable_class_name
+    @gx_participant.class.name
+  end
+
+  def gt_participant?
+    registerable_class_name == 'GtParticipant'
+  end
+
+  def gv_participant?
+    registerable_class_name == 'GvParticipant'
   end
 end

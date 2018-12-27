@@ -16,6 +16,7 @@ RSpec.describe LocalCommittee, type: :model do
 
   describe '#associations' do
     it { is_expected.to have_many :exchange_participants }
+    it { is_expected.to have_many :universities }
   end
 
   describe 'active committees' do

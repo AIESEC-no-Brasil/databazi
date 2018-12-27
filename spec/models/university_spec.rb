@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe University, type: :model do
   describe '#associations' do
     it { is_expected.to have_many :exchange_participants }
+    it { is_expected.to belong_to :local_committee }
   end
 
   describe '#scopes' do
@@ -38,6 +39,7 @@ RSpec.describe University, type: :model do
   describe '#attributes' do
     it { is_expected.to respond_to :name }
     it { is_expected.to respond_to :podio_id }
+    it { is_expected.to respond_to :city }
   end
 
   describe '#validations' do

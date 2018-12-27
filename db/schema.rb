@@ -10,10 +10,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_13_220115) do
+ActiveRecord::Schema.define(version: 2018_12_27_131339) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "unaccent"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
 
   create_table "campaigns", force: :cascade do |t|
     t.string "utm_source"
@@ -57,10 +79,22 @@ ActiveRecord::Schema.define(version: 2018_11_13_220115) do
     t.boolean "cellphone_contactable", default: false
     t.integer "scholarity"
     t.integer "campaign_id"
+    t.string "other_university"
+    t.integer "expa_id"
+    t.integer "podio_id"
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
     t.index ["university_id"], name: "index_exchange_participants_on_university_id"
+  end
+
+  create_table "expa_applications", force: :cascade do |t|
+    t.integer "expa_id"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "exchange_participant_id"
+    t.datetime "updated_at_expa"
   end
 
   create_table "experiences", force: :cascade do |t|
@@ -78,16 +112,20 @@ ActiveRecord::Schema.define(version: 2018_11_13_220115) do
     t.integer "spanish_level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "when_can_travel"
+    t.integer "preferred_destination"
   end
 
   create_table "gt_participants", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "preferred_destination"
   end
 
   create_table "gv_participants", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "when_can_travel"
   end
 
   create_table "local_committees", force: :cascade do |t|
@@ -105,9 +143,13 @@ ActiveRecord::Schema.define(version: 2018_11_13_220115) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "podio_item_id"
+    t.bigint "local_committee_id"
+    t.string "city"
+    t.index ["local_committee_id"], name: "index_universities_on_local_committee_id"
   end
 
   add_foreign_key "exchange_participants", "college_courses"
   add_foreign_key "exchange_participants", "local_committees"
   add_foreign_key "exchange_participants", "universities"
+  add_foreign_key "universities", "local_committees"
 end

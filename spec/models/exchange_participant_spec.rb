@@ -8,6 +8,8 @@ RSpec.describe ExchangeParticipant, type: :model do
     it { is_expected.to respond_to :birthdate }
     it { is_expected.to respond_to :password }
     it { is_expected.to respond_to :cellphone_contactable }
+    it { is_expected.to respond_to :expa_id }
+
     it do
       expect(ExchangeParticipant.new).to define_enum_for(:scholarity)
         .with(%i[highschool incomplete_graduation graduating post_graduated
@@ -25,6 +27,8 @@ RSpec.describe ExchangeParticipant, type: :model do
   end
 
   describe '#associations' do
+    it { is_expected.to have_many :expa_applications }
+
     it { is_expected.to belong_to :registerable }
     it { is_expected.to belong_to :campaign }
     it { is_expected.to belong_to :local_committee }

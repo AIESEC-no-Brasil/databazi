@@ -1,5 +1,6 @@
 class GvParticipantsController < ApplicationController
   include ExchangeParticipantable
+  include GvParticipantFields
   before_action :campaign_sign_up
 
   expose :gv_participant
@@ -32,17 +33,25 @@ class GvParticipantsController < ApplicationController
   def gv_participant_params
     nested_params
       .require(:gv_participant)
-      .permit(exchange_participant_attributes: %i[
-                id fullname birthdate email cellphone local_committee_id
-                university_id college_course_id password scholarity
-                campaign_id cellphone_contactable
-              ])
+      .permit(
+        :when_can_travel,
+        exchange_participant_attributes: exchange_participant_permitted_attributes
+    )
+  end
+
+  def exchange_participant_permitted_attributes
+    %i[
+      id fullname birthdate email cellphone local_committee_id
+      university_id college_course_id password scholarity
+      campaign_id cellphone_contactable other_university
+    ]
   end
 
   def nested_params
     ActionController::Parameters.new(
       gv_participant: {
-        exchange_participant_attributes: exchange_participant_params
+        when_can_travel: params[:gv_participant][:when_can_travel].to_i,
+        exchange_participant_attributes: normalized_exchange_participant_params
       }
     )
   end
@@ -51,23 +60,15 @@ class GvParticipantsController < ApplicationController
     params[:gv_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
-             :password, :scholarity, :campaign_id, :cellphone_contactable)
+             :password, :scholarity, :campaign_id, :cellphone_contactable,
+             :other_university)
   end
 
-  def gv_participant_fields
-    {
-      'email' => gv_participant.email, 'fullname' => gv_participant.fullname,
-      'cellphone' => gv_participant.cellphone,
-      'birthdate' => gv_participant.birthdate,
-      'utm_source' => utm_source, 'utm_medium' => utm_medium,
-      'utm_campaign' => utm_campaign, 'utm_term' => utm_term,
-      'utm_content' => utm_content, 'podio_app' => 152_908_22,
-      'scholarity' => scholarity_human_name,
-      'local_committee' => gv_participant.exchange_participant&.local_committee&.podio_id,
-      'university' => gv_participant.exchange_participant&.university&.podio_item_id,
-      'college_course' => gv_participant.exchange_participant&.college_course&.podio_item_id,
-      'cellphone_contactable' => gv_participant.exchange_participant.cellphone_contactable
-    }
+  def normalized_exchange_participant_params
+    params = exchange_participant_params
+    params[:scholarity] = params[:scholarity].to_i
+
+    params
   end
 
   def scholarity_human_name
