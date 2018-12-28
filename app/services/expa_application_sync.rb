@@ -10,9 +10,8 @@ class ExpaApplicationSync
       ep = ExchangeParticipant.find_by_expa_id(application.person.id)
       next unless ep
 
-
-      ep.expa_applications.create(expa_id: application.id,
-        status: application.status)
+      ep.expa_applications.where(expa_id: application.id)
+        .first_or_create!(status: application.status)
     end
   end
 
