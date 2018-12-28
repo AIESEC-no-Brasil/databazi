@@ -14,7 +14,6 @@ class SyncPodioApplicationStatus
   end
 
   def last_applications(from)
-    puts 'call last_applications'
     Expa::Application.where(updated_at: from)
   end
 end
