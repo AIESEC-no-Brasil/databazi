@@ -23,7 +23,6 @@ class ExchangeParticipant < ApplicationRecord
 
   accepts_nested_attributes_for :campaign
 
-  has_one :expa_application, as: :current_application, foreign_key: :current_aplication_id
 
   enum scholarity: %i[highschool incomplete_graduation graduating
                       post_graduated almost_graduated graduated other]
