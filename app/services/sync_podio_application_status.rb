@@ -3,5 +3,6 @@ class SyncPodioApplicationStatus
     new.call
   end
   def call
+    puts 'hello world'
   end
 end
