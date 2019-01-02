@@ -7,13 +7,18 @@ class SyncPodioApplicationStatus
     last_applications(last_updated).each do |application|
       ep = application.exchange_participant
       update_podio(application) if ep.most_actual_application(application).id == application.id
+      update_last_updated(application.updated_at)
     end
   end
 
   private
 
   def last_updated
-    SyncParam.first&.updated_at || 3.month.ago.round
+    SyncParam.first&.podio_application_status_last_sync || 3.month.ago.round
+  end
+
+  def update_last_updated(updated)
+    SyncParam.first_or_create.update_attributes(podio_application_status_last_sync: updated)
   end
 
   def last_applications(from)
