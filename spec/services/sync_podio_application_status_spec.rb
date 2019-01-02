@@ -38,11 +38,12 @@ RSpec.describe SyncPodioApplicationStatus do
       end
 
       context 'with a pre existent SyncParam' do
-        let(:syncParam) { spy(build(:sync_param)) }
+        let(:syncParam) { build(:sync_param) }
 
         before do
           allow(SyncParam).to receive(:first_or_create).and_return(syncParam)
           allow(SyncParam).to receive(:first).and_return(syncParam)
+          allow(syncParam).to receive(:update_attributes)
         end
 
         it 'update SyncParam podio_application_status_last_sync' do
