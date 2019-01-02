@@ -40,7 +40,7 @@ class SendToPodio
   end
 
   def update_participant(podio_id)
-    @gx_participant.update_attributes(podio_id: podio_id)
+    @gx_participant.exchange_participant.update_attributes(podio_id: podio_id)
 
     upload_files(podio_id, @gx_participant) if gx_participant.try(:curriculum)&.attached?
   end
