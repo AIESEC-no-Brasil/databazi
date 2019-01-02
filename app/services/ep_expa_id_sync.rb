@@ -16,7 +16,7 @@ class EpExpaIdSync
         .query(
           ExistsQuery,
           variables: { email: ep.email.downcase })&.data&.check_person_present&.id
-      logger.debug("Found ep in expa #{ep.email.downcase}") unless id.nil?
+      logger.debug("Found ep in expa #{ep.email.downcase} with EXPA_ID: #{id}") unless id.nil?
       logger.warn("Couldn't find ep in expa #{ep.email.downcase}") if id.nil?
       id ||= 0
       # ep.expa_id = id
