@@ -17,7 +17,7 @@ namespace :podio_sync do
       logger.info 'Loop'
       EpPodioIdSync.call logger: logger
       logger.info 'Wait... we cant work that much'
-      sleep(2)
+      sleep(5)
     end
   end
 end

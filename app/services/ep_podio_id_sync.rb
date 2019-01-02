@@ -25,29 +25,30 @@ class EpPodioIdSync
     ret = Podio::Item.find_by_filter_values(
       podio_app_id,
       {},
-      sort_by: 'data-inscricao', sort_desc: false, offset: offset
+      # {item_id: 981938630},
+      sort_by: 'data-inscricao', sort_desc: true, offset: offset
     )
     File.open('json_fixture.json', 'w') { |file| file.write(ret.to_json) }
     ret.all.each do |item|
       begin
         name = item.fields.select{ |field| field['field_id'] == 133074857 }[0]['values'][0]['value']
         email = item.fields.select{ |field| field['field_id'] == 133074860 }[0]['values'][0]['value']
+        data_inscricao = item.fields.select{ |field| field['field_id'] == 133074858 }[0]['values'][0]['start']
         podio_id = item.item_id
         ep = find_ep(email)
         ep&.update_attributes(podio_id: podio_id)
         if ep.nil?
-          logger.warn "Couldn't find ep from podio: Name #{name} Email #{email}"
+          logger.warn "Couldn't find ep from podio: Data #{data_inscricao} Name #{name} Email #{email}"
         else
-          logger.info "Save from podio: Name #{name} Email #{email} Podio id #{podio_id}"
+          logger.info "Save from podio: Data #{data_inscricao} Name #{name} Email #{email} Podio id #{podio_id}"
         end
       rescue StandardError => ex
-        # logger.error ex
+        logger.error ex
       end
     end
     ep_type = podio_ep_type
     @storage.transaction do
-      offset += 1
-      if (offset + 1) * 20 > ret.count
+      if offset + 20 > ret.count
         case ep_type
         when :ge_offset
           done = :ge_offset_done
@@ -58,6 +59,7 @@ class EpPodioIdSync
         end
         @storage[done] = true
       end
+      offset += 20
       logger.debug "Update @storage #{ep_type} with offset #{offset}"
       @storage[ep_type] = offset
     end
@@ -67,18 +69,7 @@ class EpPodioIdSync
 
   # TODO: Unit Test this method
   def find_ep(email)
-    case podio_ep_type
-    when :ge_offset
-      ep = GeParticipant.includes(:exchange_participant)
-        .find_by('exchange_participants.email': email, podio_id: nil)
-    when :gv_offset
-      ep = GvParticipant.includes(:exchange_participant)
-        .find_by('exchange_participants.email': email, podio_id: nil)
-    when :gt_offset
-      ep = GtParticipant.includes(:exchange_participant)
-        .find_by('exchange_participants.email': email, podio_id: nil)
-    end
-    ep
+    ExchangeParticipant.find_by(email: email, podio_id: nil)
   end
 
   def podio_app_id

@@ -20,11 +20,12 @@ module EXPAAPI
   Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
 end
 
-ExistsQuery = EXPAAPI::Client.parse <<~'GRAPHQL'
-    query($email: String) {
-      checkPersonPresent(email: $email) {
-      full_name
-      email
-    }
+ExistsQuery = EXPAAPI::Client.parse <<-'GRAPHQL'
+  query($email: String) {
+    checkPersonPresent(email: $email) {
+    full_name
+    email
+    id
+  }
 }
 GRAPHQL

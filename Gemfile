@@ -18,6 +18,7 @@ gem 'puma', '~> 3.11'
 gem 'rack-cors'
 gem 'rails', '5.2.1'
 gem 'shoryuken'
+gem 'slack-notifier'
 gem 'swagger_ui_engine'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 

@@ -9,7 +9,6 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-
 ActiveRecord::Schema.define(version: 2018_12_28_170257) do
 
   # These are extensions that must be enabled in order to support this database
@@ -81,6 +80,7 @@ ActiveRecord::Schema.define(version: 2018_12_28_170257) do
     t.integer "campaign_id"
     t.string "other_university"
     t.integer "expa_id"
+    t.integer "podio_id"
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
@@ -113,21 +113,18 @@ ActiveRecord::Schema.define(version: 2018_12_28_170257) do
     t.datetime "updated_at", null: false
     t.integer "when_can_travel"
     t.integer "preferred_destination"
-    t.integer "podio_id"
   end
 
   create_table "gt_participants", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "preferred_destination"
-    t.integer "podio_id"
   end
 
   create_table "gv_participants", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "when_can_travel"
-    t.integer "podio_id"
   end
 
   create_table "local_committees", force: :cascade do |t|

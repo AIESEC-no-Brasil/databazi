@@ -1,4 +1,4 @@
-require 'pstore'
+require 'yaml/store'
 require 'rails_helper'
 # require "#{Rails.root}/lib/expa_api"
 
@@ -9,13 +9,14 @@ describe EpPodioIdSync do
     let(:ge) { build(:ge_participant) }
     let(:gv) { build(:gv_participant) }
     let(:gt) { build(:gt_participant) }
-    let(:storage) { PStore.new('podio_sync_test.pstore') }
+    let(:storage) { YAML::Store.new('podio_sync_test.yaml') }
     let(:params) { { storage: storage } }
     let(:ep_podio_sync) { EpPodioIdSync.new }
 
     let(:field_name) { { 'field_id' => 133_074_857, 'values' => [{ 'value' => 'Foo bar' }] } }
     let(:field_email) { { 'field_id' => 133_074_860, 'values' => [{ 'value' => 'foo@bar.com' }] } }
-    let(:item) { double('fields', fields: [field_name, field_email], item_id: fake_podio_id) }
+    let(:field_start) { { 'field_id' => 133074858, 'values' => [{ 'start' => '2018-01-01' }] } }
+    let(:item) { double('fields', fields: [field_name, field_email, field_start], item_id: fake_podio_id) }
     let(:ret) { double('Podio::Item', all: [item], count: 100) }
 
     before do
@@ -42,7 +43,7 @@ describe EpPodioIdSync do
       ep_podio_sync.call(params)
       ep_podio_sync.call(params) # SECOND CALL
       expect(Podio::Item).to have_received(:find_by_filter_values)
-        .with(anything, anything, hash_including(offset: 1))
+        .with(anything, anything, hash_including(offset: 20))
     end
 
     it 'update podio_id of ep' do
@@ -83,7 +84,7 @@ describe EpPodioIdSync do
         end
 
         it 'end offsets' do
-          storage.transaction{ storage[:ge_offset] = 9 }
+          storage.transaction{ storage[:ge_offset] = 90 }
           ep_podio_sync.call(params)
           done = storage.transaction{ storage.fetch(:ge_offset_done, false) }
           expect(done).to be true
@@ -110,7 +111,7 @@ describe EpPodioIdSync do
         end
 
         it 'end offsets' do
-          storage.transaction{ storage[:gv_offset] = 9 }
+          storage.transaction{ storage[:gv_offset] = 90 }
           ep_podio_sync.call(params)
           done = storage.transaction{ storage.fetch(:gv_offset_done, false) }
           expect(done).to be true
@@ -133,7 +134,7 @@ describe EpPodioIdSync do
         end
 
         it 'end offsets' do
-          storage.transaction{ storage[:gt_offset] = 9 }
+          storage.transaction{ storage[:gt_offset] = 90 }
           ep_podio_sync.call(params)
           done = storage.transaction{ storage.fetch(:gt_offset_done, false) }
           expect(done).to be true
