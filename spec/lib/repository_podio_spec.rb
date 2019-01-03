@@ -1,5 +1,4 @@
 require 'rails_helper'
-require_relative '../../lib/repository_podio'
 
 RSpec.describe RepositoryPodio do
   @podio_ep = nil
