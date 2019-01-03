@@ -18,10 +18,10 @@ class EpExpaIdSync
         .query(
           ExistsQuery,
           variables: { email: @email })&.data&.check_person_present&.id
-      
+
       id ? successful_sync(exchange_participant, id) : failed_sync(exchange_participant)
 
-      exchange_participant.update_attributes(expa_id: id || 0)
+      exchange_participant.update_attribute('expa_id', id || 0)
     rescue StandardError => e
       @logger.error "Error when sync #{@email} error #{e.to_json}"
       @logger.error "#{e.backtrace.inspect}"
