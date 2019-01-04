@@ -11,6 +11,7 @@ RSpec.describe EpExpaIdSync, aws: true do
   before do
     allow(ep).to receive(:save)
     allow(ep).to receive(:update_attribute)
+    allow_any_instance_of(EpExpaIdSync).to receive(:failed_sync)
     # allow(ep).to receive(:email).and_call_original
     allow(ExchangeParticipant)
       .to receive(:find_by).with(
