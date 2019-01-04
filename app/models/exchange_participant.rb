@@ -1,6 +1,6 @@
 class ExchangeParticipant < ApplicationRecord
   include ActiveModel::Validations
-  validates_with YouthValidator
+  validates_with YouthValidator, on: :create
 
   before_save :encrypted_password
 

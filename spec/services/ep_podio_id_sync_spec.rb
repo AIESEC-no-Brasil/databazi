@@ -13,9 +13,9 @@ describe EpPodioIdSync do
     let(:params) { { storage: storage } }
     let(:ep_podio_sync) { EpPodioIdSync.new }
 
-    let(:field_name) { { 'field_id' => 133_074_857, 'values' => [{ 'value' => 'Foo bar' }] } }
-    let(:field_email) { { 'field_id' => 133_074_860, 'values' => [{ 'value' => 'foo@bar.com' }] } }
-    let(:field_start) { { 'field_id' => 133074858, 'values' => [{ 'start' => '2018-01-01' }] } }
+    let(:field_name) { { 'external_id' => 'title', 'values' => [{ 'value' => 'Foo bar' }] } }
+    let(:field_email) { { 'external_id' => 'email', 'values' => [{ 'value' => 'foo@bar.com' }] } }
+    let(:field_start) { { 'external_id' => 'data-inscricao', 'values' => [{ 'start' => '2018-01-01' }] } }
     let(:item) { double('fields', fields: [field_name, field_email, field_start], item_id: fake_podio_id) }
     let(:ret) { double('Podio::Item', all: [item], count: 100) }
 
