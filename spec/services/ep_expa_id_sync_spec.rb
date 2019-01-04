@@ -10,11 +10,18 @@ RSpec.describe EpExpaIdSync, aws: true do
 
   before do
     allow(ep).to receive(:save)
+    allow(ep).to receive(:update_attribute)
     # allow(ep).to receive(:email).and_call_original
     allow(ExchangeParticipant)
       .to receive(:find_by).with(
         hash_including(expa_id: nil)
       ).and_return(ep)
+    allow(ExchangeParticipant)
+      .to receive(:find_by).with(
+        hash_including(id: anything)
+      ).and_return(ep)
+    allow_any_instance_of(EpExpaIdSync)
+      .to receive(:failed_sync).and_return(nil)
     allow(EXPAAPI::Client)
       .to receive(:query).with(
         ExistsQuery, variables: hash_including(email: 'foo@bar.com')
@@ -35,9 +42,8 @@ RSpec.describe EpExpaIdSync, aws: true do
 
   it 'update attributes' do
     described_class.call
-    expect(ep).to have_attributes(expa_id: 123)
     expect(ep)
-      .to have_received(:save)
+      .to have_received(:update_attribute).with('expa_id', 123)
   end
 
   context "when don't find ep in expa" do
@@ -50,9 +56,8 @@ RSpec.describe EpExpaIdSync, aws: true do
 
     it 'update attributes with expa_id 0' do
       described_class.call
-      expect(ep).to have_attributes(expa_id: 0)
       expect(ep)
-        .to have_received(:save)
+        .to have_received(:update_attribute).with('expa_id', 0)
     end
   end
 end

@@ -8,10 +8,16 @@ class ExpaApplicationSync
   def call(from, to, page)
     load_applications(from, to, page).each do |application|
       ep = ExchangeParticipant.find_by_expa_id(application.person.id)
-      next unless ep
 
-      ep.expa_applications.where(expa_id: application.id)
-        .first_or_create!(status: application.status)
+      unless ep.nil?
+        ep.expa_applications.where(expa_id: application.id)
+          .first_or_create!(status: application.status)
+      end
+
+      if ep.nil?
+        Expa::Application.where(expa_id: application.id)
+          .first_or_create!(status: application.status)
+      end
     end
   end
 
