@@ -24,7 +24,7 @@ class EpExpaIdSync
       exchange_participant.update_attribute('expa_id', id || 0)
     rescue StandardError => e
       @logger.error "Error when sync #{@email} error #{e.to_json}"
-      raise
+      @logger.error "#{e.backtrace.inspect}"
     end
   end
 

@@ -28,12 +28,11 @@ class EpPodioIdSync
       # {item_id: 981938630},
       sort_by: 'data-inscricao', sort_desc: true, offset: offset
     )
-    File.open('json_fixture.json', 'w') { |file| file.write(ret.to_json) }
     ret.all.each do |item|
       begin
-        name = item.fields.select{ |field| field['field_id'] == 133074857 }[0]['values'][0]['value']
-        email = item.fields.select{ |field| field['field_id'] == 133074860 }[0]['values'][0]['value']
-        data_inscricao = item.fields.select{ |field| field['field_id'] == 133074858 }[0]['values'][0]['start']
+        name = item.fields.select{ |field| field['external_id'] == 'title' }[0]['values'][0]['value']
+        email = item.fields.select{ |field| field['external_id'] == 'email' }[0]['values'][0]['value']
+        data_inscricao = item.fields.select{ |field| field['external_id'] == 'data-inscricao' }[0]['values'][0]['start']
         podio_id = item.item_id
         ep = find_ep(email)
         ep&.update_attributes(podio_id: podio_id)

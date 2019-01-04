@@ -16,12 +16,6 @@ RSpec.describe EpExpaIdSync, aws: true do
       .to receive(:find_by).with(
         hash_including(expa_id: nil)
       ).and_return(ep)
-    allow(ExchangeParticipant)
-      .to receive(:find_by).with(
-        hash_including(id: anything)
-      ).and_return(ep)
-    allow_any_instance_of(EpExpaIdSync)
-      .to receive(:failed_sync).and_return(nil)
     allow(EXPAAPI::Client)
       .to receive(:query).with(
         ExistsQuery, variables: hash_including(email: 'foo@bar.com')
@@ -37,7 +31,7 @@ RSpec.describe EpExpaIdSync, aws: true do
     described_class.call
     expect(EXPAAPI::Client)
       .to have_received('query')
-            .with(ExistsQuery, variables: hash_including(email: 'foo@bar.com'))
+      .with(ExistsQuery, variables: hash_including(email: 'foo@bar.com'))
   end
 
   it 'update attributes' do
