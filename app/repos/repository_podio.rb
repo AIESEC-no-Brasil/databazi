@@ -26,6 +26,11 @@ class RepositoryPodio
       Podio::Item.find(id)
     end
 
+    # TODO: Code the Podio ICX application integration
+    def save_icx_application(application)
+
+    end
+
     private
 
     def check_podio

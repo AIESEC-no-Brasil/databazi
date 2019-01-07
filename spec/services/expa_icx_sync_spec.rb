@@ -13,6 +13,8 @@ RSpec.describe ExpaICXSync do
     before do
       @expa_repo = class_double('Repos::Expa',
                                 load_icx_applications: applications).as_stubbed_const
+      @application_repo = class_double('Repos::Applications',
+                                       save: applications).as_stubbed_const
       @podio_repo = class_double('RepositoryPodio',
                            save_icx_application: true).as_stubbed_const
     end
@@ -24,6 +26,11 @@ RSpec.describe ExpaICXSync do
 
     context 'when returning applications' do
       let(:applications) { get_json('icx_applications') }
+
+      it 'sync with database' do
+        expect(@application_repo).to receive(:save).with(any_args)
+        described_class.call(1.month.ago, 1.day.ago, 0)
+      end
 
       it 'sync with podio' do
         expect(@podio_repo).to receive(:save_icx_application).with(any_args)
