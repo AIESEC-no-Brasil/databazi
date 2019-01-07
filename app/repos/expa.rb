@@ -11,7 +11,7 @@ module Repos
             from: from,
             page: page
           }
-        )
+        )&.data&.all_opportunity_application&.data
       end
     end
   end

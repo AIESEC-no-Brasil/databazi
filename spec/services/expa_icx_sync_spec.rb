@@ -11,21 +11,23 @@ RSpec.describe ExpaICXSync do
     let(:applications) { [] }
 
     before do
-      @repo = class_double('Repos::Expa',
-                           load_icx_applications: applications).as_stubbed_const
+      @expa_repo = class_double('Repos::Expa',
+                                load_icx_applications: applications).as_stubbed_const
+      @podio_repo = class_double('RepositoryPodio',
+                           save_icx_application: true).as_stubbed_const
     end
 
     it 'call expa repo' do
-      expect(@repo).to receive(:load_icx_applications).with(any_args)
+      expect(@expa_repo).to receive(:load_icx_applications).with(any_args)
       described_class.call(1.month.ago, 1.day.ago, 0)
     end
 
     context 'when returning applications' do
       let(:applications) { get_json('icx_applications') }
 
-      it 'test mock man' do
-        puts applications.to_json
-        puts applications.data.all_opportunity_application.data[0].person.id
+      it 'sync with podio' do
+        expect(@podio_repo).to receive(:save_icx_application).with(any_args)
+        described_class.call(1.month.ago, 1.day.ago, 0)
       end
     end
   end
