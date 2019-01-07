@@ -1,7 +1,7 @@
 require "#{Rails.root}/lib/expa_api"
 
 module Repos
-  class Expa
+  class ExpaAPI
     class << self
       def load_icx_applications(from, to, page)
         res = EXPAAPI::Client.query(
@@ -11,7 +11,15 @@ module Repos
             from: from,
             page: page
           }
-        )&.data&.all_opportunity_application&.data
+        )
+        # File.write("#{Rails.root}/spec/fixtures/json/icx_applications_full.json", res.to_h.to_json)
+        # &.data&.all_opportunity_application&.data
+      end
+
+      private
+
+      def map_applications(expa_applications)
+        Expa::Application.new
       end
     end
   end

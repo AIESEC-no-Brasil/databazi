@@ -4,7 +4,7 @@ class ExpaICXSync
   end
 
   def call(from, to, page)
-    Repos::Expa.load_icx_applications(from, to, page).each do |application|
+    Repos::ExpaAPI.load_icx_applications(from, to, page).each do |application|
       application = Repos::Applications.save(application)
       RepositoryPodio.save_icx_application(application)
     end
