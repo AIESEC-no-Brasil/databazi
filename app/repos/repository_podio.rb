@@ -26,10 +26,10 @@ class RepositoryPodio
     end
 
     # TODO: Code the Podio ICX application integration
-    def save_icx_application
+    def save_icx_application(application)
       check_podio
       params = {
-        titulo: 'Foo Bar'
+        titulo: application.exchange_participant.fullname
       }
       Podio::Item.create(ENV['PODIO_APP_ICX_APPLICATIONS'], fields: params)
     end

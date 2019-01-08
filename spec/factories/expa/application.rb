@@ -19,7 +19,7 @@ FactoryBot.define do
     status { :open }
     expa_id { '4941872' }
     association :exchange_participant, factory: :icx_application_ep
-    exchange_participant_id { nil }
+    # exchange_participant_id { nil }
     # after(:create) do |application, evaluator|
     #   create_list([:exchange_participant, , 1, :for_gv_participant, expa_applications: [application])
     # end

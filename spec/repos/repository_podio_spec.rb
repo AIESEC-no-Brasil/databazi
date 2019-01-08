@@ -1,6 +1,8 @@
 require 'rails_helper'
+require 'podio_helper'
 
 RSpec.describe RepositoryPodio do
+  include PodioHelper
   @podio_ep = nil
 
   before do
@@ -21,7 +23,13 @@ RSpec.describe RepositoryPodio do
   end
 
   describe '#save_icx_application' do
-    let(:application) { described_class.save_icx_application }
+    let(:databazi_application) { build :icx_application }
+    let(:expected_podio_application) do
+      {
+        titulo: databazi_application.exchange_participant.fullname
+      }
+    end
+    let(:application) { described_class.save_icx_application(databazi_application) }
 
     after do
       described_class.delete_icx_application(application.item_id)
@@ -29,7 +37,7 @@ RSpec.describe RepositoryPodio do
 
     it 'save into Podio' do
       expect(application).to have_attributes({item_id: anything})
-      puts application.to_json
+      expect(map_podio(application)).to include(expected_podio_application)
     end
 
   end
