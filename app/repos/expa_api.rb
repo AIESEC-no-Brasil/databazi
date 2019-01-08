@@ -19,7 +19,14 @@ module Repos
       private
 
       def map_applications(expa_applications)
-        Expa::Application.new
+        mapped = expa_applications&.data&.all_opportunity_application&.data&.map do |expa_application|
+          application = Expa::Application.new
+          application.updated_at_expa = Time.parse(expa_application.updated_at)
+          application.status = expa_application.status
+          application.expa_id = expa_application.id
+          application
+        end
+        mapped
       end
     end
   end

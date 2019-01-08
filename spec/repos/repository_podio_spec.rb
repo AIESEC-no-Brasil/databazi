@@ -19,4 +19,18 @@ RSpec.describe RepositoryPodio do
     field = item.fields.select{ |f| f['external_id'] == 'status-expa' }
     expect(field[0]['values'][0]['value']['id']).to be_equal(1)
   end
+
+  describe '#save_icx_application' do
+    let(:application) { described_class.save_icx_application }
+
+    after do
+      described_class.delete_icx_application(application.item_id)
+    end
+
+    it 'save into Podio' do
+      expect(application).to have_attributes({item_id: anything})
+      puts application.to_json
+    end
+
+  end
 end

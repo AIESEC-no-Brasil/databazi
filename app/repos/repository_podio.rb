@@ -8,8 +8,7 @@ class RepositoryPodio
     end
 
     def delete_ep(id)
-      check_podio
-      Podio::Item.delete(id)
+      delete_item(id)
     end
 
     def change_status(id, status)
@@ -27,8 +26,12 @@ class RepositoryPodio
     end
 
     # TODO: Code the Podio ICX application integration
-    def save_icx_application(application)
-
+    def save_icx_application
+      check_podio
+      params = {
+        titulo: 'Foo Bar'
+      }
+      Podio::Item.create(ENV['PODIO_APP_ICX_APPLICATIONS'], fields: params)
     end
 
     private
@@ -53,6 +56,15 @@ class RepositoryPodio
         api_secret: ENV['PODIO_API_SECRET']
       )
     end
+
+    def delete_item(id)
+      check_podio
+      Podio::Item.delete(id)
+    end
+  end
+
+  def self.delete_icx_application(id)
+    delete_item(id)
   end
 end
 

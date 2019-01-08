@@ -11,10 +11,19 @@ RSpec.describe Repos::ExpaAPI do
 
   describe '#map_applications' do
     let(:applications) { get_json('icx_applications_full') }
+    let(:expected_ap) { build(:icx_application) }
 
     it 'return Application class' do
       ap = described_class.send(:map_applications, applications)
-      expect(ap).to be_a(Expa::Application)
+      expect(ap[0]).to be_a(Expa::Application)
+    end
+
+    # TODO: Finish mapping of Expa ICX Application to databazi
+    it 'validate mapping' do
+      ap = described_class.send(:map_applications, applications)
+      puts JSON.pretty_generate(expected_ap)
+      puts expected_ap.attributes
+      expect(ap[0]).to have_attributes(expected_ap.attributes)
     end
   end
 end
