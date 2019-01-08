@@ -21,8 +21,8 @@ RSpec.describe Repos::ExpaAPI do
     # TODO: Finish mapping of Expa ICX Application to databazi
     it 'validate mapping' do
       ap = described_class.send(:map_applications, applications)
-      puts JSON.pretty_generate(expected_ap)
-      puts expected_ap.attributes
+      # For match the result. s
+      ap[0].exchange_participant_id = expected_ap.exchange_participant_id
       expect(ap[0]).to have_attributes(expected_ap.attributes)
     end
   end

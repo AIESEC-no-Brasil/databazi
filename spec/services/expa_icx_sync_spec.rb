@@ -11,7 +11,7 @@ RSpec.describe ExpaICXSync do
     let(:applications) { [] }
 
     before do
-      @expa_repo = class_double('Repos::Expa',
+      @expa_repo = class_double(Repos::ExpaAPI,
                                 load_icx_applications: applications).as_stubbed_const
       @application_repo = class_double('Repos::Applications',
                                        save: applications).as_stubbed_const
