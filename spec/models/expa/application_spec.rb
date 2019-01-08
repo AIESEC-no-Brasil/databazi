@@ -5,8 +5,9 @@ RSpec.describe Expa::Application, type: :model do
     it { is_expected.to belong_to(:exchange_participant) }
   end
 
-    it do
-      expect(Expa::Application.new).to define_enum_for(:status).with(
-      { open: 1, applied: 5, accepted: 16, approved: 6 })
-    end
+  it do
+    expect(Expa::Application.new).to define_enum_for(:status).with(
+      open: 1, applied: 2, accepted: 3, approved: 4,
+      break_approved: 5, rejected: 6, withdrawn: 7)
+  end
 end

@@ -9,8 +9,7 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-
-ActiveRecord::Schema.define(version: 2018_12_27_131339) do
+ActiveRecord::Schema.define(version: 2018_12_28_170257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -135,6 +134,12 @@ ActiveRecord::Schema.define(version: 2018_12_27_131339) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "active", default: true
+  end
+
+  create_table "sync_params", force: :cascade do |t|
+    t.datetime "podio_application_status_last_sync"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "universities", force: :cascade do |t|
