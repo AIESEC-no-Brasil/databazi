@@ -7,8 +7,8 @@
 #
 set :output, path + "/cron_log.log"
 
-every 1.hour  do
-  runner "ExpaApplicationSyncScheduler.call", environment:'development'
+every 20.minutes do
+  runner "ExpaApplicationSync.call", environment:'development'
 end
 
 every 20.minutes do
