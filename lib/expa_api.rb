@@ -33,7 +33,7 @@ GRAPHQL
 LoadApplications = EXPAAPI::Client.parse <<~'GRAPHQL'
   query($from: DateTime) {
     allOpportunityApplication(
-      sort: "update_at",
+      sort: "ASC_updated_at",
       filters:{
       person_home_mc: 1606,
       last_interaction: {from: $from}
