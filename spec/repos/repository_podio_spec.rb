@@ -26,7 +26,7 @@ RSpec.describe RepositoryPodio do
     let(:databazi_application) { build :icx_application }
     let(:expected_podio_application) do
       {
-        titulo: databazi_application.exchange_participant.fullname
+        title: databazi_application.exchange_participant.fullname
       }
     end
     let(:application) { described_class.save_icx_application(databazi_application) }

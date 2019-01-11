@@ -29,7 +29,7 @@ class RepositoryPodio
     def save_icx_application(application)
       check_podio
       params = {
-        titulo: application.exchange_participant.fullname
+        title: application.exchange_participant.fullname
       }
       Podio::Item.create(ENV['PODIO_APP_ICX_APPLICATIONS'], fields: params)
     end
