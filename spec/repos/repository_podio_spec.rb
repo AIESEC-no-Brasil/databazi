@@ -31,7 +31,8 @@ RSpec.describe RepositoryPodio do
       {
         title: databazi_application.exchange_participant.fullname,
         'ep-id': Float(databazi_application.expa_ep_id),
-        status: 1
+        status: 1,
+        email: databazi_application.exchange_participant.email
       }
     end
     let(:application) { described_class.save_icx_application(databazi_application) }

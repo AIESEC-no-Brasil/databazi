@@ -31,7 +31,13 @@ class RepositoryPodio
       params = {
         title: application.exchange_participant.fullname,
         'ep-id': application.expa_ep_id,
-        status: status_to_podio(application.status)
+        status: status_to_podio(application.status),
+        email: [
+          {
+            'type': 'home',
+            value: application.exchange_participant.email
+          }
+        ]
       }
       Podio::Item.create(ENV['PODIO_APP_ICX_APPLICATIONS'], fields: params)
     end

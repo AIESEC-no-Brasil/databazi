@@ -11,6 +11,7 @@ FactoryBot.define do
   factory :icx_application_ep, parent: :ep_gv do
     fullname { 'Carolina Alejandra Tapia Collantes' }
     id { nil }
+    email { Faker::Internet.email }
   end
   factory :icx_application, :class => Expa::Application do
     # id { Faker::Number.number(5) }
