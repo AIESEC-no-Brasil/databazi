@@ -8,11 +8,11 @@
 set :output, path + "/cron_log.log"
 
 every 20.minutes do
-  runner "ExpaApplicationSync.call", environment:'development'
+  runner "ExpaApplicationSync.call", environment:'production'
 end
 
-every 20.minutes do
-  runner "SyncPodioApplicationStatus.call", environment:'development'
-end
+# every 20.minutes do
+#   runner "SyncPodioApplicationStatus.call", environment:'production'
+# end
 
 # Learn more: http://github.com/javan/whenever
