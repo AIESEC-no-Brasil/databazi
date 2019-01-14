@@ -37,7 +37,12 @@ class RepositoryPodio
             'type': 'home',
             value: application.exchange_participant.email
           }
-        ]
+        ],
+        'data-de-nascimento': parse_date(application.exchange_participant.birthdate),
+        'data-do-applied': parse_date(application.applied_at),
+        'data-do-accepted': parse_date(application.accepted_at),
+        'data-do-approved': parse_date(application.approved_at),
+        'data-do-break-approval': parse_date(application.break_approved_at),
       }
       Podio::Item.create(ENV['PODIO_APP_ICX_APPLICATIONS'], fields: params)
     end
@@ -80,6 +85,10 @@ class RepositoryPodio
     def delete_item(id)
       check_podio
       Podio::Item.delete(id)
+    end
+
+    def parse_date(date)
+      date.strftime('%Y-%m-%d %H:%M:%S')
     end
   end
 

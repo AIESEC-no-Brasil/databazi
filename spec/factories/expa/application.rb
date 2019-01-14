@@ -12,6 +12,7 @@ FactoryBot.define do
     fullname { 'Carolina Alejandra Tapia Collantes' }
     id { nil }
     email { Faker::Internet.email }
+    birthdate { Faker::Date.birthday(18, 30) }
   end
   factory :icx_application, :class => Expa::Application do
     # id { Faker::Number.number(5) }
@@ -21,6 +22,10 @@ FactoryBot.define do
     status { :applied }
     expa_id { '4941872' }
     association :exchange_participant, factory: :icx_application_ep
+    applied_at { Faker::Date.backward }
+    accepted_at { Faker::Date.backward }
+    approved_at { Faker::Date.backward }
+    break_approved_at { Faker::Date.backward }
     # exchange_participant_id { nil }
     # after(:create) do |application, evaluator|
     #   create_list([:exchange_participant, , 1, :for_gv_participant, expa_applications: [application])

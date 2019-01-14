@@ -27,14 +27,21 @@ RSpec.describe RepositoryPodio do
   describe '#save_icx_application' do
     # TODO: Think about status mapping, Podio have few status than system
     let(:databazi_application) { build :icx_application }
+    # rubocop:disable Metrics/LineLength
     let(:expected_podio_application) do
       {
         title: databazi_application.exchange_participant.fullname,
         'ep-id': Float(databazi_application.expa_ep_id),
         status: 1,
-        email: databazi_application.exchange_participant.email
+        email: databazi_application.exchange_participant.email,
+        'data-de-nascimento': databazi_application.exchange_participant.birthdate,
+        'data-do-applied': databazi_application.applied_at,
+        'data-do-accepted': databazi_application.accepted_at,
+        'data-do-approved': databazi_application.approved_at,
+        'data-do-break-approval': databazi_application.break_approved_at,
       }
     end
+    # rubocop:enable Metrics/LineLength
     let(:application) { described_class.save_icx_application(databazi_application) }
 
     after do
