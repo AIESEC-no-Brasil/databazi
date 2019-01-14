@@ -36,8 +36,8 @@ class ExpaApplicationSync
       log += " application id #{application.id}"
       logger.info log
     rescue StandardError => error
-      logger.error error.message
       message = "Error when trying sync ogx applications: #{error.message}"
+      logger.error message
       Repos::ChatLogger.notify_on_client_channel(message)
       raise
     end
