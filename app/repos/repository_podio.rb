@@ -43,6 +43,9 @@ class RepositoryPodio
         'data-do-accepted': parse_date(application.accepted_at),
         'data-do-approved': parse_date(application.approved_at),
         'data-do-break-approval': parse_date(application.break_approved_at),
+        'background-academico': application.academic_experience,
+        'opportunity-name': application.opportunity_name,
+        'op-id': application.opportunity_expa_id,
       }
       Podio::Item.create(ENV['PODIO_APP_ICX_APPLICATIONS'], fields: params)
     end

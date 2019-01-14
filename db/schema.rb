@@ -101,6 +101,9 @@ ActiveRecord::Schema.define(version: 2019_01_10_200255) do
     t.date "accepted_at"
     t.date "approved_at"
     t.date "break_approved_at"
+    t.string "academic_experience"
+    t.string "opportunity_name"
+    t.integer "opportunity_expa_id"
     t.index ["host_lc_id"], name: "index_expa_applications_on_host_lc_id"
   end
 

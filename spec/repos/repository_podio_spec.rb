@@ -39,6 +39,9 @@ RSpec.describe RepositoryPodio do
         'data-do-accepted': databazi_application.accepted_at,
         'data-do-approved': databazi_application.approved_at,
         'data-do-break-approval': databazi_application.break_approved_at,
+        'background-academico': "<p>#{databazi_application.academic_experience}</p>",
+        'opportunity-name': "<p>#{databazi_application.opportunity_name}</p>",
+        'op-id': databazi_application.opportunity_expa_id,
       }
     end
     # rubocop:enable Metrics/LineLength
