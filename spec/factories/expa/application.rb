@@ -15,8 +15,9 @@ FactoryBot.define do
   factory :icx_application, :class => Expa::Application do
     # id { Faker::Number.number(5) }
     # updated_at { Faker::Date.backward }
+    expa_ep_id { Faker::Number.number(5) }
     updated_at_expa { Time.parse('2019-01-06T10:15:14Z') }
-    status { :open }
+    status { :applied }
     expa_id { '4941872' }
     association :exchange_participant, factory: :icx_application_ep
     # exchange_participant_id { nil }

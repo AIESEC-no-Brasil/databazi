@@ -29,12 +29,26 @@ class RepositoryPodio
     def save_icx_application(application)
       check_podio
       params = {
-        title: application.exchange_participant.fullname
+        title: application.exchange_participant.fullname,
+        'ep-id': application.expa_ep_id,
+        status: status_to_podio(application.status)
       }
       Podio::Item.create(ENV['PODIO_APP_ICX_APPLICATIONS'], fields: params)
     end
 
     private
+
+    def status_to_podio(status)
+      mapping = {
+        open: 6,
+        applied: 1,
+        accepted: 2,
+        approved: 3,
+        break_approved: 4,
+        rejected: 5,
+      }
+      mapping[status.to_sym]
+    end
 
     def check_podio
       return if @@is_podio_initialized
