@@ -1,0 +1,2 @@
+class SyncParam < ApplicationRecord
+end

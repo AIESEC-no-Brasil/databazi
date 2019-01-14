@@ -3,21 +3,20 @@ require "#{Rails.root}/lib/expa_api"
 
 RSpec.describe EpExpaIdSync, aws: true do
   subject { described_class.new }
-
   let(:check_person_present) { double(id: 123) }
   let(:data) { double(check_person_present: check_person_present) }
   let(:response) { double(data: data) }
-  let(:ep) do
-    create(:gv_participant,
-           exchange_participant: build(:exchange_participant,
-                                       email: 'foo@bar.com'))
-      .exchange_participant
-  end
+  let(:ep) { ExchangeParticipant.new(email: 'foo@bar.com') }
 
   before do
     allow(ep).to receive(:save)
+    allow(ep).to receive(:update_attribute)
+    allow_any_instance_of(EpExpaIdSync).to receive(:failed_sync)
+    # allow(ep).to receive(:email).and_call_original
     allow(ExchangeParticipant)
-      .to receive(:find_by).and_return(ep)
+      .to receive(:find_by).with(
+        hash_including(expa_id: nil)
+      ).and_return(ep)
     allow(EXPAAPI::Client)
       .to receive(:query).with(
         ExistsQuery, variables: hash_including(email: 'foo@bar.com')
@@ -36,31 +35,24 @@ RSpec.describe EpExpaIdSync, aws: true do
       .with(ExistsQuery, variables: hash_including(email: 'foo@bar.com'))
   end
 
-  context 'when exchange participant exists on expa' do
-    before { described_class.call }
-
-    it 'updates expa_id with id fetched from expa' do
-      expect(ep).to have_attributes(expa_id: 123)
-    end
-
-    it 'is saved' do
-      expect(ep).to have_received(:save)
-    end
+  it 'update attributes' do
+    described_class.call
+    expect(ep)
+      .to have_received(:update_attribute).with('expa_id', 123)
   end
 
-  context 'when exchange participant doesnt exist on expa' do
+  context "when don't find ep in expa" do
     before do
       allow(EXPAAPI::Client)
         .to receive(:query).with(
           ExistsQuery, variables: hash_including(email: 'foo@bar.com')
         ).and_return(nil)
-
-      described_class.call
     end
 
-    it 'updates expa_id with 0' do
-      expect(ep).to have_attributes(expa_id: 0)
-      expect(ep).to have_received(:save)
+    it 'update attributes with expa_id 0' do
+      described_class.call
+      expect(ep)
+        .to have_received(:update_attribute).with('expa_id', 0)
     end
   end
 end
