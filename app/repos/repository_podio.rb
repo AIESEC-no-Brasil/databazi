@@ -28,6 +28,7 @@ class RepositoryPodio
     # TODO: Code the Podio ICX application integration
     def save_icx_application(application)
       check_podio
+      # rubocop:disable Metrics/LineLength
       params = {
         title: application.exchange_participant.fullname,
         'ep-id': application.expa_ep_id,
@@ -46,7 +47,10 @@ class RepositoryPodio
         'background-academico': application.academic_experience,
         'opportunity-name': application.opportunity_name,
         'op-id': application.opportunity_expa_id,
+        'host-lc': application.host_lc.podio_id,
+        'home-lc': application.home_lc.podio_id
       }
+      # rubocop:enable Metrics/LineLength
       Podio::Item.create(ENV['PODIO_APP_ICX_APPLICATIONS'], fields: params)
     end
 

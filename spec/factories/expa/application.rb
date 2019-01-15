@@ -22,6 +22,8 @@ FactoryBot.define do
     status { :applied }
     expa_id { '4941872' }
     association :exchange_participant, factory: :icx_application_ep
+    association :host_lc, factory: :local_committee, podio_id: 306818877
+    association :home_lc, factory: :local_committee, podio_id: 306818877
     applied_at { Faker::Date.backward }
     accepted_at { Faker::Date.backward }
     approved_at { Faker::Date.backward }
