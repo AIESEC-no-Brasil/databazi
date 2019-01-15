@@ -11,7 +11,7 @@ RSpec.describe Repos::ExpaAPI do
 
   describe '#map_applications' do
     let(:applications) { get_json('icx_applications_full') }
-    let(:expected_ap) { build(:icx_application, status: :open) }
+    let(:expected_ap) { build(:icx_application_expa) }
 
     it 'return Application class' do
       ap = described_class.send(:map_applications, applications)
@@ -19,7 +19,7 @@ RSpec.describe Repos::ExpaAPI do
     end
 
     # TODO: Finish mapping of Expa ICX Application to databazi
-    xit 'validate mapping' do
+    it 'validate mapping' do
       ap = described_class.send(:map_applications, applications)
       # For match the result. s
       ap[0].exchange_participant_id = expected_ap.exchange_participant_id
