@@ -73,7 +73,7 @@ class RepositoryPodio
         break_approved: 4,
         rejected: 5,
       }
-      mapping[status.to_sym]
+      mapping[status.to_sym] || 6 # default other
     end
 
     def check_podio

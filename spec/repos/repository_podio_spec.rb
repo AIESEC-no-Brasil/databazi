@@ -65,32 +65,32 @@ RSpec.describe RepositoryPodio do
   describe '#status_to_podio' do
     it 'expected applications statuses', type: :model do
       expect(Expa::Application.new).to define_enum_for(:status).with(
-        open: 1, applied: 2, accepted: 3, approved: 4,
-        break_approved: 5, rejected: 6)
+        open: 1, applied: 2, accepted: 3, approved_tn_manager: 4,
+        approved_ep_manager: 5, approved: 6, break_approved: 7, rejected: 8,
+        withdrawn: 9, realized: 100, approval_broken: 101,
+        realization_broken: 102, matched: 103, completed: 104)
     end
 
-    it 'map :open to Other' do
-      expect(described_class.send(:status_to_podio, :open)).to eql(6)
+    def self.test_map(from, to)
+      it "map #{from} to #{to}" do
+        expect(described_class.send(:status_to_podio, from)).to eql(to)
+      end
     end
-
-    it 'map :applied to Applied' do
-      expect(described_class.send(:status_to_podio, :applied)).to eql(1)
-    end
-
-    it 'map :accepted to Accepted' do
-      expect(described_class.send(:status_to_podio, :accepted)).to eql(2)
-    end
-
-    it 'map :approved to Approved' do
-      expect(described_class.send(:status_to_podio, :approved)).to eql(3)
-    end
-
-    it 'map :break_approved to Break Approval' do
-      expect(described_class.send(:status_to_podio, :break_approved)).to eql(4)
-    end
-
-    it 'map :rejected to Rejected' do
-      expect(described_class.send(:status_to_podio, :rejected)).to eql(5)
-    end
+    #
+    test_map(:open, 6)
+    test_map(:approved_tn_manager, 6)
+    test_map(:approved_ep_manager, 6)
+    test_map(:withdrawn, 6)
+    test_map(:realized, 6)
+    test_map(:approval_broken, 6)
+    test_map(:realization_broken, 6)
+    test_map(:completed, 6)
+    test_map(:matched, 6)
+    test_map(:open, 6)
+    test_map(:applied, 1)
+    test_map(:accepted, 2)
+    test_map(:approved, 3)
+    test_map(:break_approved, 4)
+    test_map(:rejected, 5)
   end
 end
