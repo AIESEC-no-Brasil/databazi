@@ -31,6 +31,8 @@ FactoryBot.define do
     academic_experience { Faker::Lorem.sentence }
     opportunity_name { Faker::Lorem.sentence }
     opportunity_expa_id { Faker::Number.number(5) }
+    sdg_target_index { 1 }
+    sdg_goal_index { 1 }
     # exchange_participant_id { nil }
     # after(:create) do |application, evaluator|
     #   create_list([:exchange_participant, , 1, :for_gv_participant, expa_applications: [application])

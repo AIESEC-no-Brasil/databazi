@@ -43,7 +43,10 @@ RSpec.describe RepositoryPodio do
         'opportunity-name': "<p>#{databazi_application.opportunity_name}</p>",
         'op-id': databazi_application.opportunity_expa_id,
         'host-lc': databazi_application.host_lc.podio_id,
-        'home-lc': databazi_application.home_lc.podio_id
+        'home-lc': databazi_application.home_lc.podio_id,
+        'home-mc': 1023733737,
+        'celular': databazi_application.exchange_participant.cellphone,
+        'sdg-de-interesse': 1
       }
     end
     # rubocop:enable Metrics/LineLength

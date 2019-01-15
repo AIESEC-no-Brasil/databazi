@@ -48,7 +48,15 @@ class RepositoryPodio
         'opportunity-name': application.opportunity_name,
         'op-id': application.opportunity_expa_id,
         'host-lc': application.host_lc.podio_id,
-        'home-lc': application.home_lc.podio_id
+        'home-lc': application.home_lc.podio_id,
+        'home-mc': 1_023_733_737, # Fixed to Brasil
+        "celular": [
+          {
+            'type': 'mobile',
+            value: application.exchange_participant.cellphone
+          }
+        ],
+        'sdg-de-interesse': application.sdg_goal_index
       }
       # rubocop:enable Metrics/LineLength
       Podio::Item.create(ENV['PODIO_APP_ICX_APPLICATIONS'], fields: params)

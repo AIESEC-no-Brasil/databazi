@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_10_200255) do
+ActiveRecord::Schema.define(version: 2019_01_15_130023) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,6 +105,8 @@ ActiveRecord::Schema.define(version: 2019_01_10_200255) do
     t.string "opportunity_name"
     t.integer "opportunity_expa_id"
     t.bigint "home_lc_id"
+    t.integer "sdg_target_index"
+    t.integer "sdg_goal_index"
     t.index ["home_lc_id"], name: "index_expa_applications_on_home_lc_id"
     t.index ["host_lc_id"], name: "index_expa_applications_on_host_lc_id"
   end
