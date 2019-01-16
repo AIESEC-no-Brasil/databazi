@@ -3,7 +3,7 @@ class DelayedCall
     new(params).call
   end
 
-  attr_reader :status, :delay_in_seconds
+  attr_reader :status, :delay_in_seconds, :job
 
   def initialize(params)
     @status = true
