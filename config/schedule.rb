@@ -8,14 +8,13 @@
 set :output, path + "/cron_log.log"
 
 every '* * * * *' do
-  runner "ExpaApplicationSync.call", environment:'production'
+  runner "ExpaApplicationSync.call", environment: 'development'
 end
 
 # workaround provided so the service is called every 30 seconds
 
 every '* * * * *' do
-  sleep(30)
-  runner "ExpaApplicationSync.call", environment:'production'
+  runner "DelayedCall.call({ delay: 30, job: 'ExpaApplicationSync' })", environment: 'development'
 end
 
 # every 20.minutes do
