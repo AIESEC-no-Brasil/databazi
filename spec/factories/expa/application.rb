@@ -32,22 +32,4 @@ FactoryBot.define do
     sdg_target_index { 1 }
     sdg_goal_index { 1 }
   end
-  factory :icx_application_expa, :class => Expa::Application do
-    updated_at_expa { Time.parse('2019-01-06T10:15:14Z') }
-    expa_id { '4941872' }
-    status { :open }
-    # expa_ep_id { Faker::Number.number(5) }
-    # association :exchange_participant, factory: :icx_application_ep
-    # association :host_lc, factory: :local_committee, podio_id: 306818877
-    # association :home_lc, factory: :local_committee, podio_id: 306818877
-    # applied_at { Faker::Date.backward }
-    # accepted_at { Faker::Date.backward }
-    # approved_at { Faker::Date.backward }
-    # break_approved_at { Faker::Date.backward }
-    # academic_experience { Faker::Lorem.sentence }
-    # opportunity_name { Faker::Lorem.sentence }
-    # opportunity_expa_id { Faker::Number.number(5) }
-    # sdg_target_index { 1 }
-    # sdg_goal_index { 1 }
-  end
 end

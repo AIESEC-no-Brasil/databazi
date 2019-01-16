@@ -11,7 +11,27 @@ RSpec.describe Repos::ExpaAPI do
 
   describe '#map_applications' do
     let(:applications) { get_json('icx_applications_full') }
-    let(:expected_ap) { build(:icx_application_expa) }
+    let(:expected_ap) do
+      {
+        'status' => 'open',
+        'expa_ep_id' => 1900638,
+        'applied_at' => Time.parse('2019-01-06T10:15:14Z'),
+        'accepted_at' => Time.parse('2019-03-06T10:15:14Z'),
+        'approved_at' => Time.parse('2019-03-06T10:15:14Z'),
+        'break_approved_at' => Time.parse('2019-03-06T10:15:14Z'),
+        'opportunity_name' => '[SHOUT] TEACHER AT YAZIGI CASCAVEL',
+        'opportunity_expa_id' => 1036097,
+        'sdg_goal_index' => 4,
+        'sdg_target_index' => 8,
+      }
+    end
+    let(:expected_ep) do
+      {
+        'fullname' => 'Carolina Alejandra Tapia Collantes',
+        'email' => 'foo@bar.com',
+        'cellphone' => '3045839907',
+      }
+    end
 
     it 'return Application class' do
       ap = described_class.send(:map_applications, applications)
@@ -22,9 +42,9 @@ RSpec.describe Repos::ExpaAPI do
     it 'validate mapping' do
       ap = described_class.send(:map_applications, applications)
       # For match the result. s
-      ap[0].exchange_participant_id = expected_ap.exchange_participant_id
-      expected_ap.expa_ep_id = ap[0].expa_ep_id
-      expect(ap[0]).to have_attributes(expected_ap.attributes)
+      expect(ap[0].exchange_participant).to be_a(ExchangeParticipant)
+      expect(ap[0].attributes).to include(expected_ap)
+      expect(ap[0].exchange_participant.attributes).to include(expected_ep)
     end
   end
 end

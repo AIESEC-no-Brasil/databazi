@@ -1,5 +1,5 @@
 class Expa::Application < ApplicationRecord
-  belongs_to :exchange_participant, foreign_key: :exchange_participant_id, optional: true
+  belongs_to :exchange_participant, optional: true
   belongs_to :host_lc, class_name: 'LocalCommittee', optional: true
   belongs_to :home_lc, class_name: 'LocalCommittee', optional: true
 

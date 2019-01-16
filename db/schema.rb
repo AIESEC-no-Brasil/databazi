@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_15_130023) do
+ActiveRecord::Schema.define(version: 2019_01_16_124227) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -97,10 +97,10 @@ ActiveRecord::Schema.define(version: 2019_01_15_130023) do
     t.datetime "updated_at_expa"
     t.bigint "host_lc_id"
     t.integer "expa_ep_id"
-    t.date "applied_at"
-    t.date "accepted_at"
-    t.date "approved_at"
-    t.date "break_approved_at"
+    t.datetime "applied_at"
+    t.datetime "accepted_at"
+    t.datetime "approved_at"
+    t.datetime "break_approved_at"
     t.string "academic_experience"
     t.string "opportunity_name"
     t.integer "opportunity_expa_id"

@@ -24,9 +24,30 @@ module Repos
           application.updated_at_expa = Time.parse(expa_application.updated_at)
           application.status = expa_application.status
           application.expa_id = expa_application.id
+          application.expa_ep_id = expa_application.person.id
+          application.applied_at = parse_time(expa_application.created_at)
+          application.approved_at = parse_time(expa_application.date_approved)
+          # The two date are the same from expa. Relies on status
+          application.accepted_at = parse_time(expa_application.matched_or_rejected_at)
+          application.break_approved_at = parse_time(expa_application.matched_or_rejected_at)
+          application.sdg_goal_index = expa_application&.opportunity&.sdg_info&.sdg_target&.goal_index
+          application.sdg_target_index = expa_application&.opportunity&.sdg_info&.sdg_target&.target_index
+          application.opportunity_expa_id = expa_application&.opportunity&.id
+          application.opportunity_name = expa_application&.opportunity&.title
+          ep = ExchangeParticipant.new(
+            fullname: expa_application&.person&.full_name,
+            email: expa_application&.person&.email,
+            cellphone: expa_application&.person&.phone,
+          )
+          application.exchange_participant = ep
+          # application.save
           application
         end
         mapped
+      end
+
+      def parse_time(date)
+        date.nil? ? nil : Time.parse(date)
       end
     end
   end
@@ -41,10 +62,14 @@ module Repos
           id
           status
           updated_at
+          created_at
+          date_approved
+          matched_or_rejected_at
           person {
             id
-            first_name
-            last_name
+            full_name
+            email
+            phone
           }
           host_lc {
             name
@@ -53,6 +78,7 @@ module Repos
             name
           }
           opportunity {
+            id
             title
             managers {
               full_name
@@ -62,6 +88,12 @@ module Repos
               id
               short_name
               short_name_display
+            }
+            sdg_info {
+              sdg_target {
+                goal_index
+                target_index
+              }
             }
           }
         }
