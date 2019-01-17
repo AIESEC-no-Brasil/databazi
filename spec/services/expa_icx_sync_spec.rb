@@ -1,7 +1,7 @@
 require 'json_helper'
 require 'rails_helper'
 
-RSpec.describe ExpaICXSync do
+RSpec.describe ExpaIcxSync do
   include JsonHelper
   it { expect(described_class).to respond_to(:call) }
   it { expect(described_class.new).to respond_to(:call) }
@@ -11,10 +11,10 @@ RSpec.describe ExpaICXSync do
     let(:applications) { [] }
 
     before do
-      @expa_repo = class_double(Repos::ExpaAPI,
+      @expa_repo = class_double(Repos::ExpaApi,
                                 load_icx_applications: applications).as_stubbed_const
       @application_repo = class_double('Repos::Applications',
-                                       save: applications).as_stubbed_const
+                                       save_icx_from_expa: applications).as_stubbed_const
       @podio_repo = class_double('RepositoryPodio',
                            save_icx_application: true).as_stubbed_const
     end
@@ -28,7 +28,7 @@ RSpec.describe ExpaICXSync do
       let(:applications) { get_json('icx_applications') }
 
       it 'sync with database' do
-        expect(@application_repo).to receive(:save).with(any_args)
+        expect(@application_repo).to receive(:save_icx_from_expa).with(any_args)
         described_class.call(1.month.ago, 1.day.ago, 0)
       end
 

@@ -2,7 +2,7 @@ require 'json_helper'
 require 'rails_helper'
 require "#{::Rails.root}/app/repos/expa_api"
 
-RSpec.describe Repos::ExpaAPI do
+RSpec.describe Repos::ExpaApi do
   include JsonHelper
 
   it '#load_icx_applications' do
