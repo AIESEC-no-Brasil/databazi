@@ -85,7 +85,7 @@ class SendToPodio
       'email' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
       'cellphone' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
       'birthdate' => {
-        start: Date.parse(sqs_params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
+        start: Date.parse(sqs_params['birthdate'].to_s).strftime('%Y-%m-%d %H:%M:%S')
       },
       'local-committee' => sqs_params['local_committee']
     }
@@ -125,7 +125,7 @@ class SendToPodio
       'email' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
       'telefone' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
       'data-de-nascimento' => {
-        start: Date.parse(sqs_params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
+        start: Date.parse(sqs_params['birthdate'].to_s).strftime('%Y-%m-%d %H:%M:%S')
       }
     }
 
