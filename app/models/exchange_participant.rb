@@ -46,7 +46,22 @@ class ExchangeParticipant < ApplicationRecord
   end
 
   def most_actual_application(updated_application)
-    status_order = ['break_approved', 'rejected', 'open', 'applied', 'accepted', 'approved']
+    status_order = %w[
+      break_approved
+      rejected
+      withdrawn
+      approval_broken
+      realization_broken
+      realized
+      completed
+      open
+      matched
+      applied
+      accepted
+      approved_tn_manager
+      approved_ep_manager
+      approved
+    ]
     applications = expa_applications.map do |application|
       updated_application.id == application.id ? updated_application : application
     end

@@ -17,8 +17,8 @@ every '* * * * *' do
   runner "DelayedCall.call({ delay: 30, job: 'ExpaApplicationSync' })", environment: 'production'
 end
 
-# every 20.minutes do
-#   runner "SyncPodioApplicationStatus.call", environment:'production'
-# end
+every 1.minute do
+  runner "SyncPodioApplicationStatus.call", environment:'production'
+end
 
 # Learn more: http://github.com/javan/whenever
