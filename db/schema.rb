@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_16_124227) do
+ActiveRecord::Schema.define(version: 2019_01_22_200126) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(version: 2019_01_16_124227) do
     t.string "other_university"
     t.integer "expa_id"
     t.integer "podio_id"
+    t.integer "exchange_type", default: 0
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
@@ -95,7 +96,6 @@ ActiveRecord::Schema.define(version: 2019_01_16_124227) do
     t.datetime "updated_at", null: false
     t.integer "exchange_participant_id"
     t.datetime "updated_at_expa"
-    t.bigint "host_lc_id"
     t.integer "expa_ep_id"
     t.datetime "applied_at"
     t.datetime "accepted_at"
@@ -105,6 +105,7 @@ ActiveRecord::Schema.define(version: 2019_01_16_124227) do
     t.string "opportunity_name"
     t.integer "opportunity_expa_id"
     t.bigint "home_lc_id"
+    t.bigint "host_lc_id"
     t.integer "sdg_target_index"
     t.integer "sdg_goal_index"
     t.index ["home_lc_id"], name: "index_expa_applications_on_home_lc_id"

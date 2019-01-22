@@ -8,8 +8,8 @@ class ExchangeParticipant < ApplicationRecord
   validates :cellphone, presence: true
   validates :email, presence: true,
                     uniqueness: true
-  validates :birthdate, presence: true
-  validates :password, presence: true
+  validates :birthdate, presence: true, if: :ogx?
+  validates :password, presence: true, if: :ogx?
 
   has_many :expa_applications, class_name: 'Expa::Application'
 
@@ -26,6 +26,8 @@ class ExchangeParticipant < ApplicationRecord
 
   enum scholarity: %i[highschool incomplete_graduation graduating
                       post_graduated almost_graduated graduated other]
+  
+  enum exchange_type: { ogx: 1, icx: 0}
 
   def decrypted_password
     return password if password_changed?

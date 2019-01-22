@@ -36,6 +36,8 @@ class RepositoryExpaApi
           fullname: expa_application&.person&.full_name,
           email: expa_application&.person&.email,
           cellphone: expa_application&.person&.phone,
+          expa_id: expa_application&.person&.id,
+          exchange_type: :icx
         )
         application.exchange_participant = ep
         # application.save
