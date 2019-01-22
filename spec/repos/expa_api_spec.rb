@@ -1,12 +1,11 @@
 require 'json_helper'
 require 'rails_helper'
-require "#{::Rails.root}/app/repos/expa_api"
 
-RSpec.describe Repos::ExpaApi do
+RSpec.describe RepositoryExpaApi do
   include JsonHelper
 
   it '#load_icx_applications' do
-    described_class.load_icx_applications(1.week.ago, 1.day.ago, 0)
+    described_class.load_icx_applications(1.week.ago)
   end
 
   describe '#map_applications' do
