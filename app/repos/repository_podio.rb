@@ -70,6 +70,7 @@ class RepositoryPodio
         raise "Application without ep with registerable ap.id #{application.id}"
       end
       Podio::Item.create(ep_type, fields: params)
+      application.update_attributes(podio_last_sync: Time.now)
     end
 
     private

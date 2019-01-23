@@ -14,6 +14,7 @@ class RepositoryApplication
     end
     Expa::Application
       .where(expa_id: application.expa_id)
-      .first_or_create(application.attributes)
+      .first_or_initialize(application.attributes)
+      .update_attributes(podio_last_sync: nil)
   end
 end
