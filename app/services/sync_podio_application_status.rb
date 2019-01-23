@@ -38,8 +38,7 @@ class SyncPodioApplicationStatus
     @logger.info "Updating podio status #{fn} with #{application.status}"
     @logger_success.info "Updating podio status #{fn} with #{application.status}"
     RepositoryPodio.change_status(
-      application.exchange_participant.podio_id,
-      Expa::Application.statuses[application.status])
+      application.exchange_participant.podio_id, application.status)
   end
 
   def configure_logger(args)
