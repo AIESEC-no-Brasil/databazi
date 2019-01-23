@@ -7,10 +7,16 @@ class SyncPodioApplicationStatus
     configure_logger(args)
     @logger.info '>>> #call'
     last_applications.each do |application|
-      @logger.debug ''
-      ep = application.exchange_participant
-      update_podio(application) if ep.most_actual_application(application).id == application.id
-      application.update_attributes(podio_last_sync: Time.now)
+      begin
+        @logger.debug ''
+        ep = application.exchange_participant
+        update_podio(application) if ep.most_actual_application(application).id == application.id
+        application.update_attributes(podio_last_sync: Time.now)
+      rescue => exception
+        Raven.capture_exception(exception)
+        @logger.error exception.message
+        # Ignore errors
+      end
     end
     @logger.info '<<< #call'
   end
