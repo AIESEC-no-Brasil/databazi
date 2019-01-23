@@ -29,7 +29,7 @@ class SyncPodioApplicationStatus
       .where(podio_last_sync: nil)
       .joins(:exchange_participant)
       .where('exchange_participants.podio_id is not null')
-      .order('updated_at_expa': :asc)
+      .order('updated_at_expa': :desc)
       .limit 10
   end
 
