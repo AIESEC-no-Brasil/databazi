@@ -14,6 +14,7 @@ RSpec.describe RepositoryExpaApi do
       {
         'status' => 'open',
         'expa_ep_id' => 1900638,
+        'updated_at_expa' => Time.parse('2019-01-06T10:15:14Z'),
         'applied_at' => Time.parse('2019-01-06T10:15:14Z'),
         'accepted_at' => Time.parse('2019-03-06T10:15:14Z'),
         'approved_at' => Time.parse('2019-03-06T10:15:14Z'),
