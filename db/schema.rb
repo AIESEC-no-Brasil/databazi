@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_10_200255) do
+ActiveRecord::Schema.define(version: 2019_01_23_133105) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(version: 2019_01_10_200255) do
     t.datetime "updated_at", null: false
     t.integer "exchange_participant_id"
     t.datetime "updated_at_expa"
+    t.datetime "podio_last_sync"
     t.integer "expa_ep_id"
   end
 
