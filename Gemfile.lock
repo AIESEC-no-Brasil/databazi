@@ -117,6 +117,10 @@ GEM
     formatador (0.2.5)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    graphql (1.8.11)
+    graphql-client (0.14.0)
+      activesupport (>= 3.0, < 6.0)
+      graphql (~> 1.6)
     guard (2.15.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -284,6 +288,8 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
+    sentry-raven (2.9.0)
+      faraday (>= 0.7.6, < 1.0)
     shellany (0.0.1)
     shoryuken (4.0.2)
       aws-sdk-core (>= 2)
@@ -348,6 +354,7 @@ DEPENDENCIES
   expa (= 0.1.2.10)!
   factory_bot_rails
   faker
+  graphql-client
   guard-rspec
   guard-rubocop
   httparty
@@ -362,6 +369,7 @@ DEPENDENCIES
   rspec-rails (~> 3.7)
   rubocop
   rubocop-rspec
+  sentry-raven
   shoryuken
   shoulda-matchers
   simplecov

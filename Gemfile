@@ -3,6 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.5.1'
 
+gem 'sentry-raven'
 gem 'aws-sdk-s3', '~> 1', require: false
 gem 'aws-sdk-sqs'
 gem 'bootsnap', '>= 1.1.0', require: false
