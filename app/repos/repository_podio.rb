@@ -15,7 +15,7 @@ class RepositoryPodio
     def change_status(id, status)
       check_podio
       attrs = {'fields': {
-        'status-expa': status
+        'status-expa': map_status(status.to_sym)
       }}
       item = Podio::Item.update(id, attrs)
       item
