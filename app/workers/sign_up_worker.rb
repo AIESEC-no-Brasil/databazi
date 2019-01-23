@@ -8,7 +8,6 @@ class SignUpWorker
                     body_parser: JSON
 
   def perform(sqs_msg, body)
-    # sqs_msg.delete if ExpaSignUp.call(body)
-    ExpaSignUp.call(body)
+    sqs_msg.delete if ExpaSignUp.call(body)
   end
 end

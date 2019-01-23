@@ -66,18 +66,18 @@ class ExpaSignUp
 
   def send_data_to_expa(exchange_participant)
     submit_data(exchange_participant)
-    # id = exchange_participant_expa_id(exchange_participant)
-    # unless id.nil?
-    #   @status = true if exchange_participant.update_attributes(expa_id: id)
-    # end
+    id = exchange_participant_expa_id(exchange_participant)
+    unless id.nil?
+      @status = true if exchange_participant.update_attributes(expa_id: id)
+    end
   end
 
-  # def exchange_participant_expa_id(exchange_participant)
-  #   EXPAAPI::Client.query(
-  #     ExistsQuery,
-  #     variables: { email: exchange_participant.email }
-  #   ).data&.check_person_present&.id
-  # end
+  def exchange_participant_expa_id(exchange_participant)
+    EXPAAPI::Client.query(
+      ExistsQuery,
+      variables: { email: exchange_participant.email }
+    ).data&.check_person_present&.id
+  end
 
   def authenticity_token
     sign_up_page.css('.signup_op [name=authenticity_token]').first['value']

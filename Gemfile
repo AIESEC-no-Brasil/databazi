@@ -10,7 +10,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'decent_exposure'
 gem 'expa', '0.1.2.10', git: 'http://github.com/AIESEC-no-Brasil/expa-rb'
 gem 'faker'
-# gem 'graphql-client'
+gem 'graphql-client'
 gem 'httparty'
 gem 'mechanize'
 gem 'pg', '>= 0.18', '< 2.0'

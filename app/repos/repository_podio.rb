@@ -15,7 +15,7 @@ class RepositoryPodio
     def change_status(id, status)
       check_podio
       attrs = {'fields': {
-        'status-expa': status
+        'status-expa': map_status(status)
       }}
       item = Podio::Item.update(id, attrs)
       item
@@ -27,6 +27,26 @@ class RepositoryPodio
     end
 
     private
+
+    def map_status(status)
+      mapper = {
+        open: 1,
+        applied: 2,
+        accepted: 3,
+        approved_tn_manager: 4,
+        approved_ep_manager: 4,
+        approved: 4,
+        break_approved: 5,
+        rejected: 6,
+        withdrawn: 6,
+        realized: 4,
+        approval_broken: 6,
+        realization_broken: 5,
+        matched: 4,
+        completed: 4
+      }
+      mapper[status]
+    end
 
     def check_podio
       return if @@is_podio_initialized
