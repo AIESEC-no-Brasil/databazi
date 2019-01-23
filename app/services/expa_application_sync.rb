@@ -19,17 +19,21 @@ class ExpaApplicationSync
 
       unless ep.nil?
         ep.expa_applications.where(expa_id: application.id)
-          .first_or_create!(status: application.status,
-                            expa_ep_id: application.person.id,
-                            updated_at_expa: Time.parse(application.updated_at))
+          .first_or_initialize
+          .update_attributes(status: application.status,
+                             expa_ep_id: application.person.id,
+                             updated_at_expa: Time.parse(application.updated_at),
+                             podio_last_sync: nil)
         log = "Sync application with EP #{ep&.fullname}"
       end
 
       if ep.nil?
         Expa::Application.where(expa_id: application.id)
-          .first_or_create!(status: application.status,
-                            expa_ep_id: application.person.id,
-                            updated_at_expa: Time.parse(application.updated_at))
+          .first_or_initialize
+          .update_attributes(status: application.status,
+                             expa_ep_id: application.person.id,
+                             updated_at_expa: Time.parse(application.updated_at),
+                             podio_last_sync: nil)
         log = "Sync application without EP"
       end
       log += " last status #{application.status}"

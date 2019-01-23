@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_10_200255) do
+ActiveRecord::Schema.define(version: 2019_01_23_133105) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(version: 2019_01_10_200255) do
     t.string "other_university"
     t.integer "expa_id"
     t.integer "podio_id"
+    t.integer "exchange_type", default: 0
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
@@ -95,6 +96,7 @@ ActiveRecord::Schema.define(version: 2019_01_10_200255) do
     t.datetime "updated_at", null: false
     t.integer "exchange_participant_id"
     t.datetime "updated_at_expa"
+    t.datetime "podio_last_sync"
     t.integer "expa_ep_id"
   end
 
@@ -158,5 +160,7 @@ ActiveRecord::Schema.define(version: 2019_01_10_200255) do
   add_foreign_key "exchange_participants", "college_courses"
   add_foreign_key "exchange_participants", "local_committees"
   add_foreign_key "exchange_participants", "universities"
+  add_foreign_key "expa_applications", "local_committees", column: "home_lc_id"
+  add_foreign_key "expa_applications", "local_committees", column: "host_lc_id"
   add_foreign_key "universities", "local_committees"
 end
