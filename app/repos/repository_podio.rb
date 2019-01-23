@@ -47,8 +47,8 @@ class RepositoryPodio
         'background-academico': application.academic_experience,
         'opportunity-name': application.opportunity_name,
         'op-id': application.opportunity_expa_id,
-        'host-lc': application.host_lc.podio_id,
-        'home-lc': application.home_lc.podio_id,
+        'host-lc': application&.host_lc&.podio_id,
+        'home-lc': application&.home_lc&.podio_id,
         'home-mc': 1_023_733_737, # Fixed to Brasil
         "celular": [
           {
@@ -59,7 +59,17 @@ class RepositoryPodio
         'sdg-de-interesse': application.sdg_goal_index
       }
       # rubocop:enable Metrics/LineLength
-      Podio::Item.create(ENV['PODIO_APP_ICX_APPLICATIONS'], fields: params)
+      case application.exchange_participant.registerable
+      when GtParticipant
+        ep_type = ENV['PODIO_APP_ICX_APPLICATIONS_GT']
+      when GvParticipant
+        ep_type = ENV['PODIO_APP_ICX_APPLICATIONS_GV']
+      when GeParticipant
+        ep_type = ENV['PODIO_APP_ICX_APPLICATIONS_GE']
+      else
+        raise "Application without ep with registerable ap.id #{application.id}"
+      end
+      Podio::Item.create(ep_type, fields: params)
     end
 
     private
@@ -103,6 +113,7 @@ class RepositoryPodio
     end
 
     def parse_date(date)
+      return nil if date.nil?
       date.strftime('%Y-%m-%d %H:%M:%S')
     end
   end

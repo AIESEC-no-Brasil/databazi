@@ -8,9 +8,10 @@ class ExpaIcxSync
     logger.info "Start sync"
 
     RepositoryExpaApi.load_icx_applications(from).each do |application|
-
-      puts RepositoryApplication.save_icx_from_expa(application).to_json
-      # RepositoryPodio.save_icx_application(application)
+      save_application = RepositoryApplication.save_icx_from_expa(application)
+      logger.info "Saved ICX Application into Databazi"
+      RepositoryPodio.save_icx_application(save_application)
+      logger.info "Saved ICX Application into Podio"
     end
     logger.info "Done sync"
     true
