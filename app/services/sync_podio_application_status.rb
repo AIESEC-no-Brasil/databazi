@@ -6,35 +6,30 @@ class SyncPodioApplicationStatus
   def call(**args)
     configure_logger(args)
     @logger.info '>>> #call'
-    last_applications(last_updated).each do |application|
-      @logger.debug ''
-      ep = application.exchange_participant
-      update_podio(application) if ep.most_actual_application(application).id == application.id
-      update_last_updated(application.updated_at)
+    last_applications.each do |application|
+      begin
+        @logger.debug ''
+        ep = application.exchange_participant
+        update_podio(application) if ep.most_actual_application(application).id == application.id
+        application.update_attributes(podio_last_sync: Time.now)
+      rescue => exception
+        Raven.capture_exception(exception)
+        @logger.error exception.message
+        # Ignore errors
+      end
     end
     @logger.info '<<< #call'
   end
 
   private
 
-  def last_updated
-    l = SyncParam.first&.podio_application_status_last_sync || 6.month.ago.round
-    @logger.info "Last sync was #{l}"
-    l
-  end
-
-  def update_last_updated(updated)
-    @logger.info "Update last sync to #{updated}"
-    SyncParam.first_or_create.update_attributes(podio_application_status_last_sync: updated)
-  end
-
-  def last_applications(from)
+  def last_applications
     Expa::Application
-      .where('expa_applications.updated_at >= ?', from)
       .where('exchange_participant_id is not null')
+      .where(podio_last_sync: nil)
       .joins(:exchange_participant)
       .where('exchange_participants.podio_id is not null')
-      .order('updated_at': :asc)
+      .order('updated_at_expa': :asc)
       .limit 10
   end
 
