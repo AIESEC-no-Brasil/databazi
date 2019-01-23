@@ -4,18 +4,18 @@ class ExchangeParticipant < ApplicationRecord
 
   before_save :encrypted_password
 
-  validates :fullname, presence: true
-  validates :cellphone, presence: true
+  validates :fullname, presence: true, if: :ogx?
+  validates :cellphone, presence: true, if: :ogx?
   validates :email, presence: true,
-                    uniqueness: true
+                    uniqueness: true, if: :ogx?
   validates :birthdate, presence: true, if: :ogx?
   validates :password, presence: true, if: :ogx?
 
   has_many :expa_applications, class_name: 'Expa::Application'
 
-  belongs_to :registerable, polymorphic: true
+  belongs_to :registerable, polymorphic: true, optional: true
   belongs_to :campaign, optional: true
-  belongs_to :local_committee
+  belongs_to :local_committee, optional: true
   # TODO: assert optional association with shoulda-matchers when
   # new version is available
   belongs_to :university, optional: true

@@ -32,6 +32,7 @@ class RepositoryExpaApi
         application.sdg_target_index = expa_application&.opportunity&.sdg_info&.sdg_target&.target_index
         application.opportunity_expa_id = expa_application&.opportunity&.id
         application.opportunity_name = expa_application&.opportunity&.title
+        epp = exchange_programme(expa_application)
         ep = ExchangeParticipant.new(
           fullname: expa_application&.person&.full_name,
           email: expa_application&.person&.email,
@@ -39,11 +40,26 @@ class RepositoryExpaApi
           expa_id: expa_application&.person&.id,
           exchange_type: :icx
         )
+        ep.registerable = epp
         application.exchange_participant = ep
         # application.save
         application
       end
       mapped
+    end
+
+    def exchange_programme(expa_application)
+      name = expa_application&.opportunity&.programme&.short_name_display
+      case name
+      when 'GT'
+        GtParticipant.new
+      when 'GV'
+        GvParticipant.new
+      when 'GE'
+        GeParticipant.new
+      else
+        raise "Invalid program type #{name}"
+      end
     end
 
     def parse_time(date)
@@ -86,6 +102,10 @@ ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
         opportunity {
           id
           title
+          programme {
+            id
+            short_name_display
+          }
           sdg_info {
             sdg_target {
               goal_index
