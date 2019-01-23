@@ -82,7 +82,6 @@ ActiveRecord::Schema.define(version: 2019_01_23_133105) do
     t.string "other_university"
     t.integer "expa_id"
     t.integer "podio_id"
-    t.integer "exchange_type", default: 0
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
