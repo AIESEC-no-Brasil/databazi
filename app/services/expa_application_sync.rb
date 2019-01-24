@@ -24,6 +24,8 @@ class ExpaApplicationSync
                              expa_ep_id: application.person.id,
                              updated_at_expa: Time.parse(application.updated_at),
                              podio_last_sync: nil)
+
+        ep.update_attributes(status: application.person.status)
         log = "Sync application with EP #{ep&.fullname}"
       end
 

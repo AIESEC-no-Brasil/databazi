@@ -59,6 +59,7 @@ LoadApplications = EXPAAPI::Client.parse <<~'GRAPHQL'
           user_id
           email
           secure_identity_email
+          status
         }
       }
     }
