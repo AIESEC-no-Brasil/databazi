@@ -22,11 +22,11 @@ class ExpaApplicationSync
           .first_or_initialize
           .update_attributes(status: application.status,
                              expa_ep_id: application.person.id,
-                             updated_at_expa: Time.parse(application.updated_at),
-                             applied_at: Time.parse(application.created_at),
-                             accepted_at: application.status != 'rejected' ? Time.parse(application.matched_or_rejected_at) : nil,
-                             approved_at: Time.parse(application.date_approved),
-                             break_approved_at: application.status == 'rejected' ? Time.parse(application.matched_or_rejected_at) : nil,
+                             updated_at_expa: parsed_date(application.updated_at),
+                             applied_at: parsed_date(application.created_at),
+                             accepted_at: application.status != 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
+                             approved_at: parsed_date(application.date_approved),
+                             break_approved_at: application.status == 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
                              podio_last_sync: nil)
 
         ep.update_attributes(status: application.person.status)
@@ -38,11 +38,11 @@ class ExpaApplicationSync
           .first_or_initialize
           .update_attributes(status: application.status,
                              expa_ep_id: application.person.id,
-                             updated_at_expa: Time.parse(application.updated_at),
-                             applied_at: Time.parse(application.created_at),
-                             accepted_at: application.status != 'rejected' ? Time.parse(application.matched_or_rejected_at) : nil,
-                             approved_at: Time.parse(application.date_approved),
-                             break_approved_at: application.status == 'rejected' ? Time.parse(application.matched_or_rejected_at) : nil,
+                             updated_at_expa: parsed_date(application.updated_at),
+                             applied_at: parsed_date(application.created_at),
+                             accepted_at: application.status != 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
+                             approved_at: parsed_date(application.date_approved),
+                             break_approved_at: application.status == 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
                              podio_last_sync: nil)
         log = "Sync application without EP"
       end
@@ -58,6 +58,10 @@ class ExpaApplicationSync
   end
 
   private
+
+  def parsed_date(date)
+    Time.parse(date) if date
+  end
 
   def load_applications(from)
     EXPAAPI::Client.query(

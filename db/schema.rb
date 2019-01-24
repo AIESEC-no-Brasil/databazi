@@ -96,8 +96,8 @@ ActiveRecord::Schema.define(version: 2019_01_24_145232) do
     t.datetime "updated_at", null: false
     t.integer "exchange_participant_id"
     t.datetime "updated_at_expa"
-    t.datetime "podio_last_sync"
     t.integer "expa_ep_id"
+    t.datetime "podio_last_sync"
     t.date "applied_at"
     t.date "accepted_at"
     t.date "approved_at"
