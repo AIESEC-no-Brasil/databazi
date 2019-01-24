@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_23_133105) do
+ActiveRecord::Schema.define(version: 2019_01_24_145232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(version: 2019_01_23_133105) do
     t.string "other_university"
     t.integer "expa_id"
     t.integer "podio_id"
+    t.integer "status"
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
@@ -95,8 +96,12 @@ ActiveRecord::Schema.define(version: 2019_01_23_133105) do
     t.datetime "updated_at", null: false
     t.integer "exchange_participant_id"
     t.datetime "updated_at_expa"
-    t.datetime "podio_last_sync"
     t.integer "expa_ep_id"
+    t.datetime "podio_last_sync"
+    t.date "applied_at"
+    t.date "accepted_at"
+    t.date "approved_at"
+    t.date "break_approved_at"
   end
 
   create_table "experiences", force: :cascade do |t|
