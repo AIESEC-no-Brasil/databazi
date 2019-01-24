@@ -12,10 +12,14 @@ class RepositoryPodio
       Podio::Item.delete(id)
     end
 
-    def change_status(id, status)
+    def change_status(id, application)
       check_podio
       attrs = {'fields': {
-        'status-expa': map_status(status.to_sym)
+        'status-expa': map_status(application.exchange_participant.status.to_sym),
+        'teste-di-data-do-applied': parse_date(application.applied_at),
+        'teste-di-data-do-accepted': parse_date(application.accepted_at),
+        'teste-di-data-do-approved': parse_date(application.approved_at),
+        'teste-di-data-do-break-approval': parse_date(application.break_approved_at)
       }}
       item = Podio::Item.update(id, attrs)
       item
@@ -25,6 +29,12 @@ class RepositoryPodio
       check_podio
       Podio::Item.find(id)
     end
+
+    def parse_date(date)
+      return nil if date.nil?
+      date.strftime('%Y-%m-%d %H:%M:%S')
+    end
+
 
     private
 

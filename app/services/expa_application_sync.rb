@@ -23,6 +23,10 @@ class ExpaApplicationSync
           .update_attributes(status: application.status,
                              expa_ep_id: application.person.id,
                              updated_at_expa: Time.parse(application.updated_at),
+                             applied_at: Time.parse(application.created_at),
+                             accepted_at: application.status != 'rejected' ? Time.parse(application.matched_or_rejected_at) : nil,
+                             approved_at: Time.parse(application.date_approved),
+                             break_approved_at: application.status == 'rejected' ? Time.parse(application.matched_or_rejected_at) : nil,
                              podio_last_sync: nil)
 
         ep.update_attributes(status: application.person.status)
@@ -35,6 +39,10 @@ class ExpaApplicationSync
           .update_attributes(status: application.status,
                              expa_ep_id: application.person.id,
                              updated_at_expa: Time.parse(application.updated_at),
+                             applied_at: Time.parse(application.created_at),
+                             accepted_at: application.status != 'rejected' ? Time.parse(application.matched_or_rejected_at) : nil,
+                             approved_at: Time.parse(application.date_approved),
+                             break_approved_at: application.status == 'rejected' ? Time.parse(application.matched_or_rejected_at) : nil,
                              podio_last_sync: nil)
         log = "Sync application without EP"
       end
