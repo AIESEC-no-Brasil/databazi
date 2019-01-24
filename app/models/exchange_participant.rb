@@ -27,6 +27,11 @@ class ExchangeParticipant < ApplicationRecord
   enum scholarity: %i[highschool incomplete_graduation graduating
                       post_graduated almost_graduated graduated other]
 
+  enum status: { open: 1, applied: 2, accepted: 3, approved_tn_manager: 4, approved_ep_manager: 5, approved: 6,
+    break_approved: 7, rejected: 8, withdrawn: 9,
+    realized: 100, approval_broken: 101, realization_broken: 102, matched: 103,
+    completed: 104 }
+
   def decrypted_password
     return password if password_changed?
 
