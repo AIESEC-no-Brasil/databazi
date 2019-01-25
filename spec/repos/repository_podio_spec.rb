@@ -50,15 +50,14 @@ RSpec.describe RepositoryPodio do
       }
     end
     # rubocop:enable Metrics/LineLength
-    let(:application) { described_class.save_icx_application(databazi_application) }
+    subject { described_class.save_icx_application(databazi_application) }
 
     after do
-      described_class.delete_icx_application(application.item_id)
+      described_class.delete_icx_application(subject.item_id)
     end
 
     it 'save into Podio' do
-      expect(application).to have_attributes({item_id: anything})
-      expect(map_podio(application)).to include(expected_podio_application)
+      expect(map_podio(subject)).to include(expected_podio_application)
     end
   end
 

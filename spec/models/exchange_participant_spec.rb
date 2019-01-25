@@ -18,6 +18,8 @@ RSpec.describe ExchangeParticipant, type: :model do
   end
 
   describe '#validations' do
+    subject { build(:exchange_participant, exchange_type: :ogx) }
+
     it { is_expected.to validate_presence_of :fullname }
     it { is_expected.to validate_presence_of :cellphone }
     it { is_expected.to validate_presence_of :email }
