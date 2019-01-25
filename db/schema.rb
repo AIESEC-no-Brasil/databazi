@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_23_133105) do
+ActiveRecord::Schema.define(version: 2019_01_24_145232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,7 @@ ActiveRecord::Schema.define(version: 2019_01_23_133105) do
     t.string "other_university"
     t.integer "expa_id"
     t.integer "podio_id"
+    t.integer "status"
     t.integer "exchange_type", default: 0
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
