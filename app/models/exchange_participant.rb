@@ -29,6 +29,11 @@ class ExchangeParticipant < ApplicationRecord
   
   enum exchange_type: { ogx: 1, icx: 0}
 
+  enum status: { open: 1, applied: 2, accepted: 3, approved_tn_manager: 4, approved_ep_manager: 5, approved: 6,
+    break_approved: 7, rejected: 8, withdrawn: 9,
+    realized: 100, approval_broken: 101, realization_broken: 102, matched: 103,
+    completed: 104 }
+
   def decrypted_password
     return password if password_changed?
 
@@ -48,7 +53,22 @@ class ExchangeParticipant < ApplicationRecord
   end
 
   def most_actual_application(updated_application)
-    status_order = ['break_approved', 'rejected', 'open', 'applied', 'accepted', 'approved']
+    status_order = %w[
+      break_approved
+      rejected
+      withdrawn
+      approval_broken
+      realization_broken
+      realized
+      completed
+      open
+      matched
+      applied
+      accepted
+      approved_tn_manager
+      approved_ep_manager
+      approved
+    ]
     applications = expa_applications.map do |application|
       updated_application.id == application.id ? updated_application : application
     end

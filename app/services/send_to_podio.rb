@@ -85,7 +85,7 @@ class SendToPodio
       'email' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
       'cellphone' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
       'birthdate' => {
-        start: Date.parse(sqs_params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
+        start: Date.parse(sqs_params['birthdate'].to_s).strftime('%Y-%m-%d %H:%M:%S')
       },
       'local-committee' => sqs_params['local_committee']
     }
@@ -105,11 +105,7 @@ class SendToPodio
     # Podio starts counting at 1 instead of 0, so we increment our enum indexes to match its category field in the podio app.
     params['when-can-travel'] = sqs_params['when_can_travel'] + 1 if sqs_params['when_can_travel']
 
-    if gt_participant?
-      params['preferred-destination'] = sqs_params['preferred_destination'] if sqs_params['preferred_destination']
-    else
-      params['preferred-destination'] = sqs_params['preferred_destination'] + 1 if sqs_params['preferred_destination']
-    end
+    params['preferred-destination'] = sqs_params['preferred_destination'] if sqs_params['preferred_destination']
 
     unless gv_participant?
       params['curriculum'] = @gx_participant.try(:curriculum)&.attached? ? 1 : 2
@@ -125,7 +121,7 @@ class SendToPodio
       'email' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
       'telefone' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
       'data-de-nascimento' => {
-        start: Date.parse(sqs_params['birthdate']).strftime('%Y-%m-%d %H:%M:%S')
+        start: Date.parse(sqs_params['birthdate'].to_s).strftime('%Y-%m-%d %H:%M:%S')
       }
     }
 

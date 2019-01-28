@@ -7,12 +7,18 @@
 #
 set :output, path + "/cron_log.log"
 
-every 20.minutes do
-  runner "ExpaApplicationSync.call", environment:'development'
+every '* * * * *' do
+  runner "ExpaApplicationSync.call", environment: 'production'
 end
 
-every 20.minutes do
-  runner "SyncPodioApplicationStatus.call", environment:'development'
+# workaround provided so the service is called every 30 seconds
+
+every '* * * * *' do
+  runner "DelayedCall.call({ delay: 30, job: 'ExpaApplicationSync' })", environment: 'production'
+end
+
+every 1.minute do
+  runner "SyncPodioApplicationStatus.call", environment:'production'
 end
 
 # Learn more: http://github.com/javan/whenever

@@ -8,13 +8,18 @@ class RepositoryPodio
     end
 
     def delete_ep(id)
-      delete_item(id)
+      check_podio
+      Podio::Item.delete(id)
     end
 
-    def change_status(id, status)
+    def change_status(id, application)
       check_podio
       attrs = {'fields': {
-        'status-expa': status
+        'status-expa': map_status(application.exchange_participant.status.to_sym),
+        'teste-di-data-do-applied': parse_date(application.applied_at),
+        'teste-di-data-do-accepted': parse_date(application.accepted_at),
+        'teste-di-data-do-approved': parse_date(application.approved_at),
+        'teste-di-data-do-break-approval': parse_date(application.break_approved_at)
       }}
       item = Podio::Item.update(id, attrs)
       item
@@ -74,7 +79,28 @@ class RepositoryPodio
       podio_item
     end
 
+
     private
+
+    def map_status(status)
+      mapper = {
+        open: 1,
+        applied: 2,
+        accepted: 3,
+        approved_tn_manager: 4,
+        approved_ep_manager: 4,
+        approved: 4,
+        break_approved: 5,
+        rejected: 6,
+        withdrawn: 6,
+        realized: 4,
+        approval_broken: 6,
+        realization_broken: 5,
+        matched: 4,
+        completed: 4
+      }
+      mapper[status]
+    end
 
     def status_to_podio(status)
       mapping = {
@@ -86,6 +112,11 @@ class RepositoryPodio
         rejected: 5,
       }
       mapping[status.to_sym] || 6 # default other
+    end
+
+    def parse_date(date)
+      return nil if date.nil?
+      date.strftime('%Y-%m-%d %H:%M:%S')
     end
 
     def check_podio
@@ -112,11 +143,6 @@ class RepositoryPodio
     def delete_item(id)
       check_podio
       Podio::Item.delete(id)
-    end
-
-    def parse_date(date)
-      return nil if date.nil?
-      date.strftime('%Y-%m-%d %H:%M:%S')
     end
   end
 

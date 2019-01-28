@@ -174,7 +174,5 @@ ActiveRecord::Schema.define(version: 2019_01_24_145232) do
   add_foreign_key "exchange_participants", "college_courses"
   add_foreign_key "exchange_participants", "local_committees"
   add_foreign_key "exchange_participants", "universities"
-  add_foreign_key "expa_applications", "local_committees", column: "home_lc_id"
-  add_foreign_key "expa_applications", "local_committees", column: "host_lc_id"
   add_foreign_key "universities", "local_committees"
 end

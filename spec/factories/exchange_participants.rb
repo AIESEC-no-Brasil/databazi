@@ -11,6 +11,7 @@ FactoryBot.define do
     college_course
     cellphone_contactable { false }
     scholarity { 1 }
+    status { 1 }
     trait :for_gv_participant do
       association(:registerable, factory: :gv_participant)
     end
