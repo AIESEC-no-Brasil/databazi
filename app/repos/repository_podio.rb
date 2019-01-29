@@ -33,6 +33,8 @@ class RepositoryPodio
     # TODO: Code the Podio ICX application integration
     def save_icx_application(application)
       check_podio
+
+      sync_icx_country(application)
       # rubocop:disable Metrics/LineLength
       params = {
         title: application.exchange_participant.fullname,
@@ -64,18 +66,11 @@ class RepositoryPodio
         'sdg-de-interesse': application.sdg_goal_index
       }
       # rubocop:enable Metrics/LineLength
-      case application.exchange_participant.registerable
-      when GtParticipant
-        ep_type = ENV['PODIO_APP_ICX_APPLICATIONS_GT']
-      when GvParticipant
-        ep_type = ENV['PODIO_APP_ICX_APPLICATIONS_GV']
-      when GeParticipant
-        ep_type = ENV['PODIO_APP_ICX_APPLICATIONS_GE']
-      else
-        raise "Application without ep with registerable ap.id #{application.id}"
-      end
-      podio_item = Podio::Item.create(ep_type, fields: params)
-      application.update_attributes(podio_last_sync: Time.now)
+      podio_item = Podio::Item.create(22140491, fields: params)
+      application.update_attributes(
+        podio_last_sync: Time.now,
+        podio_id: podio_item.item_id
+      )
       podio_item
     end
 
@@ -143,6 +138,25 @@ class RepositoryPodio
     def delete_item(id)
       check_podio
       Podio::Item.delete(id)
+    end
+
+    def sync_icx_country(application)
+      if !application&.home_mc&.podio_id.nil? || application.home_mc.nil?
+        return
+      end
+
+      items = Podio::Item.find_by_filter_values(
+        '22140562',
+        'expa-id': {
+          from: application.home_mc.expa_id,
+          to: application.home_mc.expa_id
+        }
+      )
+      if items.count != 1
+        raise "Raise couldn't find MC in ICX Paises #{application.home_mc.id}/#{application.home_mc.name}"
+      end
+
+      application.home_mc.update_attributes(podio_id: items.all[0].item_id)
     end
   end
 

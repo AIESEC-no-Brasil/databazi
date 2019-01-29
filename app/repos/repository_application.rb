@@ -12,9 +12,17 @@ class RepositoryApplication
         registerable: ep.registerable
       )
     end
-    Expa::Application
+    application.home_mc = MemberCommittee.where(
+      expa_id: application.home_mc.expa_id
+    ).first_or_create(
+      name: application.home_mc.name,
+      expa_id: application.home_mc.expa_id
+    )
+    application = Expa::Application
       .where(expa_id: application.expa_id)
       .first_or_initialize(application.attributes)
+    application
       .update_attributes(podio_last_sync: nil)
+    application
   end
 end

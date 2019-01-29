@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_24_145232) do
+ActiveRecord::Schema.define(version: 2019_01_29_191657) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,7 +110,10 @@ ActiveRecord::Schema.define(version: 2019_01_24_145232) do
     t.integer "sdg_target_index"
     t.integer "sdg_goal_index"
     t.datetime "podio_last_sync"
+    t.bigint "home_mc_id"
+    t.integer "podio_id"
     t.index ["home_lc_id"], name: "index_expa_applications_on_home_lc_id"
+    t.index ["home_mc_id"], name: "index_expa_applications_on_home_mc_id"
     t.index ["host_lc_id"], name: "index_expa_applications_on_host_lc_id"
   end
 
@@ -154,6 +157,14 @@ ActiveRecord::Schema.define(version: 2019_01_24_145232) do
     t.boolean "active", default: true
   end
 
+  create_table "member_committees", force: :cascade do |t|
+    t.string "name"
+    t.integer "expa_id"
+    t.integer "podio_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "sync_params", force: :cascade do |t|
     t.datetime "podio_application_status_last_sync"
     t.datetime "created_at", null: false
@@ -174,5 +185,6 @@ ActiveRecord::Schema.define(version: 2019_01_24_145232) do
   add_foreign_key "exchange_participants", "college_courses"
   add_foreign_key "exchange_participants", "local_committees"
   add_foreign_key "exchange_participants", "universities"
+  add_foreign_key "expa_applications", "member_committees", column: "home_mc_id"
   add_foreign_key "universities", "local_committees"
 end

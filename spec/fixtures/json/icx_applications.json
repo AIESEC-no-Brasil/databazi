@@ -1,22 +1,47 @@
 [
   {
-    "id": "4933714",
+    "id": "4941872",
     "status": "open",
-    "updated_at": "2019-01-02T12:55:22Z",
-    "host_lc_name": "VILNIUS",
+    "updated_at": "2019-01-06T10:15:14Z",
+    "created_at": "2019-01-06T10:15:14Z",
+    "date_approved": "2019-03-06T10:15:14Z",
+    "matched_or_rejected_at": "2019-03-06T10:15:14Z",
     "person": {
-      "id": "329853",
-      "full_name": "Aline Fonseca",
-      "phone": "15905073400",
-      "home_mc": {
-        "name": "Brazil"
+      "id": "1900638",
+      "full_name": "Carolina Alejandra Tapia Collantes",
+      "email": "foo@bar.com",
+      "phone": "3045839907"
+    },
+    "host_lc": {
+      "name": "MARINGÁ"
+    },
+    "home_mc": {
+      "name": "Brazil"
+    },
+    "opportunity": {
+      "title": "[SHOUT] TEACHER AT YAZIGI CASCAVEL",
+      "id": "1036097",
+      "managers": [
+        {
+          "full_name": "Gustavo Lopes",
+          "email": "p_7c764c4b14db7f6287930d21770c8db7d4df1f36@inbound.aiesec.org"
+        }
+      ],
+      "programme": {
+        "id": "2",
+        "short_name": "GIP",
+        "short_name_display": "GT"
       },
-      "home_lc": {
-        "name": "VOLTA REDONDA"
-      },
-      "user_id": 3203438,
-      "email": "p_6ac1047c30a5249446660083027b17b39cba15e1@inbound.aiesec.org",
-      "secure_identity_email": "person-10f3dfa8e6bb8d97474d5a47f68b3ecb532dbf18dbfe6aa9b42ec0afaeb58cbf@inbound.aiesec.org"
+      "sdg_info": {
+        "deliverables": [],
+        "coordination": null,
+        "sdg_target": {
+          "goal_index": 4,
+          "description": "By 2030, substantially increase the number of youth and adults who have relevant skills, including technical and vocational skills, for employment, decent jobs and entrepreneurship",
+          "target": "By 2030, substantially increase the number of youth and adults who have relevant skills, including technical and vocational skills, for employment, decent jobs and entrepreneurship",
+          "target_index": 8
+        }
+      }
     }
   },
   {

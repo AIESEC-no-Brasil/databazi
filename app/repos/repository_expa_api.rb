@@ -42,6 +42,11 @@ class RepositoryExpaApi
         )
         ep.registerable = epp
         application.exchange_participant = ep
+        member_committee = MemberCommittee.new(
+          expa_id: expa_application&.home_mc&.id,
+          name: expa_application&.home_mc&.name
+        )
+        application.home_mc = member_committee
         # application.save
         application
       end
@@ -94,9 +99,11 @@ ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
           phone
         }
         host_lc {
+          id
           name
         }
         home_mc {
+          id
           name
         }
         opportunity {
