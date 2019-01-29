@@ -1,5 +1,6 @@
 class RepositoryApplication
   def self.save_icx_from_expa(application)
+    normalize_host_lc(application)
     ep = application.exchange_participant
     application.exchange_participant = ExchangeParticipant.where(
       expa_id: application.exchange_participant.expa_id
@@ -24,5 +25,13 @@ class RepositoryApplication
     application
       .update_attributes(podio_last_sync: nil)
     application
+  end
+
+  private
+
+  def self.normalize_host_lc(application)
+    lc = LocalCommittee.where(expa_id: application.host_lc.expa_id).first
+    raise "Host LC not in database #{application.host_lc.expa_id}" if lc.nil?
+    application.host_lc = lc
   end
 end

@@ -55,8 +55,8 @@ class RepositoryPodio
         'opportunity-name': application.opportunity_name,
         'op-id': application.opportunity_expa_id,
         'host-lc': application&.host_lc&.podio_id,
-        'home-lc': application&.home_lc&.podio_id,
-        'home-mc': 1_023_733_737, # Fixed to Brasil
+        'home-lc': application&.home_lc&.podio_id || [1023759520].sample,
+        'home-mc': application&.home_mc&.podio_id, # Fixed to Brasil
         "celular": [
           {
             'type': 'mobile',
