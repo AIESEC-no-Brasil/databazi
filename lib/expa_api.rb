@@ -64,6 +64,12 @@ LoadApplications = EXPAAPI::Client.parse <<~'GRAPHQL'
           secure_identity_email
           status
         }
+        opportunity {
+          id
+          programme {
+            short_name_display
+          }
+        }
       }
     }
   }
