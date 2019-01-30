@@ -27,7 +27,9 @@ class ExpaApplicationSync
                              accepted_at: application.status != 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
                              approved_at: parsed_date(application.date_approved),
                              break_approved_at: application.status == 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
-                             podio_last_sync: nil)
+                             podio_last_sync: nil,
+                             product: application.opportunity.programme.short_name_display.downcase.to_sym,
+                             tnid: application.opportunity.id)
 
         ep.update_attributes(status: application.person.status)
         log = "Sync application with EP #{ep&.fullname}"
@@ -43,7 +45,10 @@ class ExpaApplicationSync
                              accepted_at: application.status != 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
                              approved_at: parsed_date(application.date_approved),
                              break_approved_at: application.status == 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
-                             podio_last_sync: nil)
+                             podio_last_sync: nil,
+                             product: application.opportunity.programme.short_name_display.downcase.to_sym,
+                             tnid: application.opportunity.id)
+
         log = "Sync application without EP"
       end
       log += " last status #{application.status}"
