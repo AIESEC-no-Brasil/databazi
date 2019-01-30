@@ -36,14 +36,26 @@ RSpec.describe Expa::Application, type: :model do
 
   describe 'attributes' do
     it { is_expected.to respond_to(:product) }
+    it { is_expected.to respond_to(:tnid) }
   end
 
   describe 'validations' do
     it { is_expected.to validate_presence_of(:product) }
+    it { is_expected.to validate_presence_of(:tnid) }
 
     it do
       expect(Expa::Application.new).to define_enum_for(:product)
         .with(%w[gv ge gt])
+    end
+  end
+
+  describe 'methods' do
+    context 'opportunity_link' do
+      let(:application) { build(:application) }
+
+      it 'returns a link to the opportunity' do
+        expect(application.opportunity_link).to eq("https://aiesec.org/opportunity/#{application.tnid}")
+      end
     end
   end
 

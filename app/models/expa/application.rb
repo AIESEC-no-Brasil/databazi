@@ -6,6 +6,7 @@ class Expa::Application < ApplicationRecord
   belongs_to :exchange_participant, foreign_key: :exchange_participant_id, optional: true
 
   validates :product, presence: true
+  validates :tnid, presence: true
 
   enum product: %i[gv ge gt]
 
@@ -13,4 +14,8 @@ class Expa::Application < ApplicationRecord
             break_approved: 7, rejected: 8, withdrawn: 9,
             realized: 100, approval_broken: 101, realization_broken: 102, matched: 103,
             completed: 104 }
+
+  def opportunity_link
+    "https://aiesec.org/opportunity/#{tnid}"
+  end
 end
