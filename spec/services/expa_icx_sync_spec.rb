@@ -1,7 +1,9 @@
 require 'json_helper'
 require 'rails_helper'
+require 'podio_helper'
 
 RSpec.describe ExpaIcxSync do
+  include PodioHelper
   include JsonHelper
 
   it { expect(described_class).to respond_to(:call) }
@@ -49,15 +51,19 @@ RSpec.describe ExpaIcxSync do
       before :each do
         class_double(RepositoryExpaApi,
                      load_icx_applications: expa_applications).as_stubbed_const
-        described_class.call()
       end
 
       it 'has not any expa application' do
+        described_class.call()
         expect(Expa::Application.first).to be_nil
       end
 
       context 'with expa applications' do
-        let(:expa_applications) { RepositoryExpaApi.send(:map_applications, get_json('icx_applications_full'))[0, 1] }
+        let(:expa_applications) { RepositoryExpaApi.load_icx_applications(3.month.ago)[0, 1] }
+
+        before :each do
+          create(:local_committee, expa_id: expa_applications[0].host_lc.expa_id, podio_id: 306811055)
+        end
 
         after :each do
           # RepositoryPodio.delete_icx_application(Expa::Application.first.podio_id)
@@ -65,15 +71,19 @@ RSpec.describe ExpaIcxSync do
 
         # rubocop:disable RSpec/MultipleExpectations, RSpec/ExampleLength
         it 'save expa application into databazi' do
+          described_class.call()
           expect(Expa::Application.count).to eq 1
           expect(MemberCommittee.count).to eq 1
           expect(MemberCommittee.first).to have_attributes(
             name: kind_of(String),
             expa_id: kind_of(Integer),
             podio_id: kind_of(Integer))
-          expect(Expa::Application.first).to have_attributes(
+          application = Expa::Application.first
+          expect(application).to have_attributes(
             podio_id: kind_of(Integer)
           )
+          podio_item = Podio::Item.find(application.podio_id)
+          puts map_podio(podio_item).to_json
         end
         # rubocop:enable RSpec/MultipleExpectations, RSpec/ExampleLength
       end
