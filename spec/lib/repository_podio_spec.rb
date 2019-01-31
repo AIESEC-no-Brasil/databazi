@@ -28,19 +28,7 @@ RSpec.describe RepositoryPodio do
       expect(field[0]['values'][0]['start']).to eql(application.applied_at.strftime('%Y-%m-%d %H:%M:%S'))
 
       field = item.fields.select{ |f| f['external_id'] == 'teste-di-data-do-accepted' }
-      expect(field[0]['values'][0]['start']).to eql(application.accepted_at.strftime('%Y-%m-%d %H:%M:%S'))
-
-      field = item.fields.select{ |f| f['external_id'] == 'teste-di-data-do-approved' }
-      expect(field[0]['values'][0]['start']).to eql(application.approved_at.strftime('%Y-%m-%d %H:%M:%S'))
-
-      field = item.fields.select{ |f| f['external_id'] == 'link-da-vaga-1-tnid-1' }
-      expect(field[0]['values'][0]['embed']['url']).to eql(application.opportunity_link)
-
-      field = item.fields.select{ |f| f['external_id'] == 'produto-apd-1' }
-      expect(field[0]['values'][0]['value']['id']).to eql(application.read_attribute_before_type_cast(:product) + 1)
-
-      field = item.fields.select{ |f| f['external_id'] == 'expa-application-id-1' }
-      expect(field[0]['values'][0]['value']).to eq(application.expa_id.to_s)
+      expect(field[0]['values'][0]['start']).to eql(application.accepted_at.strftime('%Y-%m-%d %H:%M:%S'))      
     end
   end
 
