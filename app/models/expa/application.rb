@@ -1,6 +1,6 @@
 class Expa::Application < ApplicationRecord
   scope :first_approved_at, -> { approveds.order(:approved_at).first }
-  scope :approveds, -> { where.not(approved_at: nil) }
+  scope :approveds, -> { where.not(approved_at: nil).order(:approved_at) }
   scope :synchronized_approveds, -> { approveds.where.not(podio_id: nil) }
 
   belongs_to :exchange_participant, foreign_key: :exchange_participant_id, optional: true

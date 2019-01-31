@@ -12,11 +12,12 @@ RSpec.describe Expa::Application, type: :model do
     end
 
     context 'approveds' do
-      let(:approved_applications) { create_list(:application, 4) }
-      let(:non_approved_applications) { create_list(:application, 4, approved_at: nil) }
+      let(:first_approved) { create(:application, approved_at: 3.days.ago) }
+      let(:second_approved) { create(:application, approved_at: 1.days.ago ) }
+      let(:non_approved_applications) { create_list(:application, 2, approved_at: nil) }
 
       it 'returns all applications with an approved_at date' do
-        expect(Expa::Application.approveds).to eq approved_applications
+        expect(Expa::Application.approveds).to eq [first_approved, second_approved]
       end
     end
 
@@ -25,7 +26,7 @@ RSpec.describe Expa::Application, type: :model do
       let(:non_synchronized_applications) { create_list(:application, 4, podio_id: nil) }
 
       it 'returns all applications with an approved_at date that has been synched with podio' do
-        expect(Expa::Application.synchronized_approveds).to eq synchronized_applications
+        expect(Expa::Application.synchronized_approveds).to match_array synchronized_applications
       end
     end
   end
@@ -37,6 +38,8 @@ RSpec.describe Expa::Application, type: :model do
   describe 'attributes' do
     it { is_expected.to respond_to(:product) }
     it { is_expected.to respond_to(:tnid) }
+    it { is_expected.to respond_to(:podio_sent) }
+    it { is_expected.to respond_to(:podio_sent_at) }
   end
 
   describe 'validations' do
