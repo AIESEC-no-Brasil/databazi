@@ -20,6 +20,7 @@ RSpec.describe RepositoryPodio do
     it '#change_status' do
       RepositoryPodio.change_status(@podio_ep.item_id, application)
       item = RepositoryPodio.get_item(@podio_ep.item_id)
+
       field = item.fields.select{ |f| f['external_id'] == 'status-expa' }
       expect(field[0]['values'][0]['value']['id']).to be_equal(2)
 
@@ -32,8 +33,14 @@ RSpec.describe RepositoryPodio do
       field = item.fields.select{ |f| f['external_id'] == 'teste-di-data-do-approved' }
       expect(field[0]['values'][0]['start']).to eql(application.approved_at.strftime('%Y-%m-%d %H:%M:%S'))
 
-      field = item.fields.select{ |f| f['external_id'] == 'teste-di-data-do-break-approval' }
-      expect(field[0]['values'][0]['start']).to eql(application.break_approved_at.strftime('%Y-%m-%d %H:%M:%S'))
+      field = item.fields.select{ |f| f['external_id'] == 'link-da-vaga-1-tnid-1' }
+      expect(field[0]['values'][0]['embed']['url']).to eql(application.opportunity_link)
+
+      field = item.fields.select{ |f| f['external_id'] == 'produto-apd-1' }
+      expect(field[0]['values'][0]['value']['id']).to eql(application.read_attribute_before_type_cast(:product) + 1)
+
+      field = item.fields.select{ |f| f['external_id'] == 'expa-application-id-1' }
+      expect(field[0]['values'][0]['value']).to eq(application.expa_id.to_s)
     end
   end
 
