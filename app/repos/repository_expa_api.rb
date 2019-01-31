@@ -48,7 +48,12 @@ class RepositoryExpaApi
         )
         application.home_mc = member_committee
         application.host_lc = LocalCommittee.new(
-          expa_id: expa_application&.host_lc&.id
+          expa_id: expa_application&.host_lc&.id,
+          name: expa_application&.host_lc&.name
+        )
+        application.home_lc = LocalCommittee.new(
+          expa_id: expa_application&.person&.home_lc&.id,
+          name: expa_application&.person&.home_lc&.name
         )
         # application.save
         application
@@ -101,6 +106,10 @@ ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
           email
           phone
           home_mc {
+            id
+            name
+          }
+          home_lc {
             id
             name
           }

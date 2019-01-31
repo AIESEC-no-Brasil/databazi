@@ -35,6 +35,7 @@ class RepositoryPodio
       check_podio
 
       sync_icx_country(application)
+      sync_home_lc(application)
       # rubocop:disable Metrics/LineLength
       params = {
         title: application.exchange_participant.fullname,
@@ -55,8 +56,8 @@ class RepositoryPodio
         'opportunity-name': application.opportunity_name,
         'op-id': application.opportunity_expa_id,
         'host-lc': application&.host_lc&.podio_id,
-        'home-lc': application&.home_lc&.podio_id || [1023759520].sample,
-        'home-mc': application&.home_mc&.podio_id, # Fixed to Brasil
+        'home-lc': application&.home_lc&.podio_id,
+        'home-mc': application&.home_mc&.podio_id,
         "celular": [
           {
             'type': 'mobile',
@@ -66,6 +67,7 @@ class RepositoryPodio
         'sdg-de-interesse': application.sdg_goal_index
       }
       # rubocop:enable Metrics/LineLength
+      puts "Veja #{params.to_json}"
       podio_item = Podio::Item.create(22140491, fields: params)
       application.update_attributes(
         podio_last_sync: Time.now,
@@ -157,6 +159,23 @@ class RepositoryPodio
       end
 
       application.home_mc.update_attributes(podio_id: items.all[0].item_id)
+    end
+
+    def sync_home_lc(application)
+      if !application&.home_lc&.podio_id.nil? || application.home_lc.nil?
+        return
+      end
+      items = Podio::Item.find_by_filter_values(
+        '22140666',
+        'title': application.home_lc.name
+      )
+      if items.count == 0
+        raise "Raise couldn't find LCs Abroad for ICX Applications #{application.home_lc.expa_id}/#{application.home_lc.name}"
+      end
+      if items.count > 1
+        raise "Found more than one LCs Abroad for ICX Applications #{application.home_lc.expa_id}/#{application.home_lc.name}"
+      end
+      application.home_lc.update_attributes(podio_id: items.all[0].item_id)
     end
   end
 
