@@ -22,7 +22,7 @@ class SyncPodioApplicationStatus
       end
     end
 
-    applications.sort_by { |application| application.approved_at }.each do |application|
+    applications.select { |application| application.approved_at }.sort_by { |application| application.approved_at }.each do |application|
       begin
         send_application_to_podio(application) if application.approved?
       rescue => exception
@@ -41,7 +41,7 @@ class SyncPodioApplicationStatus
     return if application.podio_sent
 
     exchange_participant = application.exchange_participant
-    approved_sync_count = exchange_participant.approved_sync_count
+    approved_sync_count = exchange_participant.reload.approved_sync_count
 
     unless approved_sync_count > 5
       RepositoryPodio.send_application(exchange_participant.podio_id, application, approved_sync_count)

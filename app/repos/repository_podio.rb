@@ -44,7 +44,8 @@ class RepositoryPodio
     end
 
     def update_approved_sync_count(exchange_participant)
-      exchange_participant.update_attributes(approved_sync_count: exchange_participant.approved_sync_count + 1)
+      exchange_participant.update_attributes(approved_sync_count: exchange_participant.reload.approved_sync_count + 1)
+      exchange_participant.reload
     end
 
     def update_application(application)
