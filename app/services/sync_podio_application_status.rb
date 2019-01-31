@@ -8,7 +8,7 @@ class SyncPodioApplicationStatus
     @logger.info '>>> #call'
 
     applications = last_applications
-
+    
     applications.each do |application|
       begin
         @logger.debug ''
@@ -24,7 +24,10 @@ class SyncPodioApplicationStatus
 
     applications.select { |application| application.approved_at }.sort_by { |application| application.approved_at }.each do |application|
       begin
+        podio_sent = application.podio_sent
         send_application_to_podio(application) if application.approved?
+        update_prep_podio(application) if application.status.to_sym.in?(Expa::Application::PREP_STATUS) && podio_sent        
+
       rescue => exception
         Raven.capture_exception(exception)
         @logger.error exception.message
@@ -36,6 +39,11 @@ class SyncPodioApplicationStatus
   end
 
   private
+
+  def update_prep_podio(application)
+    RepositoryPodio.update_application_podio_id(application) unless application.podio_id
+    RepositoryPodio.update_application_podio_status(application)
+  end
 
   def send_application_to_podio(application)
     return if application.podio_sent

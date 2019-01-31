@@ -48,8 +48,29 @@ class RepositoryPodio
       exchange_participant.reload
     end
 
+    def update_application_podio_status(application)
+      check_podio
+      attrs = {'fields': {
+        'status-expa': map_status_prep(application.status.to_sym)
+      }}
+      item = Podio::Item.update(application.podio_id, attrs)
+      item
+    end
+
     def update_application(application)
       application.update_attributes(podio_sent: true, podio_sent_at: Time.now)
+    end
+
+    def update_application_podio_id(application)
+      application.update_attributes(podio_id: podio_application_id(application.expa_id))
+    end
+
+    def podio_application_id(expa_id)
+      check_podio
+      Podio::Item.find_by_filter_values(
+        ENV['PODIO_APP_OGX_PREP'],
+        'expa-application-id': expa_id.to_s
+      ).all.first.item_id
     end
 
     def get_item(id)
@@ -87,6 +108,15 @@ class RepositoryPodio
         approval_broken: 6,
         realization_broken: 5,
         matched: 4,
+        completed: 4
+      }
+      mapper[status]
+    end
+
+    def map_status_prep(status)
+      mapper = {
+        realized: 2,
+        finished: 3,
         completed: 4
       }
       mapper[status]
