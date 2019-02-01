@@ -20,6 +20,7 @@ RSpec.describe RepositoryPodio do
     it '#change_status' do
       RepositoryPodio.change_status(@podio_ep.item_id, application)
       item = RepositoryPodio.get_item(@podio_ep.item_id)
+
       field = item.fields.select{ |f| f['external_id'] == 'status-expa' }
       expect(field[0]['values'][0]['value']['id']).to be_equal(2)
 
@@ -27,13 +28,7 @@ RSpec.describe RepositoryPodio do
       expect(field[0]['values'][0]['start']).to eql(application.applied_at.strftime('%Y-%m-%d %H:%M:%S'))
 
       field = item.fields.select{ |f| f['external_id'] == 'teste-di-data-do-accepted' }
-      expect(field[0]['values'][0]['start']).to eql(application.accepted_at.strftime('%Y-%m-%d %H:%M:%S'))
-
-      field = item.fields.select{ |f| f['external_id'] == 'teste-di-data-do-approved' }
-      expect(field[0]['values'][0]['start']).to eql(application.approved_at.strftime('%Y-%m-%d %H:%M:%S'))
-
-      field = item.fields.select{ |f| f['external_id'] == 'teste-di-data-do-break-approval' }
-      expect(field[0]['values'][0]['start']).to eql(application.break_approved_at.strftime('%Y-%m-%d %H:%M:%S'))
+      expect(field[0]['values'][0]['start']).to eql(application.accepted_at.strftime('%Y-%m-%d %H:%M:%S'))      
     end
   end
 
