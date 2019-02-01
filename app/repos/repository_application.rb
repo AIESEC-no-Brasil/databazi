@@ -12,6 +12,14 @@ class RepositoryApplication
     application
   end
 
+  def self.pending_podio_sync_icx_applications
+    Expa::Application
+      .where('exchange_participant_id is not null')
+      .where(podio_last_sync: nil)
+      .order('updated_at_expa': :desc)
+      .limit 10
+  end
+
   private
 
   def self.normalize_ep(application)

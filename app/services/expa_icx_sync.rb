@@ -9,13 +9,16 @@ class ExpaIcxSync
 
     RepositoryExpaApi.load_icx_applications(from).each do |application|
       logger.info "waiting"
-      sleep(2)
-      save_application = RepositoryApplication.save_icx_from_expa(application)
+      RepositoryApplication.save_icx_from_expa(application)
       logger.info "Saved ICX Application into Databazi"
-      RepositoryPodio.save_icx_application(save_application)
+    end
+
+    RepositoryApplication.pending_podio_sync_icx_applications.each do |application|
+      RepositoryPodio.save_icx_application(application)
       logger.info "Saved ICX Application into Podio"
     end
     logger.info "Done sync"
+    sleep(2)
     true
   end
 
