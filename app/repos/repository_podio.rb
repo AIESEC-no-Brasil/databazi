@@ -68,8 +68,9 @@ class RepositoryPodio
         'sdg-de-interesse': application.sdg_goal_index
       }
       # rubocop:enable Metrics/LineLength
-      puts "Veja #{params.to_json}"
-      podio_item = Podio::Item.create(22140491, fields: params)
+      type = application.exchange_participant.registerable_type
+      app_id = PODIO_APPLICATION[type.to_sym]
+      podio_item = Podio::Item.create(app_id, fields: params)
       application.update_attributes(
         podio_last_sync: Time.now,
         podio_id: podio_item.item_id
@@ -185,3 +186,8 @@ class RepositoryPodio
   end
 end
 
+PODIO_APPLICATION = {
+  'GeParticipant': 22_140_491,
+  'GvParticipant': 22_140_491,
+  'GtParticipant': 22_140_491
+}.freeze
