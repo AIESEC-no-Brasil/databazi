@@ -17,6 +17,7 @@ class SyncPodioApplicationStatus
         application.update_attributes(podio_last_sync: Time.now)
       rescue => exception
         Raven.capture_exception(exception)
+        application.update_attribute(:has_error, true)
         @logger.error exception.message
         # Ignore errors
       end
@@ -31,10 +32,15 @@ class SyncPodioApplicationStatus
       rescue => exception
         Raven.capture_exception(exception)
         @logger.error exception.message
+        application.update_attribute(:has_error, true)
+        exception.backtrace.each { |line| @logger.error line }             
+        
         # Ignore errors
       end
     end
 
+    
+    
     @logger.info '<<< #call'
   end
 
@@ -60,6 +66,7 @@ class SyncPodioApplicationStatus
     Expa::Application
       .where('exchange_participant_id is not null')
       .where(podio_last_sync: nil)
+      .where(has_error: false)
       .joins(:exchange_participant)
       .where('exchange_participants.podio_id is not null')
       .order('updated_at_expa': :desc)
