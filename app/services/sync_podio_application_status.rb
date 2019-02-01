@@ -18,6 +18,8 @@ class SyncPodioApplicationStatus
       rescue => exception
         Raven.capture_exception(exception)
         @logger.error exception.message
+        application.update_attribute(:has_error, true)
+
         # Ignore errors
       end
     end
@@ -60,6 +62,7 @@ class SyncPodioApplicationStatus
     Expa::Application
       .where('exchange_participant_id is not null')
       .where(podio_last_sync: nil)
+      .where(has_error: nil)
       .joins(:exchange_participant)
       .where('exchange_participants.podio_id is not null')
       .order('updated_at_expa': :desc)
