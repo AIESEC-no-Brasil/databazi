@@ -108,7 +108,8 @@ class RepositoryPodio
         approval_broken: 6,
         realization_broken: 5,
         matched: 4,
-        completed: 4
+        completed: 4,
+        other_status: 6
       }
       mapper[status]
     end

@@ -53,5 +53,6 @@ RSpec.describe RepositoryPodio do
     test_map :realization_broken, 5 # Podio: Break Approval
     test_map :matched, 4 # Podio: Approved
     test_map :completed, 4 # Podio: Approved
+    test_map :other_status, 6 # Podio: Approved
   end
 end

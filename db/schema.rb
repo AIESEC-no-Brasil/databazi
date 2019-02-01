@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_30_190930) do
+ActiveRecord::Schema.define(version: 2019_02_01_132622) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(version: 2019_01_30_190930) do
     t.integer "tnid"
     t.boolean "podio_sent"
     t.datetime "podio_sent_at"
+    t.boolean "has_error", default: false
   end
 
   create_table "experiences", force: :cascade do |t|

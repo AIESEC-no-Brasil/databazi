@@ -15,45 +15,50 @@ class ExpaApplicationSync
     logger.debug "Applications count #{applications.count}"
     applications = applications.sort { |a, b| Time.parse(a.updated_at) <=> Time.parse(b.updated_at) }
     applications.each do |application|
-      ep = ExchangeParticipant.find_by_expa_id(application.person.id)
+      begin
+        ep = ExchangeParticipant.find_by_expa_id(application.person.id)
 
-      unless ep.nil?
-        ep.expa_applications.where(expa_id: application.id)
-          .first_or_initialize
-          .update_attributes(status: application.status,
-                             expa_ep_id: application.person.id,
-                             updated_at_expa: parsed_date(application.updated_at),
-                             applied_at: parsed_date(application.created_at),
-                             accepted_at: application.status != 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
-                             approved_at: parsed_date(application.date_approved),
-                             break_approved_at: application.status == 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
-                             podio_last_sync: nil,
-                             product: application.opportunity.programme.short_name_display.downcase.to_sym,
-                             tnid: application.opportunity.id)
+        unless ep.nil?
+          ep.expa_applications.where(expa_id: application.id)
+            .first_or_initialize
+            .update_attributes(status: application.status,
+                              expa_ep_id: application.person.id,
+                              updated_at_expa: parsed_date(application.updated_at),
+                              applied_at: parsed_date(application.created_at),
+                              accepted_at: application.status != 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
+                              approved_at: parsed_date(application.date_approved),
+                              break_approved_at: application.status == 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
+                              podio_last_sync: nil,
+                              product: application.opportunity.programme.short_name_display.downcase.to_sym,
+                              tnid: application.opportunity.id)          
+          ep.update_attributes(status: exchange_participant_status_expa(application.person.status))
+          log = "Sync application with EP #{ep&.fullname}"
+        end
 
-        ep.update_attributes(status: application.person.status)
-        log = "Sync application with EP #{ep&.fullname}"
+        if ep.nil?
+          Expa::Application.where(expa_id: application.id)
+            .first_or_initialize
+            .update_attributes(status: application.status,
+                              expa_ep_id: application.person.id,
+                              updated_at_expa: parsed_date(application.updated_at),
+                              applied_at: parsed_date(application.created_at),
+                              accepted_at: application.status != 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
+                              approved_at: parsed_date(application.date_approved),
+                              break_approved_at: application.status == 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
+                              podio_last_sync: nil,
+                              product: application.opportunity.programme.short_name_display.downcase.to_sym,
+                              tnid: application.opportunity.id)
+
+          log = 'Sync application without EP'
+        end
+        log += " last status #{application.status}"
+        log += " application id #{application.id}"
+        logger.info log
+      rescue StandardError => error
+        message = "Error when trying sync ogx applications: #{error.message}"
+        logger.error message
+        Repos::ChatLogger.notify_on_client_channel(message)
       end
-
-      if ep.nil?
-        Expa::Application.where(expa_id: application.id)
-          .first_or_initialize
-          .update_attributes(status: application.status,
-                             expa_ep_id: application.person.id,
-                             updated_at_expa: parsed_date(application.updated_at),
-                             applied_at: parsed_date(application.created_at),
-                             accepted_at: application.status != 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
-                             approved_at: parsed_date(application.date_approved),
-                             break_approved_at: application.status == 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
-                             podio_last_sync: nil,
-                             product: application.opportunity.programme.short_name_display.downcase.to_sym,
-                             tnid: application.opportunity.id)
-
-        log = "Sync application without EP"
-      end
-      log += " last status #{application.status}"
-      log += " application id #{application.id}"
-      logger.info log
     rescue StandardError => error
       message = "Error when trying sync ogx applications: #{error.message}"
       logger.error message
@@ -62,7 +67,12 @@ class ExpaApplicationSync
     end
   end
 
+  
   private
+
+  def exchange_participant_status_expa(status)
+    status == "other" ? :other_status : status
+  end
 
   def parsed_date(date)
     Time.parse(date) if date
