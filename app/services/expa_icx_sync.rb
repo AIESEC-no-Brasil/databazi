@@ -14,7 +14,7 @@ class ExpaIcxSync
         logger.info "Saved ICX Application into Databazi"
       rescue => exception
         Raven.capture_exception(exception)
-        @logger.error exception.message
+        logger.error exception.message
       end
     end
 
@@ -24,7 +24,7 @@ class ExpaIcxSync
         logger.info "Saved ICX Application into Podio"
       rescue => exception
         Raven.capture_exception(exception)
-        @logger.error exception.message
+        logger.error exception.message
       end
     end
     logger.info "Done sync"

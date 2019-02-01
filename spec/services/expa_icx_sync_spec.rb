@@ -45,53 +45,53 @@ RSpec.describe ExpaIcxSync do
   describe '>>> Integration' do
     let(:expa_applications) { [] }
 
+    before :each do
+      class_double(RepositoryExpaApi,
+                   load_icx_applications: expa_applications).as_stubbed_const
+    end
+
     context 'without any expa applications to sync' do
       let(:expa_applications) { [] }
-
-      before :each do
-        class_double(RepositoryExpaApi,
-                     load_icx_applications: expa_applications).as_stubbed_const
-      end
 
       it 'has not any expa application' do
         described_class.call()
         expect(Expa::Application.first).to be_nil
       end
+    end
 
-      context 'with expa applications' do
-        let(:expa_applications) { RepositoryExpaApi.load_icx_applications(3.month.ago)[0, 1] }
+    context 'with expa applications' do
+      let(:expa_applications) { RepositoryExpaApi.load_icx_applications(3.month.ago)[0, 1] }
 
-        before :each do
-          create(:local_committee, expa_id: expa_applications[0].host_lc.expa_id, podio_id: 306811055)
-        end
-
-        after :each do
-          # RepositoryPodio.delete_icx_application(Expa::Application.first.podio_id)
-        end
-
-        # rubocop:disable RSpec/MultipleExpectations, RSpec/ExampleLength
-        it 'save expa application into databazi' do
-          described_class.call()
-          expect(Expa::Application.count).to eq 1
-          expect(MemberCommittee.count).to eq 1
-          expect(MemberCommittee.first).to have_attributes(
-            name: kind_of(String),
-            expa_id: kind_of(Integer),
-            podio_id: kind_of(Integer)
-           )
-          application = Expa::Application.first
-          expect(application).to have_attributes(
-            podio_id: kind_of(Integer)
-          )
-          podio_item = Podio::Item.find(application.podio_id)
-          puts map_podio(podio_item).to_json
-          expect(map_podio(podio_item)).to include(
-            'background-academico-do-ep': kind_of(Integer),
-            'background-da-vaga': kind_of(Integer)
-           )
-        end
-        # rubocop:enable RSpec/MultipleExpectations, RSpec/ExampleLength
+      before :each do
+        create(:local_committee, expa_id: expa_applications[0].host_lc.expa_id, podio_id: 306811055)
       end
+
+      after :each do
+        RepositoryPodio.delete_icx_application(Expa::Application.first.podio_id)
+      end
+
+      # rubocop:disable RSpec/MultipleExpectations, RSpec/ExampleLength
+      it 'save expa application into databazi and podio' do
+        described_class.call()
+        expect(Expa::Application.count).to eq 1
+        expect(MemberCommittee.count).to eq 1
+        expect(MemberCommittee.first).to have_attributes(
+          name: kind_of(String),
+          expa_id: kind_of(Integer),
+          podio_id: kind_of(Integer)
+        )
+        application = Expa::Application.first
+        expect(application).to have_attributes(
+          podio_id: kind_of(Integer)
+        )
+        podio_item = Podio::Item.find(application.podio_id)
+        puts map_podio(podio_item).to_json
+        expect(map_podio(podio_item)).to include(
+          'background-academico-do-ep': kind_of(Integer),
+          'background-da-vaga': kind_of(Integer)
+        )
+      end
+      # rubocop:enable RSpec/MultipleExpectations, RSpec/ExampleLength
     end
 
   end
