@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_29_191657) do
+ActiveRecord::Schema.define(version: 2019_02_01_184213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,7 @@ ActiveRecord::Schema.define(version: 2019_01_29_191657) do
     t.integer "podio_id"
     t.integer "status"
     t.integer "exchange_type", default: 0
+    t.text "academic_backgrounds", array: true
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
@@ -102,7 +103,6 @@ ActiveRecord::Schema.define(version: 2019_01_29_191657) do
     t.datetime "accepted_at"
     t.datetime "approved_at"
     t.datetime "break_approved_at"
-    t.string "academic_experience"
     t.string "opportunity_name"
     t.integer "opportunity_expa_id"
     t.bigint "home_lc_id"
@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(version: 2019_01_29_191657) do
     t.datetime "podio_last_sync"
     t.bigint "home_mc_id"
     t.integer "podio_id"
+    t.text "academic_backgrounds", array: true
     t.index ["home_lc_id"], name: "index_expa_applications_on_home_lc_id"
     t.index ["home_mc_id"], name: "index_expa_applications_on_home_mc_id"
     t.index ["host_lc_id"], name: "index_expa_applications_on_host_lc_id"

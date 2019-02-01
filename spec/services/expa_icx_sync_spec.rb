@@ -77,13 +77,18 @@ RSpec.describe ExpaIcxSync do
           expect(MemberCommittee.first).to have_attributes(
             name: kind_of(String),
             expa_id: kind_of(Integer),
-            podio_id: kind_of(Integer))
+            podio_id: kind_of(Integer)
+           )
           application = Expa::Application.first
           expect(application).to have_attributes(
             podio_id: kind_of(Integer)
           )
           podio_item = Podio::Item.find(application.podio_id)
           puts map_podio(podio_item).to_json
+          expect(map_podio(podio_item)).to include(
+            'background-academico-do-ep': kind_of(Integer),
+            'background-da-vaga': kind_of(Integer)
+           )
         end
         # rubocop:enable RSpec/MultipleExpectations, RSpec/ExampleLength
       end

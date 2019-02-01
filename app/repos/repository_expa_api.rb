@@ -38,8 +38,10 @@ class RepositoryExpaApi
           email: expa_application&.person&.email,
           cellphone: expa_application&.person&.phone,
           expa_id: expa_application&.person&.id,
-          exchange_type: :icx
+          exchange_type: :icx,
+          academic_backgrounds: map_academic_experience_of_ep(expa_application)
         )
+        application.academic_backgrounds = map_academic_experience_of_op(expa_application)
         ep.registerable = epp
         application.exchange_participant = ep
         member_committee = MemberCommittee.new(
@@ -59,6 +61,23 @@ class RepositoryExpaApi
         application
       end
       mapped
+    end
+
+    def map_academic_experience_of_ep(expa_application)
+      experiences = expa_application
+        &.person&.academic_experiences
+      backgrounds = []
+      experiences.each do |experience|
+        experience.backgrounds.map do |background|
+          backgrounds.push(background.name)
+        end
+      end
+      backgrounds
+    end
+
+    def map_academic_experience_of_op(expa_application)
+      backgrounds = expa_application&.opportunity&.backgrounds
+      backgrounds.map(&:constant_name)
     end
 
     def exchange_programme(expa_application)
@@ -105,6 +124,11 @@ ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
           full_name
           email
           phone
+          academic_experiences {
+            backgrounds {
+              name
+            }
+          }
           home_mc {
             id
             name
@@ -134,6 +158,9 @@ ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
               goal_index
               target_index
             }
+          }
+          backgrounds {
+            constant_name
           }
         }
       }

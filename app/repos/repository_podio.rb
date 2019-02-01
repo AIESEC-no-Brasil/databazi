@@ -52,12 +52,13 @@ class RepositoryPodio
         'data-do-accepted': parse_date(application.accepted_at),
         'data-do-approved': parse_date(application.approved_at),
         'data-do-break-approval': parse_date(application.break_approved_at),
-        'background-academico': application.academic_experience,
         'opportunity-name': application.opportunity_name,
         'op-id': application.opportunity_expa_id,
         'host-lc': application&.host_lc&.podio_id,
         'home-lc': application&.home_lc&.podio_id,
         'home-mc': application&.home_mc&.podio_id,
+        'background-academico-do-ep': application&.exchange_participant&.academic_backgrounds,
+        'background-da-vaga': application&.academic_backgrounds,
         "celular": [
           {
             'type': 'mobile',
