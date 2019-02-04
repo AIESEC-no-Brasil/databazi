@@ -68,14 +68,21 @@ class RepositoryPodio
         'sdg-de-interesse': application.sdg_goal_index
       }
       # rubocop:enable Metrics/LineLength
-      type = application.exchange_participant.registerable_type
-      app_id = PODIO_APPLICATION[type.to_sym]
-      podio_item = Podio::Item.create(app_id, fields: params)
-      application.update_attributes(
-        podio_last_sync: Time.now,
-        podio_id: podio_item.item_id
-      )
-      podio_item
+
+      if application.podio_id.nil?
+        type = application.exchange_participant.registerable_type
+        app_id = PODIO_APPLICATION[type.to_sym]
+        podio_item = Podio::Item.create(app_id, fields: params)
+        application.update_attributes(
+          podio_last_sync: Time.now,
+          podio_id: podio_item.item_id
+        )
+      else
+        Podio::Item.update(application.podio_id, fields: params)
+        application.update_attributes(
+          podio_last_sync: Time.now
+        )
+      end
     end
 
 

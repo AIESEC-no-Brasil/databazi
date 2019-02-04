@@ -45,13 +45,13 @@ RSpec.describe ExpaIcxSync do
   describe '>>> Integration' do
     let(:expa_applications) { [] }
 
-    before :each do
-      class_double(RepositoryExpaApi,
-                   load_icx_applications: expa_applications).as_stubbed_const
-    end
-
     context 'without any expa applications to sync' do
       let(:expa_applications) { [] }
+
+      before :each do
+        class_double(RepositoryExpaApi,
+                     load_icx_applications: expa_applications).as_stubbed_const
+      end
 
       it 'has not any expa application' do
         described_class.call()
@@ -63,6 +63,8 @@ RSpec.describe ExpaIcxSync do
       let(:expa_applications) { RepositoryExpaApi.load_icx_applications(3.month.ago)[0, 1] }
 
       before :each do
+        class_double(RepositoryExpaApi,
+                     load_icx_applications: expa_applications).as_stubbed_const
         create(:local_committee, expa_id: expa_applications[0].host_lc.expa_id, podio_id: 306811055)
       end
 
@@ -90,6 +92,41 @@ RSpec.describe ExpaIcxSync do
           'background-academico-do-ep': kind_of(Integer),
           'background-da-vaga': kind_of(Integer)
         )
+      end
+      # rubocop:enable RSpec/MultipleExpectations, RSpec/ExampleLength
+    end
+
+    context 'with and application, and a update of that application' do
+      let(:expa_applications) do
+        application = RepositoryExpaApi.load_icx_applications(3.month.ago)[0, 1][0]
+        applications = [
+          Marshal.load(Marshal.dump(application)),
+          Marshal.load(Marshal.dump(application))
+        ]
+        applications[0].status = :applied
+        applications[1].status = :accepted
+        applications
+      end
+
+      before :each do
+        create(:local_committee, expa_id: expa_applications[0].host_lc.expa_id, podio_id: 306811055)
+        repo = class_double(RepositoryExpaApi).as_stubbed_const
+        allow(repo).to receive(:load_icx_applications)
+          .and_return([expa_applications[0]], [expa_applications[1]])
+      end
+
+      after :each do
+        RepositoryPodio.delete_icx_application(Expa::Application.first.podio_id)
+      end
+
+      # rubocop:disable RSpec/MultipleExpectations, RSpec/ExampleLength
+      it 'update application ' do
+        described_class.call()
+        first_podio_id = Expa::Application.first.podio_id
+        described_class.call()
+        applications = Expa::Application.all
+        expect(applications.count).to eql(1)
+        expect(first_podio_id).to eql(applications[0].podio_id)
       end
       # rubocop:enable RSpec/MultipleExpectations, RSpec/ExampleLength
     end

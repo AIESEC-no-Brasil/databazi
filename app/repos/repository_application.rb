@@ -4,12 +4,10 @@ class RepositoryApplication
     normalize_home_lc(application)
     normalize_home_mc(application)
     normalize_ep(application)
-    application = Expa::Application
-                  .where(expa_id: application.expa_id)
-                  .first_or_initialize(application.attributes)
-    application
-      .update_attributes(podio_last_sync: nil)
-    application
+    Expa::Application
+      .where(expa_id: application.expa_id)
+      .first_or_create(application.attributes)
+      .update(podio_last_sync: nil, status: application.status)
   end
 
   def self.pending_podio_sync_icx_applications
