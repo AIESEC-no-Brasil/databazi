@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(version: 2019_02_01_184213) do
     t.integer "status"
     t.integer "exchange_type", default: 0
     t.text "academic_backgrounds", array: true
+    t.integer "approved_sync_count", default: 1
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
@@ -99,10 +100,6 @@ ActiveRecord::Schema.define(version: 2019_02_01_184213) do
     t.integer "exchange_participant_id"
     t.datetime "updated_at_expa"
     t.integer "expa_ep_id"
-    t.datetime "applied_at"
-    t.datetime "accepted_at"
-    t.datetime "approved_at"
-    t.datetime "break_approved_at"
     t.string "opportunity_name"
     t.integer "opportunity_expa_id"
     t.bigint "home_lc_id"
@@ -110,8 +107,17 @@ ActiveRecord::Schema.define(version: 2019_02_01_184213) do
     t.integer "sdg_target_index"
     t.integer "sdg_goal_index"
     t.datetime "podio_last_sync"
-    t.bigint "home_mc_id"
+    t.date "applied_at"
+    t.date "accepted_at"
+    t.date "approved_at"
+    t.date "break_approved_at"
+    t.integer "product"
     t.integer "podio_id"
+    t.integer "tnid"
+    t.boolean "podio_sent"
+    t.datetime "podio_sent_at"
+    t.boolean "has_error", default: false
+    t.bigint "home_mc_id"
     t.text "academic_backgrounds", array: true
     t.index ["home_lc_id"], name: "index_expa_applications_on_home_lc_id"
     t.index ["home_mc_id"], name: "index_expa_applications_on_home_mc_id"

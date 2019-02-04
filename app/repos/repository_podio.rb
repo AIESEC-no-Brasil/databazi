@@ -25,6 +25,56 @@ class RepositoryPodio
       item
     end
 
+    def send_application(id, application, approved_sync_count)
+      check_podio
+
+      attrs = {'fields': {
+        "data-do-approved-#{approved_sync_count}": parse_date(application.approved_at),
+        "link-da-vaga-#{approved_sync_count}-tnid-#{approved_sync_count}": embed_id(application),
+        "produto-apd-#{approved_sync_count}": product_index(application),
+        "expa-application-id-#{approved_sync_count}": application.expa_id.to_s
+      }}
+
+      item = Podio::Item.update(id, attrs)
+
+      if item
+        update_approved_sync_count(application.exchange_participant)
+        update_application(application)
+      end
+
+      item
+    end
+
+    def update_approved_sync_count(exchange_participant)
+      exchange_participant.update_attributes(approved_sync_count: exchange_participant.reload.approved_sync_count + 1)
+      exchange_participant.reload
+    end
+
+    def update_application_podio_status(application)
+      check_podio
+      attrs = {'fields': {
+        'status-expa': map_status_prep(application.status.to_sym)
+      }}
+      item = Podio::Item.update(application.podio_id, attrs)
+      item
+    end
+
+    def update_application(application)
+      application.update_attributes(podio_sent: true, podio_sent_at: Time.now)
+    end
+
+    def update_application_podio_id(application)
+      application.update_attributes(podio_id: podio_application_id(application.expa_id))
+    end
+
+    def podio_application_id(expa_id)
+      check_podio
+      Podio::Item.find_by_filter_values(
+        ENV['PODIO_APP_OGX_PREP'],
+        'expa-application-id': expa_id.to_s
+      ).all.first.item_id
+    end
+
     def get_item(id)
       check_podio
       Podio::Item.find(id)
@@ -85,8 +135,20 @@ class RepositoryPodio
       end
     end
 
-
     private
+
+    def embed_id(application)
+      Podio::Embed.create(application.opportunity_link).embed_id
+    end
+
+    def parse_date(date)
+      return nil if date.nil?
+      date.strftime('%Y-%m-%d %H:%M:%S')
+    end
+
+    def product_index(application)
+      application.read_attribute_before_type_cast(:product) + 1
+    end
 
     def map_status(status)
       mapper = {
@@ -103,6 +165,16 @@ class RepositoryPodio
         approval_broken: 6,
         realization_broken: 5,
         matched: 4,
+        completed: 4,
+        other_status: 6
+      }
+      mapper[status]
+    end
+
+    def map_status_prep(status)
+      mapper = {
+        realized: 2,
+        finished: 3,
         completed: 4
       }
       mapper[status]
