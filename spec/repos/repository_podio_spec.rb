@@ -69,7 +69,7 @@ RSpec.describe RepositoryPodio do
     let(:expected_podio_application) do
       {
         title: databazi_application.exchange_participant.fullname,
-        'ep-id': Float(databazi_application.expa_ep_id),
+        'epid': Float(databazi_application.expa_ep_id),
         status: 1,
         email: databazi_application.exchange_participant.email,
         'data-de-nascimento': databazi_application.exchange_participant.birthdate,
@@ -79,7 +79,7 @@ RSpec.describe RepositoryPodio do
         'data-do-break-approval': databazi_application.break_approved_at,
         # 'background-academico': "<p>#{databazi_application.academic_experience}</p>",
         'opportunity-name': "<p>#{databazi_application.opportunity_name}</p>",
-        'op-id': databazi_application.tnid,
+        'expa-opportunity-id': databazi_application.tnid,
         'host-lc': databazi_application&.host_lc&.podio_id,
         'home-lc': databazi_application&.home_lc&.podio_id,
         'home-mc': 1023733737,

@@ -89,7 +89,7 @@ class RepositoryPodio
       # rubocop:disable Metrics/LineLength
       params = {
         title: application.exchange_participant.fullname,
-        'ep-id': application.expa_ep_id,
+        'epid': application.expa_ep_id,
         status: status_to_podio(application.status),
         email: [
           {
@@ -103,7 +103,7 @@ class RepositoryPodio
         'data-do-approved': parse_date(application.approved_at),
         'data-do-break-approval': parse_date(application.break_approved_at),
         'opportunity-name': application.opportunity_name,
-        'op-id': application.tnid,
+        'expa-opportunity-id': application.tnid,
         'host-lc': application&.host_lc&.podio_id,
         'home-lc': application&.home_lc&.podio_id,
         'home-mc': application&.home_mc&.podio_id,
