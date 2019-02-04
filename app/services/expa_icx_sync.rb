@@ -20,7 +20,6 @@ class ExpaIcxSync
 
     RepositoryApplication.pending_podio_sync_icx_applications.each do |application|
       begin
-        puts "Status of podio ap #{application.status}"
         RepositoryPodio.save_icx_application(application)
         logger.info "Saved ICX Application into Podio"
       rescue => exception
