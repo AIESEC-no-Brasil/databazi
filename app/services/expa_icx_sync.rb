@@ -13,8 +13,10 @@ class ExpaIcxSync
         RepositoryApplication.save_icx_from_expa(application)
         logger.info "Saved ICX Application into Databazi"
       rescue => exception
+        Raven.extra_context application_expa_id: application&.expa_id
         Raven.capture_exception(exception)
         logger.error exception.message
+        break
       end
     end
 
