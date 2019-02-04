@@ -20,7 +20,7 @@ RSpec.describe RepositoryExpaApi do
         'approved_at' => Time.parse('2019-03-06T10:15:14Z'),
         'break_approved_at' => Time.parse('2019-03-06T10:15:14Z'),
         'opportunity_name' => '[SHOUT] TEACHER AT YAZIGI CASCAVEL',
-        'opportunity_expa_id' => 1036097,
+        'tnid' => 1036097,
         'sdg_goal_index' => 4,
         'sdg_target_index' => 8,
       }

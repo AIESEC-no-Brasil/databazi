@@ -30,8 +30,10 @@ class RepositoryExpaApi
         application.break_approved_at = parse_time(expa_application.matched_or_rejected_at)
         application.sdg_goal_index = expa_application&.opportunity&.sdg_info&.sdg_target&.goal_index
         application.sdg_target_index = expa_application&.opportunity&.sdg_info&.sdg_target&.target_index
-        application.opportunity_expa_id = expa_application&.opportunity&.id
+        application.tnid = expa_application&.opportunity&.id
         application.opportunity_name = expa_application&.opportunity&.title
+        application.product = expa_application
+          &.opportunity&.programme&.short_name_display&.downcase&.to_sym
         epp = exchange_programme(expa_application)
         ep = ExchangeParticipant.new(
           fullname: expa_application&.person&.full_name,

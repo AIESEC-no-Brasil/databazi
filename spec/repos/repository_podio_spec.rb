@@ -79,7 +79,7 @@ RSpec.describe RepositoryPodio do
         'data-do-break-approval': databazi_application.break_approved_at,
         # 'background-academico': "<p>#{databazi_application.academic_experience}</p>",
         'opportunity-name': "<p>#{databazi_application.opportunity_name}</p>",
-        'op-id': databazi_application.opportunity_expa_id,
+        'op-id': databazi_application.tnid,
         'host-lc': databazi_application&.host_lc&.podio_id,
         'home-lc': databazi_application&.home_lc&.podio_id,
         'home-mc': 1023733737,
@@ -105,7 +105,7 @@ RSpec.describe RepositoryPodio do
         open: 1, applied: 2, accepted: 3, approved_tn_manager: 4,
         approved_ep_manager: 5, approved: 6, break_approved: 7, rejected: 8,
         withdrawn: 9, realized: 100, approval_broken: 101,
-        realization_broken: 102, matched: 103, completed: 104)
+        realization_broken: 102, matched: 103, completed: 104, finished: 105 )
     end
 
     def self.test_map(from, to)

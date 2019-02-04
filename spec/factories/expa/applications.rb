@@ -36,7 +36,7 @@ FactoryBot.define do
     approved_at { Faker::Date.backward }
     break_approved_at { Faker::Date.backward }
     opportunity_name { Faker::Lorem.sentence }
-    opportunity_expa_id { Faker::Number.number(5) }
+    tnid { Faker::Number.number(5) }
     sdg_target_index { 1 }
     sdg_goal_index { 1 }
   end

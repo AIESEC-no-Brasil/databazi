@@ -6,8 +6,8 @@ class RepositoryApplication
     normalize_ep(application)
     Expa::Application
       .where(expa_id: application.expa_id)
-      .first_or_create(application.attributes)
-      .update(podio_last_sync: nil, status: application.status)
+      .first_or_create!(application.attributes)
+      .update!(podio_last_sync: nil, status: application.status)
   end
 
   def self.pending_podio_sync_icx_applications
