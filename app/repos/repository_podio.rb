@@ -267,6 +267,6 @@ end
 
 PODIO_APPLICATION = {
   'GeParticipant': 22_140_491,
-  'GvParticipant': 22_140_491,
-  'GtParticipant': 22_140_491
+  'GvParticipant': 22_281_486,
+  'GtParticipant': 22_281_488
 }.freeze
