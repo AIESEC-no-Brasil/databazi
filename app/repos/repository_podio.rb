@@ -122,9 +122,9 @@ class RepositoryPodio
 
       params = cut_icx_params_by_program(params, application)
 
+      Raven.extra_context podio_params: params.to_json
       if application.podio_id.nil?
-        type = application.exchange_participant.registerable_type
-        app_id = PODIO_APPLICATION[type.to_sym]
+        app_id = PODIO_APPLICATION[application.product.to_sym]
         podio_item = Podio::Item.create(app_id, fields: params)
         application.update_attributes(
           podio_last_sync: Time.now,
@@ -267,7 +267,7 @@ class RepositoryPodio
 
   def self.map_aplicante_qualificado(application)
     # code here
-    (APLICANTE_QUALIFICADO_RULE.include? application.home_mc.name) ? 1 : 0
+    (APLICANTE_QUALIFICADO_RULE.include? application.home_mc.name) ? 1 : 2
   end
 
   def self.cut_icx_params_by_program(params, application)
@@ -285,9 +285,9 @@ class RepositoryPodio
 end
 
 PODIO_APPLICATION = {
-  'GeParticipant': 22_140_491,
-  'GvParticipant': 22_281_486,
-  'GtParticipant': 22_282_262
+  'ge': 22_140_491,
+  'gv': 22_281_486,
+  'gt': 22_282_262
 }.freeze
 
 APLICANTE_QUALIFICADO_RULE = [
