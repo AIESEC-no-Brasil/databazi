@@ -72,7 +72,7 @@ RSpec.describe RepositoryPodio do
         'epid': Float(databazi_application.expa_ep_id),
         status: 1,
         email: databazi_application.exchange_participant.email,
-        'data-de-nascimento': databazi_application.exchange_participant.birthdate,
+        # 'data-de-nascimento': databazi_application.exchange_participant.birthdate,
         'data-do-applied': databazi_application.applied_at,
         'data-do-accepted': databazi_application.accepted_at,
         'data-do-approved': databazi_application.approved_at,

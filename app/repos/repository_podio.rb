@@ -89,7 +89,7 @@ class RepositoryPodio
       # rubocop:disable Metrics/LineLength
       params = {
         title: application.exchange_participant.fullname,
-        'epid': application.expa_ep_id,
+        'epid': application.expa_ep_id.to_s,
         status: status_to_podio(application.status),
         email: [
           {
@@ -97,18 +97,19 @@ class RepositoryPodio
             value: application.exchange_participant.email
           }
         ],
-        'data-de-nascimento': parse_date(application.exchange_participant.birthdate),
+        # 'data-de-nascimento': parse_date(application.exchange_participant.birthdate),
         'data-do-applied': parse_date(application.applied_at),
         'data-do-accepted': parse_date(application.accepted_at),
         'data-do-approved': parse_date(application.approved_at),
         'data-do-break-approval': parse_date(application.break_approved_at),
         'opportunity-name': application.opportunity_name,
-        'expa-opportunity-id': application.tnid,
+        'expa-opportunity-id': application.tnid.to_s,
         'host-lc': application&.host_lc&.podio_id,
         'home-lc': application&.home_lc&.podio_id,
         'home-mc': application&.home_mc&.podio_id,
         'background-academico-do-ep': application&.exchange_participant&.academic_backgrounds,
         'background-da-vaga': application&.academic_backgrounds,
+        'aplicante-qualificado': map_aplicante_qualificado(application),
         "celular": [
           {
             'type': 'mobile',
@@ -118,6 +119,8 @@ class RepositoryPodio
         'sdg-de-interesse': application.sdg_goal_index
       }
       # rubocop:enable Metrics/LineLength
+
+      params = cut_icx_params_by_program(params, application)
 
       if application.podio_id.nil?
         type = application.exchange_participant.registerable_type
@@ -224,9 +227,7 @@ class RepositoryPodio
     end
 
     def sync_icx_country(application)
-      if !application&.home_mc&.podio_id.nil? || application.home_mc.nil?
-        return
-      end
+      return if !application&.home_mc&.podio_id.nil? || application.home_mc.nil?
 
       items = Podio::Item.find_by_filter_values(
         '22140562',
@@ -243,18 +244,16 @@ class RepositoryPodio
     end
 
     def sync_home_lc(application)
-      if !application&.home_lc&.podio_id.nil? || application.home_lc.nil?
-        return
-      end
+      return if !application&.home_lc&.podio_id.nil? || application.home_lc.nil?
       items = Podio::Item.find_by_filter_values(
         '22140666',
         'title': application.home_lc.name
       )
       if items.count == 0
-        raise "Raise couldn't find LCs Abroad for ICX Applications #{application.home_lc.expa_id}/#{application.home_lc.name}"
+        raise "Raise couldn't find LCs Abroad for ICX Applications #{application&.home_lc&.attributes&.to_json}/#{application&.home_mc&.attributes&.to_json}"
       end
       if items.count > 1
-        raise "Found more than one LCs Abroad for ICX Applications #{application.home_lc.expa_id}/#{application.home_lc.name}"
+        raise "Found more than one LCs Abroad for ICX Applications #{application&.home_lc&.attributes&.to_json}/#{application&.home_mc&.attributes&.to_json}"
       end
       application.home_lc.update_attributes(podio_id: items.all[0].item_id)
     end
@@ -263,10 +262,38 @@ class RepositoryPodio
   def self.delete_icx_application(id)
     delete_item(id)
   end
+
+  private
+
+  def self.map_aplicante_qualificado(application)
+    # code here
+    (APLICANTE_QUALIFICADO_RULE.include? application.home_mc.name) ? 1 : 0
+  end
+
+  def self.cut_icx_params_by_program(params, application)
+    to_cut = {
+      'aplicante-qualificado': [:ge, :gv],
+      'sdg-de-interesse': [:ge, :gt],
+      'background-academico-do-ep': [:gv],
+      'background-da-vaga': [:gv]
+    }
+    to_cut.each do |key, value|
+      params = params.except(key) if value.include? application.product.to_sym
+    end
+    params
+  end
 end
 
 PODIO_APPLICATION = {
   'GeParticipant': 22_140_491,
   'GvParticipant': 22_281_486,
-  'GtParticipant': 22_281_488
+  'GtParticipant': 22_282_262
 }.freeze
+
+APLICANTE_QUALIFICADO_RULE = [
+  'Argentina', 'Austria', 'Belgium', 'Bolivia', 'Canada', 'Chile', 'Colombia',
+  'Denmark', 'Ecuador', 'Spain', 'Finland', 'France', 'Germany',
+  'Guatemala', 'Hungary', 'Ireland', 'Mexico', 'Morocco', 'Norway',
+  'Panama', 'Paraguay', 'Peru', 'Poland', 'Portugal', 'Serbia', 'Sweden',
+  'Switzerland', 'Tunisia', 'Turkey', 'Ukraine', 'Uruguay'
+].freeze
