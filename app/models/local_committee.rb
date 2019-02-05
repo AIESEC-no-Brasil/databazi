@@ -1,7 +1,7 @@
 class LocalCommittee < ApplicationRecord
   scope :active, -> { where(active: true) }
 
-  validates_presence_of :name, :podio_id, :expa_id
+  validates_presence_of :name, :expa_id
 
   has_many :exchange_participants
   has_many :universities

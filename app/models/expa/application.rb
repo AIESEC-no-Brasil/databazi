@@ -5,6 +5,9 @@ class Expa::Application < ApplicationRecord
   scope :synchronized_approveds, -> { approveds.where.not(podio_id: nil) }
 
   belongs_to :exchange_participant, foreign_key: :exchange_participant_id, optional: true
+  belongs_to :host_lc, class_name: 'LocalCommittee', optional: true
+  belongs_to :home_lc, class_name: 'LocalCommittee', optional: true
+  belongs_to :home_mc, class_name: 'MemberCommittee', optional: true
 
   validates :product, presence: true
   validates :tnid, presence: true
@@ -14,7 +17,7 @@ class Expa::Application < ApplicationRecord
   enum status: { open: 1, applied: 2, accepted: 3, approved_tn_manager: 4, approved_ep_manager: 5, approved: 6,
             break_approved: 7, rejected: 8, withdrawn: 9,
             realized: 100, approval_broken: 101, realization_broken: 102, matched: 103,
-            completed: 104, finished: 105  }
+            completed: 104, finished: 105 }
 
   def opportunity_link
     "https://aiesec.org/opportunity/#{tnid}"
