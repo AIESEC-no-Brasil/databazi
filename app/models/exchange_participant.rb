@@ -27,7 +27,7 @@ class ExchangeParticipant < ApplicationRecord
   enum scholarity: %i[highschool incomplete_graduation graduating
                       post_graduated almost_graduated graduated other]
   
-  enum exchange_type: { ogx: 1, icx: 0}
+  enum exchange_type: { ogx: 0, icx: 1}
 
   enum status: { open: 1, applied: 2, accepted: 3, approved_tn_manager: 4, approved_ep_manager: 5, approved: 6,
     break_approved: 7, rejected: 8, withdrawn: 9,
