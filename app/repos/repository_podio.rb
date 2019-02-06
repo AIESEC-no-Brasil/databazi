@@ -193,6 +193,7 @@ class RepositoryPodio
         completed: 3, #TODO - this status is after 'approved' and should be used in ICX PREP, so we temporarly sets as approved for now
         realization_broken: 3, #TODO - this status is after 'approved' and should be used in ICX PREP, so we temporarly sets as approved for now
         break_approved: 4,
+        approval_broken: 4,
         rejected: 5,
         withdrawn: 7
       }

@@ -114,7 +114,7 @@ RSpec.describe RepositoryPodio do
     test_map(:approved_ep_manager, 6)
     test_map(:withdrawn, 7)
     test_map(:realized, 3)
-    test_map(:approval_broken, 6)
+    test_map(:approval_broken, 4)
     test_map(:realization_broken, 3)
     test_map(:completed, 3)
     test_map(:matched, 6)
