@@ -1,0 +1,2 @@
+class MemberCommittee < ApplicationRecord
+end
