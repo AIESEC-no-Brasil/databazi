@@ -30,12 +30,6 @@ RSpec.describe RepositoryPodio do
 
       field = item.fields.select { |f| f['external_id'] == 'teste-di-data-do-accepted' }
       expect(field[0]['values'][0]['start']).to eql(application.accepted_at.strftime('%Y-%m-%d %H:%M:%S'))
-
-      field = item.fields.select { |f| f['external_id'] == 'teste-di-data-do-approved' }
-      expect(field[0]['values'][0]['start']).to eql(application.approved_at.strftime('%Y-%m-%d %H:%M:%S'))
-
-      field = item.fields.select { |f| f['external_id'] == 'teste-di-data-do-break-approval' }
-      expect(field[0]['values'][0]['start']).to eql(application.break_approved_at.strftime('%Y-%m-%d %H:%M:%S'))
     end
   end
 

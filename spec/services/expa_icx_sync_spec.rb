@@ -88,10 +88,6 @@ RSpec.describe ExpaIcxSync do
         )
         podio_item = Podio::Item.find(application.podio_id)
         puts map_podio(podio_item).to_json
-        expect(map_podio(podio_item)).to include(
-          'background-academico-do-ep': kind_of(Integer),
-          'background-da-vaga': kind_of(Integer)
-        )
       end
       # rubocop:enable RSpec/MultipleExpectations, RSpec/ExampleLength
     end
