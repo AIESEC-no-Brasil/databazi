@@ -1,3 +1,5 @@
+require "#{Rails.root}/app/repos/chat_logger"
+
 class RepositoryPodio
   @@is_podio_initialized = false
 
@@ -187,10 +189,16 @@ class RepositoryPodio
         applied: 1,
         accepted: 2,
         approved: 3,
+        realized: 3, #TODO - this status is after 'approved' and should be used in ICX PREP, so we temporarly sets as approved for now
+        completed: 3, #TODO - this status is after 'approved' and should be used in ICX PREP, so we temporarly sets as approved for now
+        realization_broken: 3, #TODO - this status is after 'approved' and should be used in ICX PREP, so we temporarly sets as approved for now
         break_approved: 4,
         rejected: 5,
+        withdrawn: 7
       }
-      mapping[status.to_sym] || 6 # default other
+      podio_status = mapping[status.to_sym] || 6 # default other      
+      Repos::ChatLogger.notify_on_client_channel("[ICX to Podio]Status não mapeado: #{status}") if podio_status == 6
+      podio_status
     end
 
     def parse_date(date)
