@@ -56,6 +56,20 @@ RSpec.describe ExchangeParticipant, type: :model do
         registerable: build(:gv_participant), password: 'test')
     end
 
+    describe '#scholarity_length' do
+      context 'arg' do
+        before(:each) { ENV['COUNTRY'] = 'arg' }
+
+        it { expect(exchange_participant.scholarity_length).to eq 6 }
+      end
+
+      context 'bra' do
+        before(:each) { ENV['COUNTRY'] = 'bra' }
+
+        it { expect(exchange_participant.scholarity_length).to eq 7 }
+      end
+    end
+
     describe '#decrypted_password' do
       it { expect(exchange_participant.password).not_to eq 'test' }
       it { expect(exchange_participant.decrypted_password).to eq 'test' }

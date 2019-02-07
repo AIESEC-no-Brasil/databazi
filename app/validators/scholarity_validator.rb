@@ -1,11 +1,9 @@
 # Scholarity Custom Validator based upon current country
 class ScholarityValidator < ActiveModel::Validator
-  include ScholarityUtility
-
   def validate(record)
-    return if record.scholarity < scholarity_length
+    return if record.scholarity < record.scholarity_length
 
-    record.errors[:scholarity] << "Informa uma opção válida 0-#{scholarity_length - 1}"
+    record.errors[:scholarity] << "Informa uma opção válida 0-#{record.scholarity_length - 1}"
   end
 end
 

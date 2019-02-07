@@ -45,6 +45,22 @@ class ExchangeParticipant < ApplicationRecord
     ExchangeParticipant::ARGENTINEAN_SCHOLARITY[scholarity]
   end
 
+  def scholarity_length
+    if ENV['COUNTRY'] == 'bra'
+      brazilian_scholarity_length
+    else
+      argentinean_scholarity_length
+    end
+  end
+
+  def brazilian_scholarity_length
+    ExchangeParticipant::BRAZILIAN_SCHOLARITY.length
+  end
+
+  def argentinean_scholarity_length
+    ExchangeParticipant::ARGENTINEAN_SCHOLARITY.length
+  end
+
   def decrypted_password
     return password if password_changed?
 
