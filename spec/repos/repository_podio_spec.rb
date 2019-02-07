@@ -30,12 +30,6 @@ RSpec.describe RepositoryPodio do
 
       field = item.fields.select { |f| f['external_id'] == 'teste-di-data-do-accepted' }
       expect(field[0]['values'][0]['start']).to eql(application.accepted_at.strftime('%Y-%m-%d %H:%M:%S'))
-
-      field = item.fields.select { |f| f['external_id'] == 'teste-di-data-do-approved' }
-      expect(field[0]['values'][0]['start']).to eql(application.approved_at.strftime('%Y-%m-%d %H:%M:%S'))
-
-      field = item.fields.select { |f| f['external_id'] == 'teste-di-data-do-break-approval' }
-      expect(field[0]['values'][0]['start']).to eql(application.break_approved_at.strftime('%Y-%m-%d %H:%M:%S'))
     end
   end
 
@@ -118,11 +112,11 @@ RSpec.describe RepositoryPodio do
     test_map(:open, 6)
     test_map(:approved_tn_manager, 6)
     test_map(:approved_ep_manager, 6)
-    test_map(:withdrawn, 6)
-    test_map(:realized, 6)
-    test_map(:approval_broken, 6)
-    test_map(:realization_broken, 6)
-    test_map(:completed, 6)
+    test_map(:withdrawn, 7)
+    test_map(:realized, 3)
+    test_map(:approval_broken, 4)
+    test_map(:realization_broken, 3)
+    test_map(:completed, 3)
     test_map(:matched, 6)
     test_map(:open, 6)
     test_map(:applied, 1)
