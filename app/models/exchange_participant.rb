@@ -1,8 +1,13 @@
 class ExchangeParticipant < ApplicationRecord
   include ActiveModel::Validations
-  validates_with YouthValidator, on: :create
-
   before_save :encrypted_password
+
+  ARGENTINEAN_SCHOLARITY = %i[incomplete_highschool highschool graduating graduated post_graduating post_graduated]
+  BRAZILIAN_SCHOLARITY = %i[highschool incomplete_graduation graduating post_graduated almost_graduated graduated other]
+
+  validates_with YouthValidator, on: :create
+  validates_with ScholarityValidator, on: :create
+
 
   validates :fullname, presence: true, if: :ogx?
   validates :cellphone, presence: true, if: :ogx?
@@ -16,23 +21,45 @@ class ExchangeParticipant < ApplicationRecord
   belongs_to :registerable, polymorphic: true, optional: true
   belongs_to :campaign, optional: true
   belongs_to :local_committee, optional: true
-  # TODO: assert optional association with shoulda-matchers when
-  # new version is available
   belongs_to :university, optional: true
   belongs_to :college_course, optional: true
 
   accepts_nested_attributes_for :campaign
 
-
-  enum scholarity: %i[highschool incomplete_graduation graduating
-                      post_graduated almost_graduated graduated other]
-  
   enum exchange_type: { ogx: 0, icx: 1}
 
   enum status: { open: 1, applied: 2, accepted: 3, approved_tn_manager: 4, approved_ep_manager: 5, approved: 6,
     break_approved: 7, rejected: 8, withdrawn: 9,
     realized: 100, approval_broken: 101, realization_broken: 102, matched: 103,
     completed: 104, finished: 105, other_status: 999 }
+
+  def scholarity_sym
+    ENV['COUNTRY'] == 'bra' ? brazilian_scholarity : argentinean_scholarity
+  end
+
+  def brazilian_scholarity
+    ExchangeParticipant::BRAZILIAN_SCHOLARITY[scholarity]
+  end
+
+  def argentinean_scholarity
+    ExchangeParticipant::ARGENTINEAN_SCHOLARITY[scholarity]
+  end
+
+  def scholarity_length
+    if ENV['COUNTRY'] == 'bra'
+      brazilian_scholarity_length
+    else
+      argentinean_scholarity_length
+    end
+  end
+
+  def brazilian_scholarity_length
+    ExchangeParticipant::BRAZILIAN_SCHOLARITY.length
+  end
+
+  def argentinean_scholarity_length
+    ExchangeParticipant::ARGENTINEAN_SCHOLARITY.length
+  end
 
   def decrypted_password
     return password if password_changed?
