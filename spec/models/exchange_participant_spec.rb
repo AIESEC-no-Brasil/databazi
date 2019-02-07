@@ -9,12 +9,28 @@ RSpec.describe ExchangeParticipant, type: :model do
     it { is_expected.to respond_to :password }
     it { is_expected.to respond_to :cellphone_contactable }
     it { is_expected.to respond_to :expa_id }
+  end
 
-    it do
-      expect(ExchangeParticipant.new).to define_enum_for(:scholarity)
-        .with(%i[highschool incomplete_graduation graduating post_graduated
-                 almost_graduated graduated other])
+  describe '#constants' do
+    describe '#argentinean_scholarity' do
+      let(:argentinean_scholarity) { ExchangeParticipant::ARGENTINEAN_SCHOLARITY }
+      it { expect(argentinean_scholarity).to match_array(%i[incomplete_highschool highschool graduating graduated post_graduating post_graduated])}
     end
+
+    describe '#brazilian_scholarity' do
+      let(:brazilian_scholarity) { ExchangeParticipant::BRAZILIAN_SCHOLARITY }
+      it { expect(brazilian_scholarity).to match_array(%i[highschool incomplete_graduation graduating post_graduated almost_graduated graduated other])}
+    end
+  end
+
+  describe '#associations' do
+    it { is_expected.to have_many :expa_applications }
+
+    it { is_expected.to belong_to :registerable }
+    it { is_expected.to belong_to :campaign }
+    it { is_expected.to belong_to :local_committee }
+    it { is_expected.to belong_to :university }
+    it { is_expected.to belong_to :college_course }
   end
 
   describe '#validations' do
@@ -27,16 +43,6 @@ RSpec.describe ExchangeParticipant, type: :model do
     # TODO: How to validate by rule of exchange type
     xit { is_expected.to validate_presence_of :password }
     xit { is_expected.to validate_presence_of :birthdate}
-  end
-
-  describe '#associations' do
-    it { is_expected.to have_many :expa_applications }
-
-    it { is_expected.to belong_to :registerable }
-    it { is_expected.to belong_to :campaign }
-    it { is_expected.to belong_to :local_committee }
-    it { is_expected.to belong_to :university }
-    it { is_expected.to belong_to :college_course }
   end
 
   describe 'nested attributes' do
@@ -165,9 +171,67 @@ RSpec.describe ExchangeParticipant, type: :model do
         it { is_expected.to be_equal(current_application_2) }
       end
     end
+
+    describe '#scholarity_sym' do
+      context 'arg' do
+        before(:each) { ENV['COUNTRY'] = 'arg' }
+        let(:exchange_participant) { build(:exchange_participant, scholarity: 0) }
+
+        it { expect(exchange_participant.scholarity_sym).to eq ExchangeParticipant::ARGENTINEAN_SCHOLARITY.first }
+      end
+
+      context 'bra' do
+        before(:each) { ENV['COUNTRY'] = 'bra' }
+        let(:exchange_participant) { build(:exchange_participant, scholarity: 0) }
+
+        it { expect(exchange_participant.scholarity_sym).to eq ExchangeParticipant::BRAZILIAN_SCHOLARITY.first }
+      end
+    end
   end
 
   describe '#custom_validations' do
+    describe 'scholarity' do
+      let(:exchange_participant) { build(:exchange_participant, registerable: build(:gv_participant)) }
+
+      context 'arg' do
+        before(:each) { ENV['COUNTRY'] = 'arg' }
+        let(:scholarity_length) { ExchangeParticipant::ARGENTINEAN_SCHOLARITY.length }
+
+        it 'is valid when scholarity is within constant length' do
+          exchange_participant.scholarity = scholarity_length - 1
+          exchange_participant.valid?
+
+          expect(exchange_participant).to be_valid
+        end
+
+        it 'is invalid when sholarity is without constant length' do
+          exchange_participant.scholarity = scholarity_length
+          exchange_participant.valid?
+
+          expect(exchange_participant).to be_invalid
+        end
+      end
+
+      context 'bra' do
+        before(:each) { ENV['COUNTRY'] = 'bra' }
+        let(:scholarity_length) { ExchangeParticipant::BRAZILIAN_SCHOLARITY.length }
+
+        it 'is valid when scholarity is within constant length' do
+          exchange_participant.scholarity = scholarity_length - 1
+          exchange_participant.valid?
+
+          expect(exchange_participant).to be_valid
+        end
+
+        it 'is invalid when sholarity is without constant length' do
+          exchange_participant.scholarity = scholarity_length
+          exchange_participant.valid?
+
+          expect(exchange_participant).to be_invalid
+        end
+      end
+    end
+
     # TODO: How to validate by rule of exchange type
     xdescribe 'age validation' do
       let(:younger_than_18) do
