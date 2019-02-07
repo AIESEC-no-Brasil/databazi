@@ -1,3 +1,4 @@
+# Scholarity Utility methods
 module ScholarityUtility
   def scholarity_length
     if ENV['COUNTRY'] == 'bra'

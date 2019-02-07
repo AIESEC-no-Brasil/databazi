@@ -1,3 +1,4 @@
+# Scholarity Custom Validator based upon current country
 class ScholarityValidator < ActiveModel::Validator
   include ScholarityUtility
 
