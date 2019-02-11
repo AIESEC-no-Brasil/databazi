@@ -12,6 +12,7 @@ FactoryBot.define do
     cellphone_contactable { false }
     scholarity { 1 }
     status { 1 }
+    expa_id { Faker::Number.number(5) }
     trait :for_gv_participant do
       association(:registerable, factory: :gv_participant)
     end
