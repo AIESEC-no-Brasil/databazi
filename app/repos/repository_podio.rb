@@ -19,7 +19,9 @@ class RepositoryPodio
       attrs = {'fields': {
         'status-expa': map_status(application.exchange_participant.status.to_sym),
         'teste-di-data-do-applied': parse_date(application.applied_at),
-        'teste-di-data-do-accepted': parse_date(application.accepted_at)
+        'teste-di-data-do-accepted': parse_date(application.accepted_at),
+        'di-ep-id': application.exchange_participant.expa_id.to_s,
+        'op-id-1': application.tnid.to_s
       }}
       item = Podio::Item.update(id, attrs)
       item
@@ -30,7 +32,7 @@ class RepositoryPodio
 
       attrs = {'fields': {
         "data-do-approved-#{approved_sync_count}": parse_date(application.approved_at),
-        "link-da-vaga-#{approved_sync_count}-tnid-#{approved_sync_count}": embed_id(application),
+        "op-id-#{approved_sync_count}": application.tnid.to_s,
         "produto-apd-#{approved_sync_count}": product_index(application),
         "expa-application-id-#{approved_sync_count}": application.expa_id.to_s
       }}
@@ -52,9 +54,17 @@ class RepositoryPodio
 
     def update_application_podio_status(application)
       check_podio
-      attrs = {'fields': {
-        'status-expa': map_status_prep(application.status.to_sym)
-      }}
+
+      if application.status.to_sym.in?(Expa::Application::PREP_BROKEN_STATUS)
+        attrs = {'fields': {
+          'status-da-quebra': map_status_prep_broken(application.status.to_sym)
+        }}
+      else
+        attrs = {'fields': {
+          'status-expa': map_status_prep(application.status.to_sym)
+        }}
+      end
+
       item = Podio::Item.update(application.podio_id, attrs)
       item
     end
@@ -183,6 +193,14 @@ class RepositoryPodio
       mapper[status]
     end
 
+    def map_status_prep_broken(status)
+      mapper = {
+        approval_broken: 1,
+        realization_broken: 2
+      }
+      mapper[status]
+    end
+
     def status_to_podio(status)
       mapping = {
         open: 6,
@@ -197,7 +215,7 @@ class RepositoryPodio
         rejected: 5,
         withdrawn: 7
       }
-      podio_status = mapping[status.to_sym] || 6 # default other      
+      podio_status = mapping[status.to_sym] || 6 # default other
       Repos::ChatLogger.notify_on_client_channel("[ICX to Podio]Status não mapeado: #{status}") if podio_status == 6
       podio_status
     end

@@ -1,5 +1,7 @@
 class Expa::Application < ApplicationRecord
   PREP_STATUS = [:realized, :completed, :finished]
+  PREP_BROKEN_STATUS = [:approval_broken, :realization_broken]
+
   scope :first_approved_at, -> { approveds.order(:approved_at).first }
   scope :approveds, -> { where.not(approved_at: nil).order(:approved_at) }
   scope :synchronized_approveds, -> { approveds.where.not(podio_id: nil) }
