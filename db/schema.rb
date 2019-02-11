@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_04_120112) do
+ActiveRecord::Schema.define(version: 2019_02_11_202612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,9 +82,9 @@ ActiveRecord::Schema.define(version: 2019_02_04_120112) do
     t.string "other_university"
     t.integer "expa_id"
     t.integer "podio_id"
+    t.integer "exchange_type", default: 0
     t.integer "status"
     t.integer "approved_sync_count", default: 1
-    t.integer "exchange_type", default: 0
     t.text "academic_backgrounds", array: true
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
@@ -100,6 +100,11 @@ ActiveRecord::Schema.define(version: 2019_02_04_120112) do
     t.integer "exchange_participant_id"
     t.datetime "updated_at_expa"
     t.integer "expa_ep_id"
+    t.string "opportunity_name"
+    t.bigint "home_lc_id"
+    t.bigint "host_lc_id"
+    t.integer "sdg_target_index"
+    t.integer "sdg_goal_index"
     t.datetime "podio_last_sync"
     t.datetime "applied_at"
     t.datetime "accepted_at"
@@ -108,15 +113,10 @@ ActiveRecord::Schema.define(version: 2019_02_04_120112) do
     t.integer "product"
     t.integer "podio_id"
     t.integer "tnid"
+    t.bigint "home_mc_id"
     t.boolean "podio_sent"
     t.datetime "podio_sent_at"
     t.boolean "has_error", default: false
-    t.string "opportunity_name"
-    t.bigint "home_lc_id"
-    t.bigint "host_lc_id"
-    t.integer "sdg_target_index"
-    t.integer "sdg_goal_index"
-    t.bigint "home_mc_id"
     t.text "academic_backgrounds", array: true
     t.index ["home_lc_id"], name: "index_expa_applications_on_home_lc_id"
     t.index ["home_mc_id"], name: "index_expa_applications_on_home_mc_id"
@@ -161,6 +161,7 @@ ActiveRecord::Schema.define(version: 2019_02_04_120112) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "active", default: true
+    t.integer "member_committee_id"
   end
 
   create_table "member_committees", force: :cascade do |t|
