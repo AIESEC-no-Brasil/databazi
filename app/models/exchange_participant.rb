@@ -123,8 +123,8 @@ class ExchangeParticipant < ApplicationRecord
 
   def self.brazilian_scholarity(symbol)
     scholarity = {
-      highschool: "Ensino Médio completo"
-      incomplete_graduation: "Graduação incompleta"
+      highschool: "Ensino Médio Completo"
+      incomplete_graduation: "Graduação Incompleta"
       graduating: "Estudante de Graduação"
       post_graduated: "Mestrado ou Pós"
       almost_graduated: "Graduado em até 1,5 anos"
