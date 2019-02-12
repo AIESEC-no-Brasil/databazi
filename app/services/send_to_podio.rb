@@ -130,7 +130,7 @@ class SendToPodio
     params['tag-campanha'] = sqs_params['utm_campaign'] if sqs_params['utm_campaign']
     params['tag-termo'] = sqs_params['utm_term'] if sqs_params['utm_term']
     params['tag-conteudo-2'] = sqs_params['utm_content'] if sqs_params['utm_content']
-    params['escolaridade'] = sqs_params['scholarity'] if sqs_params['scholarity']
+    params['escolaridade'] = scholarity_name(sqs_params['scholarity']) if sqs_params['scholarity']
     params['cl-marcado-no-expa-nao-conta-expansao-ainda'] = sqs_params['local_committee'] if sqs_params['local_committee']
     params['nivel-de-ingles'] = sqs_params['english_level'] if sqs_params['english_level']
     params['nivel-de-espanhol'] = sqs_params['spanish_level'] if sqs_params['spanish_level']
@@ -145,6 +145,10 @@ class SendToPodio
       params['nivel-de-espanhol'] = 5 if params['nivel-de-espanhol'].zero?
     end
     params
+  end
+
+  def scholarity_name(index)
+    ExchangeParticipant.brazilian_scholarity(ExchangeParticipant::BRAZILIAN_SCHOLARITY[index])
   end
 
   def cellphone_contactable_option(value)
