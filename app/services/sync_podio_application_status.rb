@@ -73,6 +73,7 @@ class SyncPodioApplicationStatus
       .where(has_error: false)
       .joins(:exchange_participant)
       .where('exchange_participants.podio_id is not null')
+      .where(exchange_participants: { exchange_type: :ogx })
       .order('updated_at_expa': :desc)
       .limit 10
   end
