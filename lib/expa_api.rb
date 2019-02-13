@@ -46,8 +46,10 @@ LoadApplications = EXPAAPI::Client.parse <<~'GRAPHQL'
         status
         updated_at
         created_at
-        date_approved
         matched_or_rejected_at
+        date_approved
+        date_realized
+        experience_end_date        
         host_lc_name
         person {
           id
