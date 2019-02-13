@@ -52,7 +52,7 @@ class RepositoryPodio
       exchange_participant.reload
     end
 
-    def update_application_podio_status(application)
+    def update_application_prep(application)
       check_podio
 
       if application.status.to_sym.in?(Expa::Application::PREP_BROKEN_STATUS)
@@ -64,9 +64,52 @@ class RepositoryPodio
           'status-expa': map_status_prep(application.status.to_sym)
         }}
       end
+      
+      attrs[:fields] = attrs[:fields].merge(map_standards(application.standards)) if application.standards
 
       item = Podio::Item.update(application.podio_id, attrs)
       item
+    end
+
+    def map_standards(standards)
+      podio_standards_fields = {}
+      standards.each do |standard|
+        podio_key = map_standard_constant_to_podio(standard['data']['constant_name'])
+        podio_value = map_standard_option_to_podio(standard['data']['option'])
+        podio_standards_fields[podio_key] = podio_value if podio_key
+      end
+      podio_standards_fields
+    end
+
+    def map_standard_constant_to_podio(constant)
+      map_constant = {
+        'Personal goal setting': '1-personal-goal-setting',
+        'Outgoing Preparation': '2-outgoing-preparation',
+        'Expectation setting': '3-expectation-setting',
+        'Incoming Preparation': '4-incoming-preparation',
+        'Development Spaces with Opportunity Provider': '5-dev-spaces-with-opportunity-provider',
+        'Debrief with AIESEC home': '6-debrief-with-aiesec-home',
+        'Visa and work permit': '7-visa-work-permit',
+        'Arrival pickup': '8-arrival-pick-up',
+        'Departure support': '9-departure-support',
+        'Job description': '10-job-description',
+        'Duration': '11-duration',
+        'Working hours': '12-working-hours',
+        'First day of work': '13-first-day-of-work',
+        'Insurance': '14-insurance',
+        'Accommodation': '15-accommodation',
+        'Basic living costs': '16-basic-living-costs'
+      }
+      map_constant[constant.to_sym]
+    end
+
+    def map_standard_option_to_podio(option)
+      map_option = {
+        'true': 2,
+        'false': 3,
+        'not needed': 4
+      }
+      map_option[option.to_sym] || 1 #default is 'not filled'
     end
 
     def update_application(application)

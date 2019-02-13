@@ -70,6 +70,10 @@ LoadApplications = EXPAAPI::Client.parse <<~'GRAPHQL'
             short_name_display
           }
         }
+        standards{
+          constant_name
+          option
+        }
       }
     }
   }
