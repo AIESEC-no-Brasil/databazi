@@ -52,7 +52,7 @@ class SyncPodioApplicationStatus
 
   def update_prep_podio(application)
     RepositoryPodio.update_application_podio_id(application) unless application.podio_id
-    RepositoryPodio.update_application_podio_status(application)
+    RepositoryPodio.update_application_prep(application)
   end
 
   def send_application_to_podio(application)
