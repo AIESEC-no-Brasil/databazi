@@ -17,12 +17,12 @@ class RepositoryPodio
     def change_status(id, application)
       check_podio
       attrs = {'fields': {
-        'status-expa': map_status(application.exchange_participant.status.to_sym),
-        'teste-di-data-do-applied': parse_date(application.applied_at),
-        'teste-di-data-do-accepted': parse_date(application.accepted_at),
-        'di-ep-id': application.exchange_participant.expa_id.to_s,
-        'op-id-1': application.tnid.to_s
+        'status-expa': map_status(application.exchange_participant.status.to_sym)
       }}
+      attrs[:fields]['teste-di-data-do-applied'] = parse_date(application.applied_at) if application.applied_at
+      attrs[:fields]['teste-di-data-do-accepted'] = parse_date(application.accepted_at) if application.accepted_at
+      attrs[:fields]['op-id-1'] = application.tnid.to_s if application.tnid
+      attrs[:fields]['di-ep-id'] = application.exchange_participant.expa_id.to_s if application.exchange_participant.expa_id
       item = Podio::Item.update(id, attrs)
       item
     end
