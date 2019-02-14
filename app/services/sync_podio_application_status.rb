@@ -27,7 +27,7 @@ class SyncPodioApplicationStatus
       begin
         podio_sent = application.podio_sent
         send_application_to_podio(application) if application.approved?
-        update_prep_podio(application) if prep_valid_status_inclusion?(application) && podio_sent
+        RepositoryPodio.update_ogx_application_prep(application) if RepositoryPodio.prep_valid_status_inclusion?(application) && podio_sent
 
       rescue => exception
         Raven.capture_exception(exception)
@@ -46,15 +46,6 @@ class SyncPodioApplicationStatus
 
   private
 
-  def prep_valid_status_inclusion?(application)
-    application.status.to_sym.in?(Expa::Application::PREP_STATUS) || application.status.to_sym.in?(Expa::Application::PREP_BROKEN_STATUS)
-  end
-
-  def update_prep_podio(application)
-    RepositoryPodio.update_application_podio_id(application) unless application.podio_id
-    RepositoryPodio.update_application_podio_status(application)
-  end
-
   def send_application_to_podio(application)
     return if application.podio_sent
 
@@ -62,7 +53,7 @@ class SyncPodioApplicationStatus
     approved_sync_count = exchange_participant.reload.approved_sync_count
 
     unless approved_sync_count > 5
-      RepositoryPodio.send_application(exchange_participant.podio_id, application, approved_sync_count)
+      RepositoryPodio.send_ogx_application(exchange_participant.podio_id, application, approved_sync_count)
     end
   end
 
@@ -73,6 +64,7 @@ class SyncPodioApplicationStatus
       .where(has_error: false)
       .joins(:exchange_participant)
       .where('exchange_participants.podio_id is not null')
+      .where(exchange_participants: { exchange_type: :ogx })
       .order('updated_at_expa': :desc)
       .limit 10
   end

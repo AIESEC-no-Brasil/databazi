@@ -25,6 +25,8 @@ class RepositoryExpaApi
         application.expa_ep_id = expa_application.person.id
         application.applied_at = parse_time(expa_application.created_at)
         application.approved_at = parse_time(expa_application.date_approved)
+        application.realized_at = parse_time(expa_application.date_realized)
+        application.completed_at = parse_time(expa_application.experience_end_date)
         # The two date are the same from expa. Relies on status
         application.accepted_at = parse_time(expa_application.matched_or_rejected_at)
         application.break_approved_at = parse_time(expa_application.matched_or_rejected_at)
@@ -59,6 +61,7 @@ class RepositoryExpaApi
           expa_id: expa_application&.person&.home_lc&.id,
           name: expa_application&.person&.home_lc&.name
         )
+        application.standards = expa_application.standards
         # application.save
         application
       end
@@ -118,9 +121,11 @@ ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
         id
         status
         updated_at
-        created_at
-        date_approved
+        created_at        
         matched_or_rejected_at
+        date_approved
+        date_realized
+        experience_end_date
         person {
           id
           full_name
@@ -164,6 +169,10 @@ ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
           backgrounds {
             constant_name
           }
+        }
+        standards{
+          constant_name
+          option
         }
       }
     }

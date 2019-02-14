@@ -17,17 +17,17 @@ class RepositoryPodio
     def change_status(id, application)
       check_podio
       attrs = {'fields': {
-        'status-expa': map_status(application.exchange_participant.status.to_sym),
-        'teste-di-data-do-applied': parse_date(application.applied_at),
-        'teste-di-data-do-accepted': parse_date(application.accepted_at),
-        'di-ep-id': application.exchange_participant.expa_id.to_s,
-        'op-id-1': application.tnid.to_s
+        'status-expa': map_status(application.exchange_participant.status.to_sym)
       }}
+      attrs[:fields]['teste-di-data-do-applied'] = parse_date(application.applied_at) if application.applied_at
+      attrs[:fields]['teste-di-data-do-accepted'] = parse_date(application.accepted_at) if application.accepted_at
+      attrs[:fields]['op-id-1'] = application.tnid.to_s if application.tnid
+      attrs[:fields]['di-ep-id'] = application.exchange_participant.expa_id.to_s if application.exchange_participant.expa_id
       item = Podio::Item.update(id, attrs)
       item
     end
 
-    def send_application(id, application, approved_sync_count)
+    def send_ogx_application(id, application, approved_sync_count)
       check_podio
 
       attrs = {'fields': {
@@ -40,20 +40,25 @@ class RepositoryPodio
       item = Podio::Item.update(id, attrs)
 
       if item
-        update_approved_sync_count(application.exchange_participant)
-        update_application(application)
+        update_ogx_approved_sync_count(application.exchange_participant)
+        define_ogx_application_as_sent(application)
       end
 
       item
     end
 
-    def update_approved_sync_count(exchange_participant)
+    def update_ogx_approved_sync_count(exchange_participant)
       exchange_participant.update_attributes(approved_sync_count: exchange_participant.reload.approved_sync_count + 1)
       exchange_participant.reload
     end
 
-    def update_application_podio_status(application)
+    def prep_valid_status_inclusion?(application)
+      application.status.to_sym.in?(Expa::Application::PREP_STATUS) || application.status.to_sym.in?(Expa::Application::PREP_BROKEN_STATUS)
+    end
+
+    def update_ogx_application_prep(application)
       check_podio
+      update_ogx_application_podio_id(application) unless application.podio_id
 
       if application.status.to_sym.in?(Expa::Application::PREP_BROKEN_STATUS)
         attrs = {'fields': {
@@ -65,22 +70,92 @@ class RepositoryPodio
         }}
       end
 
+      attrs[:fields]['expa-data-de-re'] = parse_date(application.realized_at) if application.realized_at
+      attrs[:fields]['expa-data-de-fin'] = parse_date(application.completed_at) if application.completed_at
+      
+      attrs[:fields] = attrs[:fields].merge(map_standards(application.standards)) if application.standards
+
       item = Podio::Item.update(application.podio_id, attrs)
       item
     end
 
-    def update_application(application)
+    def update_icx_application_prep(application)
+      check_podio
+      update_icx_application_prep_podio_id(application) unless application.prep_podio_id
+
+      attrs = {'fields': {
+        'status-expa': map_status_prep(application.status.to_sym)
+      }}
+
+      attrs[:fields]['expa-data-de-re'] = parse_date(application.realized_at) if application.realized_at
+      attrs[:fields]['expa-data-de-fin'] = parse_date(application.completed_at) if application.completed_at
+
+      attrs[:fields] = attrs[:fields].merge(map_standards(application.standards)) if application.standards
+      
+      item = Podio::Item.update(application.prep_podio_id, attrs)
+      item
+    end
+
+    def map_standards(standards)
+      podio_standards_fields = {}
+      standards.each do |standard|
+        podio_key = map_standard_constant_to_podio(standard['data']['constant_name'])
+        podio_value = map_standard_option_to_podio(standard['data']['option'])
+        podio_standards_fields[podio_key] = podio_value if podio_key
+      end
+      podio_standards_fields
+    end
+
+    def map_standard_constant_to_podio(constant)
+      map_constant = {
+        'Personal goal setting': '1-personal-goal-setting',
+        'Outgoing Preparation': '2-outgoing-preparation',
+        'Expectation setting': '3-expectation-setting',
+        'Incoming Preparation': '4-incoming-preparation',
+        'Development Spaces with Opportunity Provider': '5-dev-spaces-with-opportunity-provider',
+        'Debrief with AIESEC home': '6-debrief-with-aiesec-home',
+        'Visa and work permit': '7-visa-work-permit',
+        'Arrival pickup': '8-arrival-pick-up',
+        'Departure support': '9-departure-support',
+        'Job description': '10-job-description',
+        'Duration': '11-duration',
+        'Working hours': '12-working-hours',
+        'First day of work': '13-first-day-of-work',
+        'Insurance': '14-insurance',
+        'Accommodation': '15-accommodation',
+        'Basic living costs': '16-basic-living-costs'
+      }
+      map_constant[constant.to_sym]
+    end
+
+    def map_standard_option_to_podio(option)
+      map_option = {
+        'true': 2,
+        'false': 3,
+        'not needed': 4
+      }
+      map_option[option.to_sym] || 1 #default is 'not filled'
+    end
+
+    def define_ogx_application_as_sent(application)
       application.update_attributes(podio_sent: true, podio_sent_at: Time.now)
     end
 
-    def update_application_podio_id(application)
-      application.update_attributes(podio_id: podio_application_id(application.expa_id))
+    def update_ogx_application_podio_id(application)
+      application.update_attributes(podio_id: get_podio_application_id(application.expa_id, ENV['PODIO_APP_OGX_PREP']))
     end
 
-    def podio_application_id(expa_id)
+    def update_icx_application_prep_podio_id(application)
+      app_area = ENV["PODIO_APP_ICX_I#{application.product_upcase}_PREP"]
+      application.update_attributes(
+        prep_podio_id: get_podio_application_id(application.expa_id, app_area)
+      )
+    end
+
+    def get_podio_application_id(expa_id, app_area)
       check_podio
       Podio::Item.find_by_filter_values(
-        ENV['PODIO_APP_OGX_PREP'],
+        app_area,
         'expa-application-id': expa_id.to_s
       ).all.first.item_id
     end
@@ -93,21 +168,21 @@ class RepositoryPodio
     # TODO: Code the Podio ICX application integration
     def save_icx_application(application)
       check_podio
-
       sync_icx_country(application)
       sync_home_lc(application)
+      
       # rubocop:disable Metrics/LineLength
       params = {
         title: application.exchange_participant.fullname,
         'epid': application.expa_ep_id.to_s,
-        status: status_to_podio(application.status),
+        status: icx_status_to_podio(application.status),
         email: [
           {
             'type': 'home',
             value: application.exchange_participant.email
           }
         ],
-        # 'data-de-nascimento': parse_date(application.exchange_participant.birthdate),
+        #'data-de-nascimento': parse_date(application.exchange_participant.birthdate),
         'data-do-applied': parse_date(application.applied_at),
         'data-do-accepted': parse_date(application.accepted_at),
         'data-do-approved': parse_date(application.approved_at),
@@ -126,7 +201,8 @@ class RepositoryPodio
             value: application.exchange_participant.cellphone
           }
         ],
-        'sdg-de-interesse': application.sdg_goal_index
+        'sdg-de-interesse': application.sdg_goal_index,
+        'expa-application-id': application.expa_id.to_s
       }
       # rubocop:enable Metrics/LineLength
 
@@ -146,6 +222,8 @@ class RepositoryPodio
           podio_last_sync: Time.now
         )
       end
+
+      update_icx_application_prep(application) if prep_valid_status_inclusion?(application)
     end
 
     private
@@ -201,15 +279,15 @@ class RepositoryPodio
       mapper[status]
     end
 
-    def status_to_podio(status)
+    def icx_status_to_podio(status)
       mapping = {
         open: 6,
         applied: 1,
         accepted: 2,
         approved: 3,
-        realized: 3, #TODO - this status is after 'approved' and should be used in ICX PREP, so we temporarly sets as approved for now
-        completed: 3, #TODO - this status is after 'approved' and should be used in ICX PREP, so we temporarly sets as approved for now
-        realization_broken: 3, #TODO - this status is after 'approved' and should be used in ICX PREP, so we temporarly sets as approved for now
+        realized: 3, #this status is after 'approved' and it'll only be be used in ICX PREP, in this stage it must stop on 'approved' status
+        completed: 3, #this status is after 'approved' and it'll only be be used in ICX PREP, in this stage it must stop on 'approved' status
+        realization_broken: 3, #this status is after 'approved' and it'll only be be used in ICX PREP, in this stage it must stop on 'approved' status
         break_approved: 4,
         approval_broken: 4,
         rejected: 5,
