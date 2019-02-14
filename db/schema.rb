@@ -165,6 +165,7 @@ ActiveRecord::Schema.define(version: 2019_02_13_233205) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "active", default: true
+    t.integer "member_committee_id"
   end
 
   create_table "member_committees", force: :cascade do |t|
