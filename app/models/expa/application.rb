@@ -24,4 +24,8 @@ class Expa::Application < ApplicationRecord
   def opportunity_link
     "https://aiesec.org/opportunity/#{tnid}"
   end
+
+  def product_upcase
+    product.to_s.upcase
+  end
 end
