@@ -223,7 +223,16 @@ class RepositoryPodio
         )
       end
 
-      update_icx_application_prep(application) if prep_valid_status_inclusion?(application)
+      begin
+        update_icx_application_prep(application) if prep_valid_status_inclusion?(application)
+      rescue => exception
+        Raven.capture_message "[ICX I#{application.product_upcase} Prep]Error when updating prep data",
+        extra: {
+          application: application.to_json,
+          exception: exception
+        }
+        application.update_attribute(:prep_podio_sync_error, true)
+      end
     end
 
     private
