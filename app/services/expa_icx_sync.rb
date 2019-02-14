@@ -28,6 +28,7 @@ class ExpaIcxSync
       rescue => exception
         Raven.capture_exception(exception)
         logger.error exception.message
+        application.update_attribute(:has_error, true)
       end
     end
     logger.info "Done sync"

@@ -93,7 +93,7 @@ RSpec.describe RepositoryPodio do
     end
   end
 
-  describe '#status_to_podio' do
+  describe '#icx_status_to_podio' do
     it 'expected applications statuses', type: :model do
       expect(Expa::Application.new).to define_enum_for(:status).with(
         open: 1, applied: 2, accepted: 3, approved_tn_manager: 4,
@@ -104,7 +104,7 @@ RSpec.describe RepositoryPodio do
 
     def self.test_map(from, to)
       it "map #{from} to #{to}" do
-        expect(described_class.send(:status_to_podio, from)).to eql(to)
+        expect(described_class.send(:icx_status_to_podio, from)).to eql(to)
       end
     end
 
