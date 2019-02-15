@@ -357,17 +357,26 @@ class RepositoryPodio
 
     def sync_home_lc(application)
       return if !application&.home_lc&.podio_id.nil? || application.home_lc.nil?
+
       items = Podio::Item.find_by_filter_values(
         '22140666',
         'title': application.home_lc.name
       )
-      if items.count == 0
-        raise "Raise couldn't find LCs Abroad for ICX Applications #{application&.home_lc&.attributes&.to_json}/#{application&.home_mc&.attributes&.to_json}"
-      end
-      if items.count > 1
+      lc_podio_id = nil
+      if items.count.zero?
+        params = {
+          title: application&.home_lc&.name,
+          mc: application&.home_mc&.podio_id
+        }
+        lc = Podio::Item.create('22140666', fields: params)
+        lc_podio_id = lc.item_id
+      elsif items.count > 1
         raise "Found more than one LCs Abroad for ICX Applications #{application&.home_lc&.attributes&.to_json}/#{application&.home_mc&.attributes&.to_json}"
+      else
+        lc_podio_id = items.all[0].item_id
       end
-      application.home_lc.update_attributes(podio_id: items.all[0].item_id)
+
+      application.home_lc.update_attributes(podio_id: lc_podio_id)
     end
   end
 
