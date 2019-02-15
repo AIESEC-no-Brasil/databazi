@@ -27,7 +27,17 @@ class SyncPodioApplicationStatus
       begin
         podio_sent = application.podio_sent
         send_application_to_podio(application) if application.approved?
-        RepositoryPodio.update_ogx_application_prep(application) if RepositoryPodio.prep_valid_status_inclusion?(application) && podio_sent
+
+        begin
+          RepositoryPodio.update_ogx_application_prep(application) if RepositoryPodio.prep_valid_status_inclusion?(application) && podio_sent
+        rescue => exception
+          Raven.capture_message "[OGX Prep]Error when updating prep data",
+          extra: {
+            application: application.to_json,
+            exception: exception
+          }
+          application.update_attribute(:prep_podio_sync_error, true)
+        end
 
       rescue => exception
         Raven.capture_exception(exception)

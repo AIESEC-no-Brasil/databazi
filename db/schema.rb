@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_14_230534) do
+ActiveRecord::Schema.define(version: 2019_02_15_133532) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -108,7 +108,7 @@ ActiveRecord::Schema.define(version: 2019_02_14_230534) do
     t.integer "product"
     t.integer "podio_id"
     t.integer "tnid"
-    t.boolean "podio_sent"
+    t.boolean "podio_sent", default: false
     t.datetime "podio_sent_at"
     t.boolean "has_error", default: false
     t.string "opportunity_name"
