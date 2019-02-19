@@ -290,7 +290,7 @@ class RepositoryPodio
 
     def icx_status_to_podio(status)
       mapping = {
-        open: 6,
+        open: 1,
         applied: 1,
         accepted: 2,
         approved: 3,
