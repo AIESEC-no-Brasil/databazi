@@ -1,5 +1,6 @@
 class RepositoryApplication
   def self.save_icx_from_expa(application)
+    p application.to_json
     normalize_host_lc(application)
     normalize_home_lc(application)
     normalize_home_mc(application)
@@ -7,7 +8,29 @@ class RepositoryApplication
     Expa::Application
       .where(expa_id: application.expa_id)
       .first_or_create!(application.attributes)
-      .update!(podio_last_sync: nil, status: application.status)
+      .update!(
+        podio_last_sync: nil,
+        status: application.status,
+        updated_at_expa: application.updated_at_expa,
+        applied_at: application.applied_at,
+        approved_at: application.approved_at,
+        realized_at: application.realized_at,
+        completed_at: application.completed_at,
+        accepted_at: application.accepted_at,
+        break_approved_at: application.break_approved_at,
+        sdg_goal_index: application.sdg_goal_index,
+        sdg_target_index: application.sdg_target_index,
+        tnid: application.tnid,
+        opportunity_name: application.opportunity_name,
+        product: application.product,
+        academic_backgrounds: application.academic_backgrounds,
+        home_mc: application.home_mc,
+        host_lc: application.host_lc,
+        home_lc: application.home_lc,
+        standards: application.standards
+      )
+      p 'it worked'
+    true
   end
 
   def self.pending_podio_sync_icx_applications
