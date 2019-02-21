@@ -15,4 +15,3 @@ namespace :arg do
     end
   end
 end
-
