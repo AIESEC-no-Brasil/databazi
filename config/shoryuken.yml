@@ -3,3 +3,4 @@ delay: 0
 queues:
   - [databazi_sign_up_queue, 1]
   - [databazi_podio_queue_new, 1]
+  - [survey_processor, 1]
