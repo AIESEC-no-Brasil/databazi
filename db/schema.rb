@@ -9,7 +9,6 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-
 ActiveRecord::Schema.define(version: 2019_02_18_190904) do
 
   # These are extensions that must be enabled in order to support this database
@@ -113,8 +112,8 @@ ActiveRecord::Schema.define(version: 2019_02_18_190904) do
     t.integer "product"
     t.integer "podio_id"
     t.integer "tnid"
+    t.boolean "podio_sent", default: false
     t.bigint "home_mc_id"
-    t.boolean "podio_sent"
     t.datetime "podio_sent_at"
     t.boolean "has_error", default: false
     t.text "academic_backgrounds", array: true
@@ -122,6 +121,7 @@ ActiveRecord::Schema.define(version: 2019_02_18_190904) do
     t.integer "prep_podio_id"
     t.datetime "realized_at"
     t.datetime "completed_at"
+    t.boolean "prep_podio_sync_error", default: false
     t.index ["home_lc_id"], name: "index_expa_applications_on_home_lc_id"
     t.index ["home_mc_id"], name: "index_expa_applications_on_home_mc_id"
     t.index ["host_lc_id"], name: "index_expa_applications_on_host_lc_id"
