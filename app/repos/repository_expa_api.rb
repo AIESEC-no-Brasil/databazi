@@ -17,7 +17,10 @@ class RepositoryExpaApi
     private
 
     def map_applications(expa_applications)
-      mapped = expa_applications&.data&.all_opportunity_application&.data&.map do |expa_application|
+      #removing applications with 'TMP' product - we only work with GE, GT and GT products
+      mapped = expa_applications&.data&.all_opportunity_application&.data&.reject{ |application| application&.opportunity&.programme&.short_name_display == 'TMP' }
+      mapped = mapped.map do |expa_application|
+        pp expa_application.to_json
         application = Expa::Application.new
         application.updated_at_expa = Time.parse(expa_application.updated_at)
         application.status = expa_application.status

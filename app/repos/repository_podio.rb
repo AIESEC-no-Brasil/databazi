@@ -348,11 +348,19 @@ class RepositoryPodio
           to: application.home_mc.expa_id
         }
       )
-      if items.count != 1
-        raise "Raise couldn't find MC in ICX Paises #{application.home_mc.id}/#{application.home_mc.name}"
+      mc_podio_id = nil
+      if items.count.zero?
+        params = {
+          titulo: application&.home_mc&.name,
+          'expa-id': application&.home_mc&.expa_id
+        }
+        mc = Podio::Item.create('22140562', fields: params)
+        mc_podio_id = mc.item_id
+      else
+        mc_podio_id = items.all[0].item_id
       end
 
-      application.home_mc.update_attributes(podio_id: items.all[0].item_id)
+      application.home_mc.update_attributes(podio_id: mc_podio_id)
     end
 
     def sync_home_lc(application)
@@ -370,8 +378,6 @@ class RepositoryPodio
         }
         lc = Podio::Item.create('22140666', fields: params)
         lc_podio_id = lc.item_id
-      elsif items.count > 1
-        raise "Found more than one LCs Abroad for ICX Applications #{application&.home_lc&.attributes&.to_json}/#{application&.home_mc&.attributes&.to_json}"
       else
         lc_podio_id = items.all[0].item_id
       end
