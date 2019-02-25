@@ -1,6 +1,7 @@
 class LocalCommittee < ApplicationRecord
   scope :active, -> { where(active: true) }
   scope :brazilian, -> { joins(:member_committee).where(member_committees: { name: 'Brazil' }) }
+  scope :argentinean, -> { joins(:member_committee).where(member_committees: { name: 'Argentina' }) }
 
   validates_presence_of :name, :expa_id
 
