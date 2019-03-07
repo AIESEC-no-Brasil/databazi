@@ -75,11 +75,23 @@ class SurveyProcessor
     field['values'][0]['value']
   end
 
+  def receiver_committee(item)
+    field = item.fields.select { |f| f['external_id'] == 'comite-de-origem' }.first
+    field['values'][0]['value']['title']
+  end
+
+  def receiver_product(item)
+    field = item.fields.select { |f| f['external_id'] == 'produto' }.first
+    field['values'][0]['value']['text']
+  end
+
   def send_survey(item, collector)
     HTTP.basic_auth(user: ENV['BINDS_USERNAME'] , pass: ENV['BINDS_PASSWORD'])
     HTTP.post('https://app.binds.co/api/seeds',
       json: { collector: collector,
-              from: { name: receiver_name(item), email: receiver_email(item)} }
+              from: { name: receiver_name(item), email: receiver_email(item) },
+              metadata: { loja: receiver_committee(item),
+                          produto: receiver_product(item) } }
     )
   end
 
