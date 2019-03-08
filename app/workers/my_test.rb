@@ -12,9 +12,12 @@ class MyTestWorker
   def perform(sqs_msg, body)
     sleep(30)
     application = JSON.parse(body['data'].to_json, object_class: OpenStruct)
-
-    sqs_msg.delete if ExpaApplicationSync.save_ogx_application(application)
-    #ap = RepositoryExpaApi.map_applications(application)
-    #sqs_msg.delete if RepositoryApplication.save_icx_from_expa(ap)
+    
+    ap = RepositoryExpaApi.map_applications(application)
+    if application&.opportunity&.programme&.short_name_display == 'TMP'
+      sqs_msg.delete
+    elsif RepositoryApplication.save_icx_from_expa(ap)
+      sqs_msg.delete
+    end
   end
 end

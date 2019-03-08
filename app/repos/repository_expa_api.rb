@@ -14,13 +14,8 @@ class RepositoryExpaApi
       # &.data&.all_opportunity_application&.data
     end
 
-    private
-
-    def map_applications(expa_applications)
-      #removing applications with 'TMP' product - we only work with GE, GT and GT products
-      mapped = expa_applications&.data&.all_opportunity_application&.data&.reject{ |application| application&.opportunity&.programme&.short_name_display == 'TMP' }
-      mapped = mapped.map do |expa_application|
-        pp expa_application.to_json
+    def map_applications(expa_application)
+      #mapped = expa_applications.map do |expa_application|
         application = Expa::Application.new
         application.updated_at_expa = Time.parse(expa_application.updated_at)
         application.status = expa_application.status
@@ -67,8 +62,8 @@ class RepositoryExpaApi
         application.standards = expa_application.standards
         # application.save
         application
-      end
-      mapped
+      #end
+      #mapped
     end
 
     def map_academic_experience_of_ep(expa_application)
@@ -115,7 +110,8 @@ ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
       filters:{
         opportunity_home_mc: 1606,
         last_interaction: {from: $from}
-      }
+      },
+      per_page:100
     ) {
       paging {
         total_pages
