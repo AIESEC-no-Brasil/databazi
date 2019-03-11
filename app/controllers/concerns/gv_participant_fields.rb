@@ -47,7 +47,8 @@ module GvParticipantFields
       'college_course' => gv_participant.exchange_participant&.college_course&.podio_id,
       'when_can_travel' => gv_participant&.read_attribute_before_type_cast(:when_can_travel),
       'other_university' => gv_participant.exchange_participant&.other_university,
-      'cellphone_contactable' => gv_participant.exchange_participant.cellphone_contactable
+      'cellphone_contactable' => gv_participant.exchange_participant.cellphone_contactable,
+      'referral_type' => gv_participant.exchange_participant&.read_attribute_before_type_cast(:referral_type)
     }
   end
 end

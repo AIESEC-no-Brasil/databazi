@@ -47,7 +47,8 @@ module GeParticipantFields
       'english_level' => ge_participant&.english_level&.read_attribute_before_type_cast(:english_level),
       'when_can_travel' => ge_participant&.read_attribute_before_type_cast(:when_can_travel),
       'preferred_destination' => ge_participant&.read_attribute_before_type_cast(:preferred_destination),
-      'cellphone_contactable' => ge_participant.exchange_participant.cellphone_contactable
+      'cellphone_contactable' => ge_participant.exchange_participant.cellphone_contactable,
+      'referral_type' => ge_participant.exchange_participant&.read_attribute_before_type_cast(:referral_type)
     }
   end
 end
