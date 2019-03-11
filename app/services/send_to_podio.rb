@@ -101,6 +101,7 @@ class SendToPodio
     params['utm-term'] = sqs_params['utm_term'] if sqs_params['utm_term']
     params['utm-content'] = sqs_params['utm_content'] if sqs_params['utm_content']
     params['english-level'] = sqs_params['english_level'] if sqs_params['english_level']
+    params['referral-type'] = sqs_params['referral_type'] if sqs_params['referral_type']
 
     # Podio starts counting at 1 instead of 0, so we increment our enum indexes to match its category field in the podio app.
     params['when-can-travel'] = sqs_params['when_can_travel'] + 1 if sqs_params['when_can_travel']
