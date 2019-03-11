@@ -45,7 +45,7 @@ class GtParticipantsController < ApplicationController
     %i[
       id fullname email birthdate cellphone local_committee_id
       university_id college_course_id password scholarity
-      campaign_id cellphone_contactable other_university
+      campaign_id cellphone_contactable other_university referral_type
     ]
   end
 
