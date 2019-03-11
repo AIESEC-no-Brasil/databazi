@@ -96,7 +96,7 @@ class GtParticipantsController < ApplicationController
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
              :password, :scholarity, :campaign_id, :cellphone_contactable,
-             :other_university)
+             :other_university, :referral_type)
   end
 
   def experience_params
