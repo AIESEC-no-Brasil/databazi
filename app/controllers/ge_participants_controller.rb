@@ -77,6 +77,7 @@ class GeParticipantsController < ApplicationController
   def normalized_exchange_participant_params
     params = exchange_participant_params
     params[:scholarity] = params[:scholarity].to_i
+    params[:referral_type] = params[:referral_type].to_i
 
     params
   end
