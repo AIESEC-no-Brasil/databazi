@@ -3,7 +3,7 @@ server '52.8.202.239', port: 22, user: 'ubuntu', roles: [:web, :app, :db], prima
 server '13.52.15.16', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
 
 # ARG
-server '52.205.23.29', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
+server '13.52.15.180', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
 
 set :branch, :master
 # server-based syntax
