@@ -37,7 +37,8 @@ class ExchangeParticipant < ApplicationRecord
     friend_social_network: 4, google: 5, facebook_group: 6, facebook_ad: 7,
     instagram_ad: 8, university_presentation: 9, university_mail: 10,
     university_workshop: 11, university_website: 12, event_or_fair: 13,
-    partner_organization: 14, spanglish_event: 15, potenciate_ad: 16, influencer: 17 }
+    partner_organization: 14, spanglish_event: 15, potenciate_ad: 16, influencer: 17 },
+    _suffix: true
 
   def scholarity_sym
     ENV['COUNTRY'] == 'bra' ? brazilian_scholarity : argentinean_scholarity
