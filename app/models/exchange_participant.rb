@@ -33,7 +33,7 @@ class ExchangeParticipant < ApplicationRecord
     realized: 100, approval_broken: 101, realization_broken: 102, matched: 103,
     completed: 104, finished: 105, other_status: 999 }
 
-  enum referral_type: { friend: 1, friend_facebook: 2, friend_instastories: 3,
+  enum referral_type: { none: 0, friend: 1, friend_facebook: 2, friend_instastories: 3,
     friend_social_network: 4, google: 5, facebook_group: 6, facebook_ad: 7,
     instagram_ad: 8, university_presentation: 9, university_mail: 10,
     university_workshop: 11, university_website: 12, event_or_fair: 13,
