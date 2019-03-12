@@ -12,7 +12,7 @@ RSpec.describe ExchangeParticipant, type: :model do
     it { is_expected.to respond_to :referral_type }
     it do
       expect(ExchangeParticipant.new).to define_enum_for(:referral_type)
-        .with({ friend: 1, friend_facebook: 2, friend_instastories: 3,
+        .with({ none: 0, friend: 1, friend_facebook: 2, friend_instastories: 3,
                 friend_social_network: 4, google: 5, facebook_group: 6, facebook_ad: 7,
                 instagram_ad: 8, university_presentation: 9, university_mail: 10,
                 university_workshop: 11, university_website: 12, event_or_fair: 13,
