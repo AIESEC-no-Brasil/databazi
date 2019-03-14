@@ -72,7 +72,7 @@ class RepositoryPodio
 
       attrs[:fields]['expa-data-de-re'] = parse_date(application.realized_at) if application.realized_at
       attrs[:fields]['expa-data-de-fin'] = parse_date(application.completed_at) if application.completed_at
-      
+
       attrs[:fields] = attrs[:fields].merge(map_standards(application.standards)) if application.standards
 
       item = Podio::Item.update(application.podio_id, attrs)
@@ -91,7 +91,7 @@ class RepositoryPodio
       attrs[:fields]['expa-data-de-fin'] = parse_date(application.completed_at) if application.completed_at
 
       attrs[:fields] = attrs[:fields].merge(map_standards(application.standards)) if application.standards
-      
+
       item = Podio::Item.update(application.prep_podio_id, attrs)
       item
     end
@@ -170,7 +170,7 @@ class RepositoryPodio
       check_podio
       sync_icx_country(application)
       sync_home_lc(application)
-      
+
       # rubocop:disable Metrics/LineLength
       params = {
         title: application.exchange_participant.fullname,
@@ -186,7 +186,6 @@ class RepositoryPodio
         'data-do-applied': parse_date(application.applied_at),
         'data-do-accepted': parse_date(application.accepted_at),
         'data-do-approved': parse_date(application.approved_at),
-        'data-do-break-approval': parse_date(application.break_approved_at),
         'opportunity-name': application.opportunity_name,
         'expa-opportunity-id': application.tnid.to_s,
         'host-lc': application&.host_lc&.podio_id,
@@ -204,6 +203,7 @@ class RepositoryPodio
         'sdg-de-interesse': application.sdg_goal_index,
         'expa-application-id': application.expa_id.to_s
       }
+      params['data-do-break-approval'] = application.break_approved_at ? parse_date(application.break_approved_at) : nil
       # rubocop:enable Metrics/LineLength
 
       params = cut_icx_params_by_program(params, application)
