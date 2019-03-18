@@ -15,20 +15,28 @@ class SurveyProcessor
   end
 
   def call
+    puts "o podio_id é #{@podio_id}"
     item = fetch_item
+    puts "peguei o item #{item}"
 
     status = fetch_status(item)
+    puts "o status é #{status}"
 
-    survey_history = SurveyHistory.first_or_create(podio_id: @podio_id)
+    survey_history = SurveyHistory.find_by(podio_id: @podio_id)
+    survey_history = SurveyHistory.create(podio_id: @podio_id) unless survey_history
+    puts " o historico é #{survey_history}"
 
     collector = Survey.find_by(status: status).collector
+    puts "o collector é #{collector}"
 
     res = send_survey(item, collector) unless already_sent?(survey_history, collector)
+    puts "a resposta é #{res}"
 
     if res
       @status = true if update_surveys(survey_history, res, collector)
     end
 
+    puts "status do service eh: #{@status}"
     @status
   end
 
@@ -67,11 +75,23 @@ class SurveyProcessor
     field['values'][0]['value']
   end
 
+  def receiver_committee(item)
+    field = item.fields.select { |f| f['external_id'] == 'comite-de-origem' }.first
+    field['values'][0]['value']['title']
+  end
+
+  def receiver_product(item)
+    field = item.fields.select { |f| f['external_id'] == 'produto' }.first
+    field['values'][0]['value']['text']
+  end
+
   def send_survey(item, collector)
     HTTP.basic_auth(user: ENV['BINDS_USERNAME'] , pass: ENV['BINDS_PASSWORD'])
     HTTP.post('https://app.binds.co/api/seeds',
       json: { collector: collector,
-              from: { name: receiver_name(item), email: receiver_email(item)} }
+              from: { name: receiver_name(item), email: receiver_email(item) },
+              metadata: { loja: receiver_committee(item),
+                          produto: receiver_product(item) } }
     )
   end
 

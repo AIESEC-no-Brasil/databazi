@@ -50,7 +50,8 @@ module GtParticipantFields
       'other_university' => gt_participant.exchange_participant&.other_university,
       'preferred_destination' => gt_participant&.read_attribute_before_type_cast(:preferred_destination),
       'english_level' => gt_participant&.english_level&.read_attribute_before_type_cast(:english_level),
-      'cellphone_contactable' => gt_participant.exchange_participant.cellphone_contactable
+      'cellphone_contactable' => gt_participant.exchange_participant.cellphone_contactable,
+      'referral_type' => gt_participant.exchange_participant&.read_attribute_before_type_cast(:referral_type)
     }
   end
 end

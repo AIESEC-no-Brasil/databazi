@@ -3,11 +3,7 @@ require 'graphql/client/http'
 
 module EXPAAPI
   def self.access_token
-    HTTParty
-      .get("http://token.aiesec.org.br/" \
-        "get_token.php?token=#{token_token}"
-      )
-      .body
+    HTTParty.get("#{ENV['TOKEN_URL']}?token=#{token_token}").body
   end
 
   def self.token_token
