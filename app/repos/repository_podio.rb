@@ -287,11 +287,12 @@ class RepositoryPodio
       }
       mapper[status]
     end
-
+    
     def icx_status_to_podio(status)
       mapping = {
         open: 1,
         applied: 1,
+        matched: 8,
         accepted: 2,
         approved: 3,
         realized: 3, #this status is after 'approved' and it'll only be be used in ICX PREP, in this stage it must stop on 'approved' status

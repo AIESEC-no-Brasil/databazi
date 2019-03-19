@@ -33,13 +33,13 @@ class RepositoryApplication
   def self.pending_podio_sync_icx_applications
     Expa::Application
       .where('exchange_participant_id is not null')
-      .where.not(status: %i[matched approved_tn_manager approved_ep_manager]) #this statuses should be ignored in this context
+      .where.not(status: %i[approved_tn_manager approved_ep_manager]) #this statuses should be ignored in this context
       .joins(:exchange_participant)
       .where(exchange_participants: { exchange_type: :icx })
       .where(podio_last_sync: nil)
       .where(has_error: false)
       .order('updated_at_expa': :desc)
-      .limit 10
+      limit(10)
   end
 
   private
