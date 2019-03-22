@@ -45,9 +45,9 @@ class RepositoryPodio
       program = application&.exchange_participant&.registerable_type
 
       if program == 'GeParticipant' && approved_sync_count == 1
-        attrs[:fields]["expa-application-id-#{approved_sync_count}-3"]: application.expa_id.to_s
+        attrs[:fields]["expa-application-id-#{approved_sync_count}-3"] = application.expa_id.to_s
       else
-        attrs[:fields]["expa-application-id-#{approved_sync_count}"]: application.expa_id.to_s
+        attrs[:fields]["expa-application-id-#{approved_sync_count}"] = application.expa_id.to_s
       end
 
 
