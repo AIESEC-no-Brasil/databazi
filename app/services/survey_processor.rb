@@ -15,28 +15,20 @@ class SurveyProcessor
   end
 
   def call
-    puts "o podio_id é #{@podio_id}"
     item = fetch_item
-    puts "peguei o item #{item}"
-
     status = fetch_status(item)
-    puts "o status é #{status}"
 
     survey_history = SurveyHistory.find_by(podio_id: @podio_id)
     survey_history = SurveyHistory.create(podio_id: @podio_id) unless survey_history
-    puts " o historico é #{survey_history}"
 
     collector = Survey.find_by(status: status).collector
-    puts "o collector é #{collector}"
 
     res = send_survey(item, collector) unless already_sent?(survey_history, collector)
-    puts "a resposta é #{res}"
 
     if res
       @status = true if update_surveys(survey_history, res, collector)
     end
 
-    puts "status do service eh: #{@status}"
     @status
   end
 
