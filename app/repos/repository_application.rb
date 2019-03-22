@@ -26,7 +26,8 @@ class RepositoryApplication
         home_mc: application.home_mc,
         host_lc: application.host_lc,
         home_lc: application.home_lc,
-        standards: application.standards
+        standards: application.standards,
+        exchange_participant_id: application.exchange_participant.id
       )
   end
 
