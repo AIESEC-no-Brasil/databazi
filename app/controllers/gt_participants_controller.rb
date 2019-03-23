@@ -45,7 +45,7 @@ class GtParticipantsController < ApplicationController
     %i[
       id fullname email birthdate cellphone local_committee_id
       university_id college_course_id password scholarity
-      campaign_id cellphone_contactable other_university referral_type
+      campaign_id cellphone_contactable other_university referral_type city
     ]
   end
 
@@ -97,7 +97,7 @@ class GtParticipantsController < ApplicationController
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
              :password, :scholarity, :campaign_id, :cellphone_contactable,
-             :other_university, :referral_type)
+             :other_university, :referral_type, :city)
   end
 
   def experience_params

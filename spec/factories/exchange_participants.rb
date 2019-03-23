@@ -3,6 +3,7 @@ FactoryBot.define do
     podio_id { Faker::Number.number(5) }
     fullname { Faker::Name.name }
     cellphone { Faker::PhoneNumber.cell_phone }
+    city { 'City' }
     email { Faker::Internet.email }
     birthdate { Faker::Date.birthday(18, 30) }
     password { Faker::Internet.password }

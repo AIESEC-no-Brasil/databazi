@@ -40,7 +40,7 @@ class GeParticipantsController < ApplicationController
       exchange_participant_attributes: %i[
         id fullname email birthdate cellphone local_committee_id
         university_id college_course_id password scholarity
-        campaign_id cellphone_contactable other_university referral_type
+        campaign_id cellphone_contactable other_university referral_type city
       ]
     )
   end
@@ -87,7 +87,7 @@ class GeParticipantsController < ApplicationController
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
              :password, :scholarity, :campaign_id, :cellphone_contactable,
-             :other_university, :referral_type)
+             :other_university, :referral_type, :city)
   end
 
   def scholarity_human_name
