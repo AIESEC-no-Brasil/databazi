@@ -11,6 +11,7 @@ class UniversitiesController < ApplicationController
       raise ArgumentError, 'missing department parameter' unless params[:department]
 
       results = results.joins(:university_local_committees)
+        .select('universities.id, name, city, university_local_committees.local_committee_id')
         .where(department: params[:department])
         .where(university_local_committees: { program: params[:program] })
 
