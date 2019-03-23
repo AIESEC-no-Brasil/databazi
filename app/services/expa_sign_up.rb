@@ -38,22 +38,30 @@ class ExpaSignUp
   def submit_data(exchange_participant)
     HTTParty.post(
       'https://auth.aiesec.org/users/',
-      body: {
-        'authenticity_token' => authenticity_token,
-        'utf8' => '✓',
-        'user[email]' => exchange_participant.email,
-        'user[first_name]' => exchange_participant.first_name,
-        'user[last_name]' => exchange_participant_last_name(exchange_participant.last_name),
-        'user[password]' => exchange_participant.decrypted_password,
-        'user[phone]' => exchange_participant.cellphone,
-        'user[country]' => ENV['EXPA_COUNTRY'],
-        'user[mc]' => ENV['EXPA_MC_ID'],
-        'user[lc]' => exchange_participant.local_committee.expa_id,
-        'user[lc_input]' => exchange_participant.local_committee.expa_id,
-        'user[allow_phone_communication]' =>
-          exchange_participant.cellphone_contactable
-      }
+      body: body_params
     )
+  end
+
+  def body_params
+    params = {
+      'authenticity_token' => authenticity_token,
+      'utf8' => '✓',
+      'user[email]' => exchange_participant.email,
+      'user[first_name]' => exchange_participant.first_name,
+      'user[last_name]' => exchange_participant_last_name(exchange_participant.last_name),
+      'user[password]' => exchange_participant.decrypted_password,
+      'user[phone]' => exchange_participant.cellphone,
+      'user[country]' => ENV['EXPA_COUNTRY'],
+      'user[mc]' => ENV['EXPA_MC_ID'],
+      'user[lc]' => exchange_participant.local_committee.expa_id,
+      'user[lc_input]' => exchange_participant.local_committee.expa_id,
+      'user[allow_phone_communication]' =>
+        exchange_participant.cellphone_contactable
+    }
+
+    params['user[alingment_id]'] = exchange_participant.university.expa_id if ENV['COUNTRY'] == 'per'
+
+    params
   end
 
   def exchange_participant_last_name(last_name)
