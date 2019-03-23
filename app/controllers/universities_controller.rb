@@ -5,14 +5,30 @@ class UniversitiesController < ApplicationController
     if params[:city]
       results = results.where('unaccent(city) ILIKE unaccent(?)', params[:city])
     end
-    results.limit(limit_response)
-           .order(name: :asc)
+
+    if ENV['COUNTRY'] == 'per'
+      raise ArgumentError, 'missing program parameter' unless params[:program]
+      raise ArgumentError, 'missing department parameter' unless params[:department]
+
+      results = results.joins(:university_local_committees)
+        .where(department: params[:department])
+        .where(university_local_committees: { program: params[:program] })
+
+    end
+
+    results.limit(limit_response).order(name: :asc)
   }
 
   expose :other, -> { other_university(params[:city]) }
 
   def index
-    render json: format_response
+    begin 
+      render json: format_response
+    rescue => e
+      render status:400, json: {
+        message: e.message
+      }
+    end
   end
 
   private
@@ -22,6 +38,8 @@ class UniversitiesController < ApplicationController
   end
 
   def format_response
+    return universities.as_json(only: %i[id name local_committee_id city]) if ENV['COUNTRY'] == 'per'
+
     universities.as_json(only: %i[id name local_committee_id city]) +
       other.as_json(only: %i[id name local_committee_id city])
   end
