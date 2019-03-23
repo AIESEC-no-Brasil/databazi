@@ -59,7 +59,7 @@ class ExpaSignUp
         exchange_participant.cellphone_contactable
     }
 
-    params['user[alingment_id]'] = exchange_participant.university.expa_id if ENV['COUNTRY'] == 'per'
+    params['user[alignment_id]'] = exchange_participant.university.expa_id if ENV['COUNTRY'] == 'per'
 
     params
   end
