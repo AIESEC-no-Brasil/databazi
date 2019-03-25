@@ -22,50 +22,59 @@ class SendToPodio
 
   def utm_source_to_podio(db_source)
     podio_domains = {
-      'rd-station': 0,
-      'google': 1,
-      'facebook': 2,
-      'instagram': 3,
-      'twitter': 4,
-      'linkedin': 5,
-      'site': 6,
-      'blog': 7,
-      'offline': 8,
-      'outros': 9
+      'rdstation': 1,
+      'google': 2,
+      'facebook': 3,
+      'facebook-ads': 11,
+      'instagram': 4,
+      'twitter': 5,
+      'twitter-ads': 12,
+      'linkedin': 6,
+      'linkedin-ads': 13,
+      'youtube': 14,
+      'site': 7,
+      'blog': 8,
+      'offline': 9,
+      'outros': 10
     }
 
-    podio_domain = podio_domains[podio_domains.keys.detect{ |domain| db_source =~ /#{domain.to_s}/ }]
+    podio_domain = podio_domains[podio_domains.keys.detect{ |domain| db_source.downcase == domain.to_s.downcase }]
 
     return podio_domains[:outros] if podio_domain.nil?
 
     podio_domain
   end
 
-  def utm_medium_to_podio(db_source)
+  def utm_medium_to_podio(db_medium)
     podio_domains = {
-      'banner-home': 0,
-      'bumper': 1,
-      'cartaz': 2,
-      'cpc': 3,
-      'display': 4,
-      'email': 5,
-      'imagem': 6,
-      'indicacao': 7,
-      'leads-ads': 8,
-      'pop-up': 9,
-      'post-blog': 10,
-      'post-form': 11,
-      'post-link': 12,
-      'search': 13,
-      'stories': 14,
-      'trueview': 15,
-      'video': 16,
-      'outros': 17
+      'banner': 19,
+      'banner-home': 1,
+      'pop-up': 10,
+      'post-form': 12,
+      'imagem': 7,
+      'interacao': 20,
+      'post-blog': 11,
+      'post-link': 13,
+      'stories': 15,
+      'video': 17,
+      'lead-ads': 9,
+      'cpc': 4,
+      'display': 5,
+      'search': 14,
+      'imagem-unica': 21,
+      'cartaz': 3,
+      'evento': 22,
+      'indicacao': 8,
+      'outro': 18,
+      'panfleto': 23,
+      'email': 6,
+      'bumper': 2,
+      'trueview': 16
     }
 
-    podio_domain = podio_domains[podio_domains.keys.detect{ |domain| db_source =~ /#{domain.to_s}/ }]
+    podio_domain = podio_domains[podio_domains.keys.detect{ |domain| db_medium.downcase == domain.to_s.downcase }]
 
-    return podio_domains[:outros] if podio_domain.nil?
+    return podio_domains[:outro] if podio_domain.nil?
 
     podio_domain
   end
@@ -88,7 +97,7 @@ class SendToPodio
 
     podio_id
   end
-
+  
   def update_participant(podio_id)
     @gx_participant.exchange_participant.update_attributes(podio_id: podio_id)
 
