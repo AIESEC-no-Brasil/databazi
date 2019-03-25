@@ -39,7 +39,7 @@ class UniversitiesController < ApplicationController
   end
 
   def format_response
-    return universities.as_json(only: %i[id name local_committee_id city]) if ENV['COUNTRY'] == 'per'
+    return other_university_peru if ENV['COUNTRY'] == 'per'
 
     universities.as_json(only: %i[id name local_committee_id city]) +
       other.as_json(only: %i[id name local_committee_id city])
@@ -62,5 +62,16 @@ class UniversitiesController < ApplicationController
     else
       University.where('lower(name) = ?', 'outra')
     end
+  end
+
+  def other_university_peru
+    universities = University.where(department: params[:department])
+      .joins(:university_local_committees)
+      .select('universities.id, name, city, university_local_committees.local_committee_id')
+      .where('unaccent(name) ILIKE unaccent(?)', '%otras%')
+      .where(department: params[:department])
+      .where(university_local_committees: { program: params[:program] }) if universities.blank?    
+
+    universities.as_json(only: %i[id name local_committee_id city])
   end
 end
