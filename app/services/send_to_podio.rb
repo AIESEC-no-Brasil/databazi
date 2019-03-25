@@ -38,9 +38,9 @@ class SendToPodio
       'outros': 10
     }
 
-    podio_domain = podio_domains[podio_domains.keys.detect{ |domain| db_source.downcase == domain.to_s.downcase }]
+    podio_domain = podio_domains[db_source.downcase.to_sym]
 
-    return podio_domains[:outros] if podio_domain.nil?
+    return podio_domains[:outros] unless podio_domain
 
     podio_domain
   end
@@ -72,9 +72,9 @@ class SendToPodio
       'trueview': 16
     }
 
-    podio_domain = podio_domains[podio_domains.keys.detect{ |domain| db_medium.downcase == domain.to_s.downcase }]
+    podio_domain = podio_domains[db_medium.downcase.to_sym]
 
-    return podio_domains[:outro] if podio_domain.nil?
+    return podio_domains[:outro] unless podio_domain
 
     podio_domain
   end
