@@ -20,6 +20,56 @@ class SendToPodio
     @status = send_to_podio(@params)
   end
 
+  def utm_source_to_podio(db_source)
+    podio_domains = {
+      'rd-station': 0,
+      'google': 1,
+      'facebook': 2,
+      'instagram': 3,
+      'twitter': 4,
+      'linkedin': 5,
+      'site': 6,
+      'blog': 7,
+      'offline': 8,
+      'outros': 9
+    }
+
+    podio_domain = podio_domains[podio_domains.keys.detect{ |domain| db_source =~ /#{domain.to_s}/ }]
+
+    return podio_domains[:outros] if podio_domain.nil?
+
+    podio_domain
+  end
+
+  def utm_medium_to_podio(db_source)
+    podio_domains = {
+      'banner-home': 0,
+      'bumper': 1,
+      'cartaz': 2,
+      'cpc': 3,
+      'display': 4,
+      'email': 5,
+      'imagem': 6,
+      'indicacao': 7,
+      'leads-ads': 8,
+      'pop-up': 9,
+      'post-blog': 10,
+      'post-form': 11,
+      'post-link': 12,
+      'search': 13,
+      'stories': 14,
+      'trueview': 15,
+      'video': 16,
+      'outros': 17
+    }
+
+    podio_domain = podio_domains[podio_domains.keys.detect{ |domain| db_source =~ /#{domain.to_s}/ }]
+
+    return podio_domains[:outros] if podio_domain.nil?
+
+    podio_domain
+  end
+
   private
 
   def send_to_podio(params)
@@ -130,8 +180,8 @@ class SendToPodio
       }
     }
 
-    params['tag-origem'] = sqs_params['utm_source'] if sqs_params['utm_source']
-    params['tag-meio'] = sqs_params['utm_medium'] if sqs_params['utm_medium']
+    params['tag-origem-2'] = utm_source_to_podio(sqs_params['utm_source']) if sqs_params['utm_source']
+    params['tag-meio-2'] = utm_medium_to_podio(sqs_params['utm_medium']) if sqs_params['utm_medium']
     params['tag-campanha'] = sqs_params['utm_campaign'] if sqs_params['utm_campaign']
     params['tag-termo'] = sqs_params['utm_term'] if sqs_params['utm_term']
     params['tag-conteudo-2'] = sqs_params['utm_content'] if sqs_params['utm_content']
@@ -170,5 +220,5 @@ class SendToPodio
 
   def gv_participant?
     registerable_class_name == 'GvParticipant'
-  end
+  end  
 end
