@@ -16,7 +16,6 @@ class RepositoryPodio
 
     def change_status(id, application)
       check_podio
-      program = application&.exchange_participant&.registerable_type
 
       attrs = {'fields': {
         'status-expa': map_status(application.exchange_participant.status.to_sym)
@@ -24,7 +23,7 @@ class RepositoryPodio
       attrs[:fields]['teste-di-data-do-applied'] = parse_date(application.applied_at) if application.applied_at
       attrs[:fields]['teste-di-data-do-accepted'] = parse_date(application.accepted_at) if application.accepted_at
       attrs[:fields]['op-id-1'] = application.tnid.to_s if application.tnid
-      if program == 'GvParticipant'
+      if application.product == 'gv'
         attrs[:fields]['di-ep-id'] = application.exchange_participant.expa_id.to_s if application.exchange_participant.expa_id
       else
         attrs[:fields]['di-ep-id-2'] = application.exchange_participant.expa_id.to_s if application.exchange_participant.expa_id
@@ -301,7 +300,7 @@ class RepositoryPodio
       }
       mapper[status]
     end
-    
+
     def icx_status_to_podio(status)
       mapping = {
         open: 1,
