@@ -44,4 +44,17 @@ RSpec.describe LocalCommittee, type: :model do
 
     it { expect(local_committees_list.count).to eq 4 }
   end
+
+  describe 'argentinean committees' do
+    let(:foreign_member_committee) { create(:member_committee, name: 'foreign') }
+    let!(:foreign_local_committee) { create(:local_committee, member_committee: foreign_member_committee) }
+    let(:argentinean_member_committee) { create(:member_committee, name: 'Argentina') }
+    let!(:argentinean_local_committees) { create_list(:local_committee, 4,member_committee: argentinean_member_committee) }
+
+    subject(:local_committees_list) { LocalCommittee.argentinean }
+
+    it { is_expected.to match_array(argentinean_local_committees) }
+
+    it { expect(local_committees_list.count).to eq 4 }
+  end
 end
