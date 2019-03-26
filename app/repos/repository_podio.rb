@@ -16,13 +16,18 @@ class RepositoryPodio
 
     def change_status(id, application)
       check_podio
+
       attrs = {'fields': {
         'status-expa': map_status(application.exchange_participant.status.to_sym)
       }}
       attrs[:fields]['teste-di-data-do-applied'] = parse_date(application.applied_at) if application.applied_at
       attrs[:fields]['teste-di-data-do-accepted'] = parse_date(application.accepted_at) if application.accepted_at
       attrs[:fields]['op-id-1'] = application.tnid.to_s if application.tnid
-      attrs[:fields]['di-ep-id'] = application.exchange_participant.expa_id.to_s if application.exchange_participant.expa_id
+      if application.product == 'gv'
+        attrs[:fields]['di-ep-id'] = application.exchange_participant.expa_id.to_s if application.exchange_participant.expa_id
+      else
+        attrs[:fields]['di-ep-id-2'] = application.exchange_participant.expa_id.to_s if application.exchange_participant.expa_id
+      end
       item = Podio::Item.update(id, attrs)
       item
     end
@@ -33,9 +38,17 @@ class RepositoryPodio
       attrs = {'fields': {
         "data-do-approved-#{approved_sync_count}": parse_date(application.approved_at),
         "op-id-#{approved_sync_count}": application.tnid.to_s,
-        "produto-apd-#{approved_sync_count}": product_index(application),
-        "expa-application-id-#{approved_sync_count}": application.expa_id.to_s
+        "produto-apd-#{approved_sync_count}": product_index(application)
       }}
+
+      program = application&.exchange_participant&.registerable_type
+
+      if program == 'GeParticipant' && approved_sync_count == 1
+        attrs[:fields]["expa-application-id-#{approved_sync_count}-3"] = application.expa_id.to_s
+      else
+        attrs[:fields]["expa-application-id-#{approved_sync_count}"] = application.expa_id.to_s
+      end
+
 
       item = Podio::Item.update(id, attrs)
 
@@ -290,7 +303,7 @@ class RepositoryPodio
       }
       mapper[status]
     end
-    
+
     def icx_status_to_podio(status)
       mapping = {
         open: 1,
