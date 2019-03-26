@@ -26,7 +26,8 @@ class RepositoryApplication
         home_mc: application.home_mc,
         host_lc: application.host_lc,
         home_lc: application.home_lc,
-        standards: application.standards
+        standards: application.standards,
+        exchange_participant_id: application.exchange_participant.id
       )
   end
 
@@ -45,16 +46,27 @@ class RepositoryApplication
   private
 
   def self.normalize_ep(application)
-    ep = application.exchange_participant
+    most_recent_ep = application.exchange_participant
+
     application.exchange_participant = ExchangeParticipant.where(
-      expa_id: application.exchange_participant.expa_id
+      expa_id: most_recent_ep.expa_id
     ).first_or_create!(
-      application.exchange_participant.attributes
+      most_recent_ep.attributes
     )
-    if ep.registerable.new_record?
-      ep.registerable.save
+
+    application.exchange_participant.update(
+      fullname: most_recent_ep.fullname,
+      email: most_recent_ep.email,
+      cellphone: most_recent_ep.cellphone,
+      cellphone_contactable: most_recent_ep.cellphone_contactable,
+      exchange_type: most_recent_ep.exchange_type,
+      academic_backgrounds: most_recent_ep.academic_backgrounds
+    )
+
+    if most_recent_ep.registerable.new_record?
+      most_recent_ep.registerable.save
       application.exchange_participant.update_attributes(
-        registerable: ep.registerable
+        registerable: most_recent_ep.registerable
       )
     end
   end
