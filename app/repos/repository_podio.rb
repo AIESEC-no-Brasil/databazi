@@ -217,6 +217,9 @@ class RepositoryPodio
         'expa-application-id': application.expa_id.to_s
       }
       params['data-do-break-approval'] = application.break_approved_at ? parse_date(application.break_approved_at) : nil
+
+      params['quero-ser-contactado-por-telefone'] = application&.exchange_participant&.cellphone_contactable ? 1 : 2 #1 = Yes, 2 = No
+
       # rubocop:enable Metrics/LineLength
 
       params = cut_icx_params_by_program(params, application)
