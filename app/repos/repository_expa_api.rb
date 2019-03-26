@@ -39,6 +39,7 @@ class RepositoryExpaApi
           fullname: expa_application&.person&.full_name,
           email: expa_application&.person&.email,
           cellphone: expa_application&.person&.phone,
+          cellphone_contactable: expa_application&.person&.meta&.allow_phone_communication == "true" ? true : false,
           expa_id: expa_application&.person&.id,
           exchange_type: :icx,
           academic_backgrounds: map_academic_experience_of_ep(expa_application)
@@ -146,6 +147,9 @@ ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
           home_lc {
             id
             name
+          }
+          meta{
+            allow_phone_communication
           }
         }
         host_lc {
