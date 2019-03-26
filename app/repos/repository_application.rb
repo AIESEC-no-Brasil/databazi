@@ -40,7 +40,7 @@ class RepositoryApplication
       .where(podio_last_sync: nil)
       .where(has_error: false)
       .order('updated_at_expa': :desc)
-      limit(10)
+      .limit(10)
   end
 
   private
