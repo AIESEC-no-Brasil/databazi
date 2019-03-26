@@ -9,7 +9,8 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-ActiveRecord::Schema.define(version: 2019_02_18_190904) do
+
+ActiveRecord::Schema.define(version: 2019_03_11_180932) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,6 +86,7 @@ ActiveRecord::Schema.define(version: 2019_02_18_190904) do
     t.integer "status"
     t.integer "approved_sync_count", default: 1
     t.text "academic_backgrounds", array: true
+    t.integer "referral_type"
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
@@ -112,8 +114,8 @@ ActiveRecord::Schema.define(version: 2019_02_18_190904) do
     t.integer "product"
     t.integer "podio_id"
     t.integer "tnid"
-    t.boolean "podio_sent", default: false
     t.bigint "home_mc_id"
+    t.boolean "podio_sent", default: false
     t.datetime "podio_sent_at"
     t.boolean "has_error", default: false
     t.text "academic_backgrounds", array: true

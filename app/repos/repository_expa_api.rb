@@ -27,7 +27,7 @@ class RepositoryExpaApi
         application.completed_at = parse_time(expa_application.experience_end_date)
         # The two date are the same from expa. Relies on status
         application.accepted_at = parse_time(expa_application.matched_or_rejected_at)
-        application.break_approved_at = parse_time(expa_application.matched_or_rejected_at)
+        application.break_approved_at = parse_time(expa_application.matched_or_rejected_at) if rejected_application?(expa_application.status)
         application.sdg_goal_index = expa_application&.opportunity&.sdg_info&.sdg_target&.goal_index
         application.sdg_target_index = expa_application&.opportunity&.sdg_info&.sdg_target&.target_index
         application.tnid = expa_application&.opportunity&.id
@@ -64,6 +64,10 @@ class RepositoryExpaApi
         application
       #end
       #mapped
+    end
+
+    def rejected_application?(status)
+      status.in?(['break_approved', 'approval_broken', 'rejected'])
     end
 
     def map_academic_experience_of_ep(expa_application)
@@ -120,7 +124,7 @@ ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
         id
         status
         updated_at
-        created_at        
+        created_at
         matched_or_rejected_at
         date_approved
         date_realized
