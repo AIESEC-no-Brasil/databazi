@@ -12,15 +12,12 @@ class RepositoryExpaApi
 
       total_pages = res&.data&.all_opportunity_application&.paging&.total_pages
 
-      p total_pages
-
       apps = map_applications(res&.data&.all_opportunity_application&.data) unless res.nil?
 
       apps.each do |expa_application|
         begin
           callback.call(expa_application)
         rescue => exception
-          p exception
           Raven.extra_context application_expa_id: expa_application&.expa_id
           Raven.capture_exception(exception)
           logger = logger || Logger.new(STDOUT)
