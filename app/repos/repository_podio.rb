@@ -206,16 +206,18 @@ class RepositoryPodio
         'home-mc': application&.home_mc&.podio_id,
         'background-academico-do-ep': application&.exchange_participant&.academic_backgrounds,
         'background-da-vaga': application&.academic_backgrounds,
-        'aplicante-qualificado': map_aplicante_qualificado(application),
         "celular": [
           {
             'type': 'mobile',
-            value: application.exchange_participant.cellphone
+            value: application.exchange_participant.cellphone ? application.exchange_participant.cellphone[0...50] : nil #maximum of 50 characters (podio limit)
           }
         ],
         'sdg-de-interesse': application.sdg_goal_index,
         'expa-application-id': application.expa_id.to_s
       }
+
+      params['aplicante-qualificado'] = map_aplicante_qualificado(application) if application.home_mc&.name
+
       params['data-do-break-approval'] = application.break_approved_at ? parse_date(application.break_approved_at) : nil
 
       params['quero-ser-contactado-por-telefone'] = application&.exchange_participant&.cellphone_contactable ? 1 : 2 #1 = Yes, 2 = No
@@ -422,7 +424,8 @@ class RepositoryPodio
       'background-da-vaga': [:gv]
     }
     to_cut.each do |key, value|
-      params = params.except(key) if value.include? application.product.to_sym
+      params = params.except(key.to_s) if value.include?(application.product.to_sym)
+      params = params.except(key.to_sym) if value.include?(application.product.to_sym)
     end
     params
   end
