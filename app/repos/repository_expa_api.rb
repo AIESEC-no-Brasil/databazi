@@ -2,25 +2,52 @@ require "#{Rails.root}/lib/expa_api"
 
 class RepositoryExpaApi
   class << self
-    def load_icx_applications(from)
+    def load_icx_applications(from, page = 1, &callback)
       res = EXPAAPI::Client.query(
         ICXAPPLICATIONS,
         variables: {
           from: from
         }
       )
-      map_applications(res) unless res.nil?
+
+      total_pages = res&.data&.all_opportunity_application&.paging&.total_pages
+
+      p total_pages
+
+      apps = map_applications(res&.data&.all_opportunity_application&.data) unless res.nil?
+
+      apps.each do |expa_application|
+        begin
+          callback.call(expa_application)
+        rescue => exception
+          p exception
+          Raven.extra_context application_expa_id: expa_application&.expa_id
+          Raven.capture_exception(exception)
+          logger = logger || Logger.new(STDOUT)
+          logger.error exception.message
+          logger.error(exception.backtrace.map { |s| "\n#{s}" })
+          break
+        end
+      end if apps
+
+      apps = nil
       # File.write("#{Rails.root}/spec/fixtures/json/icx_applications_full.json", res.to_h.to_json)
       # &.data&.all_opportunity_application&.data
+
+      return load_icx_applications(
+        from,
+        page + 1,
+        &callback
+      ) unless res.nil? || page + 1 > total_pages
+
     end
 
     private
 
     def map_applications(expa_applications)
       #removing applications with 'TMP' product - we only work with GE, GT and GT products
-      mapped = expa_applications&.data&.all_opportunity_application&.data&.reject{ |application| application&.opportunity&.programme&.short_name_display == 'TMP' }
+      mapped = expa_applications.reject{ |application| application&.opportunity&.programme&.short_name_display == 'TMP' }
       mapped = mapped.map do |expa_application|
-        pp expa_application.to_json
         application = Expa::Application.new
         application.updated_at_expa = Time.parse(expa_application.updated_at)
         application.status = expa_application.status
@@ -116,7 +143,8 @@ end
 ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
   query ($from: DateTime) {
     allOpportunityApplication(
-      sort: "ASC_updated_at",
+      sort: "updated_at",
+      per_page: 500,
       filters:{
         opportunity_home_mc: 1606,
         last_interaction: {from: $from}
