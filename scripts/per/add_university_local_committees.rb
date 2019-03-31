@@ -1,4 +1,4 @@
-data = CSV.read("#{Rails.root}/files/uni_lc.csv")
+data = CSV.read("#{Rails.root}/scripts/uni_lc.csv")
 
 data.shift
 
