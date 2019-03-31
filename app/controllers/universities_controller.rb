@@ -11,8 +11,9 @@ class UniversitiesController < ApplicationController
       raise ArgumentError, 'missing department parameter' unless params[:department]
 
       results = results.joins(:university_local_committees)
-        .select('universities.id, name, city, university_local_committees.local_committee_id')
-        .where(department: params[:department])
+        .select('universities.id, name, city, university_local_committees.local_committee_id')        
+        .where('lower(unaccent(department)) = unaccent(?)', params[:department].downcase)
+        .where('lower(unaccent(city)) ILIKE unaccent(?)', params[:city].downcase)
         .where(university_local_committees: { program: params[:program] })
 
     end
@@ -65,12 +66,14 @@ class UniversitiesController < ApplicationController
   end
 
   def other_university_peru
-    universities = University.where(department: params[:department])
+    return universities unless universities.blank?
+
+    universities = University
       .joins(:university_local_committees)
       .select('universities.id, name, city, university_local_committees.local_committee_id')
-      .where('unaccent(name) ILIKE unaccent(?)', '%otras%')
-      .where(department: params[:department])
-      .where(university_local_committees: { program: params[:program] }) if universities.blank?    
+      .where('lower(unaccent(department)) = unaccent(?)', params[:department].downcase)
+      .where('lower(unaccent(name)) ILIKE unaccent(?)', '%otras%')
+      .where(university_local_committees: { program: params[:program] })
 
     universities.as_json(only: %i[id name local_committee_id city])
   end

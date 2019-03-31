@@ -1,4 +1,4 @@
-# Universities
+-- Universities
 
 INSERT INTO universities (expa_id, department, name, city, created_at, updated_at) VALUES('9227', 'Amazonas', 'Amazonas - Otras universidades e institutos', 'Amazonas', now(), now());
 INSERT INTO universities (expa_id, department, name, city, created_at, updated_at) VALUES('10613', 'Ancash', 'Ancash - Otras universidades e institutos', 'Ancash', now(), now());
@@ -152,10 +152,9 @@ INSERT INTO universities (expa_id, department, name, city, created_at, updated_a
 INSERT INTO universities (expa_id, department, name, city, created_at, updated_at) VALUES('9233', 'Tumbes', 'Tumbes - Otras universidades e institutos', 'Tumbes', now(), now());
 INSERT INTO universities (expa_id, department, name, city, created_at, updated_at) VALUES('9231', 'Ucayali', 'Ucayali - Otras universidades e institutos', 'Ucayali', now(), now());
 
-# Local Committees
+-- Local Committees
 
 INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('Arequipa', 613, 1, now(), now(), true);
-INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('Cajamarca', 1922, 2, now(), now(), true);
 INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('Católica', 669, 16, now(), now(), true);
 INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('Chiclayo', 1665, 3, now(), now(), true);
 INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('Cusco', 1890, 4, now(), now(), true);
@@ -163,8 +162,8 @@ INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, a
 INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('Huánuco', 2363, 6, now(), now(), true);
 INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('Ica', 1720, 7, now(), now(), true);
 INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('Lima', 589, 8, now(), now(), true);
-INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('Pacífico', 1432, 9, now(), now(), true);
 INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('MC Peru', 1768, 10, now(), now(), true);
+INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('Pacífico', 1432, 9, now(), now(), true);
 INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('Piura', 160, 11, now(), now(), true);
 INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('Puno', 2364, 12, now(), now(), true);
 INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('San Marcos', 269, 17, now(), now(), true);
@@ -172,7 +171,3 @@ INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, a
 INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('Tarapoto', 2365, 14, now(), now(), true);
 INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('Trujillo', 1716, 15, now(), now(), true);
 INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('URP', 116, 19, now(), now(), true);
-INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('USMP', 1732, 18, now(), now(), true);
-INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('EduardoLandia', 2382, -1, now(), now(), true);
-INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('EduardoLandia', 2383, -1, now(), now(), true);
-INSERT INTO local_committees (name, expa_id, podio_id, created_at, updated_at, active) VALUES('EduardoLandia', 2384, -1, now(), now(), true);
