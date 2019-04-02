@@ -95,7 +95,6 @@ class RepositoryPodio
     def update_icx_application_prep(application)
       check_podio
       update_icx_application_prep_podio_id(application) unless application.prep_podio_id
-
       attrs = {'fields': {
         'status-expa': map_status_prep(application.status.to_sym)
       }}
@@ -112,8 +111,9 @@ class RepositoryPodio
     def map_standards(standards)
       podio_standards_fields = {}
       standards.each do |standard|
-        podio_key = map_standard_constant_to_podio(standard['data']['constant_name'])
-        podio_value = map_standard_option_to_podio(standard['data']['option'])
+        standard_data = standard['data'] || standard['table']
+        podio_key = map_standard_constant_to_podio(standard_data['constant_name'])
+        podio_value = map_standard_option_to_podio(standard_data['option'])
         podio_standards_fields[podio_key] = podio_value if podio_key
       end
       podio_standards_fields
@@ -142,6 +142,8 @@ class RepositoryPodio
     end
 
     def map_standard_option_to_podio(option)
+      return 1 unless option #default is 'not filled'
+
       map_option = {
         'true': 2,
         'false': 3,
@@ -197,7 +199,7 @@ class RepositoryPodio
         ],
         #'data-de-nascimento': parse_date(application.exchange_participant.birthdate),
         'data-do-applied': parse_date(application.applied_at),
-        'data-do-accepted': parse_date(application.accepted_at),
+        'data-do-accepted': application.accepted_at ? parse_date(application.accepted_at) : nil,
         'data-do-approved': parse_date(application.approved_at),
         'opportunity-name': application.opportunity_name,
         'expa-opportunity-id': application.tnid.to_s,
@@ -310,8 +312,8 @@ class RepositoryPodio
       mapping = {
         open: 1,
         applied: 1,
-        matched: 8,
-        accepted: 2,
+        matched: 8, #accepted
+        accepted: 2, #lda preenchido
         approved: 3,
         realized: 3, #this status is after 'approved' and it'll only be be used in ICX PREP, in this stage it must stop on 'approved' status
         completed: 3, #this status is after 'approved' and it'll only be be used in ICX PREP, in this stage it must stop on 'approved' status
