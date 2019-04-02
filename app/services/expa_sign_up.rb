@@ -61,7 +61,10 @@ class ExpaSignUp
 
     if ENV['COUNTRY'] == 'per'
       params['user[alignment_id]'] = exchange_participant.university.expa_id
-      params['user[referral_type'] = peruvian_referral_type(exchange_participant.referral_type)
+
+      referral_type = peruvian_referral_type(exchange_participant.referral_type)
+      exchange_reason = peruvian_exchange_reason(exchange_participant.exchange_reason, exchange_participant.registerable_type)
+      params['user[referral_type'] = "#{referral_type}&#{exchange_reason}"
 
       when_can_travel = exchange_participant.registerable.when_can_travel
       params['earliest_start_date'] = peruvian_earliest_start_date(when_can_travel) && when_can_travel < 3
@@ -111,6 +114,22 @@ class ExpaSignUp
     }
 
     translations.key(referral_type)
+  end
+
+  def peruvian_exchange_reason(exchange_reason, program)
+    gv_participant = ['desarrollo', 'viajar', 'impacto', 'otra']
+    ge_participant = ['empleo', 'viajar', 'internacional', 'otra']
+    gt_participant = ['oportunidades', 'horizontes', 'networking', 'otra']
+
+    fetch_exchange_reason(exchange_reason, program)
+  end
+
+  def program_snake_case(program)
+    program.underscore.downcase
+  end
+
+  def fetch_exchange_reason(exchange_reason, program)
+    eval(program_snake_case(program)).fetch(exchange_reason)
   end
 
   def peruvian_earliest_start_date(when_can_travel)
