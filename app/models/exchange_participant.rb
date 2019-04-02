@@ -11,7 +11,7 @@ class ExchangeParticipant < ApplicationRecord
                                 university_workshop: 11, university_website: 12, event_or_fair: 13,
                                 partner_organization: 14, spanglish_event: 15, potenciate_ad: 16, influencer: 17 }
 
-  PERUVIAN_REFERRAL_TYPE = { none: 0, facebook: 1, instagram: 2, friend_or_family: 3, university_advertising: 4, other: 5 }
+  PERUVIAN_REFERRAL_TYPE = { facebook: 0, instagram: 1, friend_or_family: 2, university_advertising: 3, other: 4 }
 
   validates_with YouthValidator, on: :create
   validates_with ScholarityValidator, on: :create

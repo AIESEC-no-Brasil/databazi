@@ -60,6 +60,7 @@ class ExpaSignUp
     }
 
     params['user[alignment_id]'] = exchange_participant.university.expa_id if ENV['COUNTRY'] == 'per'
+    params['user[referral_type'] = peruvian_referral_type(exchange_participant.referral_type) if ENV['COUNTRY'] == 'per'
 
     params
   end
@@ -93,5 +94,17 @@ class ExpaSignUp
 
   def sign_up_page
     Nokogiri::HTML(open('https://auth.aiesec.org/users/sign_in'))
+  end
+
+  def peruvian_referral_type(params, exchange_participant)
+    translations = {
+      'facebook' => 0,
+      'instagram' => 1,
+      'amigo o familia' => 2,
+      'publicidad universitaria' => 3,
+      'otro' => 4
+    }
+
+    translations.key(exchange_participant.referral_type)
   end
 end
