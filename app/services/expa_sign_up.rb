@@ -67,7 +67,9 @@ class ExpaSignUp
       params['user[referral_type'] = "#{referral_type}&#{exchange_reason}"
 
       when_can_travel = exchange_participant.registerable.when_can_travel
-      params['earliest_start_date'] = peruvian_earliest_start_date(when_can_travel) && when_can_travel < 3
+      params['user[earliest_start_date]'] = peruvian_earliest_start_date(when_can_travel) && when_can_travel < 3
+
+      params['user[selected_programmes]'] = peruvian_program(exchange_participant.registerable)
     end
 
     params
@@ -122,6 +124,12 @@ class ExpaSignUp
     gt_participant = ['oportunidades', 'horizontes', 'networking', 'otra']
 
     fetch_exchange_reason(exchange_reason, program)
+  end
+
+  def peruvian_program(program)
+    programmes = { gv_participant: 1, gt_participant: 2, ge_participant: 5 }
+
+    programmes[program_snake_case(program).to_sym]
   end
 
   def program_snake_case(program)
