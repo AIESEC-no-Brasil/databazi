@@ -59,8 +59,13 @@ class ExpaSignUp
         exchange_participant.cellphone_contactable
     }
 
-    params['user[alignment_id]'] = exchange_participant.university.expa_id if ENV['COUNTRY'] == 'per'
-    params['user[referral_type'] = peruvian_referral_type(exchange_participant.referral_type) if ENV['COUNTRY'] == 'per'
+    if ENV['COUNTRY'] == 'per'
+      params['user[alignment_id]'] = exchange_participant.university.expa_id
+      params['user[referral_type'] = peruvian_referral_type(exchange_participant.referral_type)
+
+      when_can_travel = exchange_participant.registerable.when_can_travel
+      params['earliest_start_date'] = peruvian_earliest_start_date(when_can_travel) && when_can_travel < 3
+    end
 
     params
   end
@@ -96,7 +101,7 @@ class ExpaSignUp
     Nokogiri::HTML(open('https://auth.aiesec.org/users/sign_in'))
   end
 
-  def peruvian_referral_type(params, exchange_participant)
+  def peruvian_referral_type(referral_type)
     translations = {
       'facebook' => 0,
       'instagram' => 1,
@@ -105,6 +110,14 @@ class ExpaSignUp
       'otro' => 4
     }
 
-    translations.key(exchange_participant.referral_type)
+    translations.key(referral_type)
+  end
+
+  def peruvian_earliest_start_date(when_can_travel)
+    # as_soon_as_possible next_three_months next_six_months
+    date = [ Time.now, Time.now + 3.months, Time.now + 6.months]
+
+    # FIX-ME: check timezone
+    date + 3.hours
   end
 end
