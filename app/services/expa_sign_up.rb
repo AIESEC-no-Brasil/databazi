@@ -38,22 +38,41 @@ class ExpaSignUp
   def submit_data(exchange_participant)
     HTTParty.post(
       'https://auth.aiesec.org/users/',
-      body: {
-        'authenticity_token' => authenticity_token,
-        'utf8' => '✓',
-        'user[email]' => exchange_participant.email,
-        'user[first_name]' => exchange_participant.first_name,
-        'user[last_name]' => exchange_participant_last_name(exchange_participant.last_name),
-        'user[password]' => exchange_participant.decrypted_password,
-        'user[phone]' => exchange_participant.cellphone,
-        'user[country]' => 'Brazil',
-        'user[mc]' => '1606',
-        'user[lc]' => exchange_participant.local_committee.expa_id,
-        'user[lc_input]' => exchange_participant.local_committee.expa_id,
-        'user[allow_phone_communication]' =>
-          exchange_participant.cellphone_contactable
-      }
+      body: body_params
     )
+  end
+
+  def body_params
+    params = {
+      'authenticity_token' => authenticity_token,
+      'utf8' => '✓',
+      'user[email]' => exchange_participant.email,
+      'user[first_name]' => exchange_participant.first_name,
+      'user[last_name]' => exchange_participant_last_name(exchange_participant.last_name),
+      'user[password]' => exchange_participant.decrypted_password,
+      'user[phone]' => exchange_participant.cellphone,
+      'user[country]' => ENV['EXPA_COUNTRY'],
+      'user[mc]' => ENV['EXPA_MC_ID'],
+      'user[lc]' => exchange_participant.local_committee.expa_id,
+      'user[lc_input]' => exchange_participant.local_committee.expa_id,
+      'user[allow_phone_communication]' =>
+        exchange_participant.cellphone_contactable
+    }
+
+    if ENV['COUNTRY'] == 'per'
+      params['user[alignment_id]'] = exchange_participant.university.expa_id
+
+      referral_type = peruvian_referral_type(exchange_participant.referral_type) if exchange_participant.referral_type > 0
+      exchange_reason = peruvian_exchange_reason(exchange_participant.exchange_reason, exchange_participant.registerable_type)
+      params['user[referral_type'] = "#{referral_type}&#{exchange_reason}"
+
+      when_can_travel = exchange_participant.registerable.when_can_travel
+      params['user[earliest_start_date]'] = peruvian_earliest_start_date(when_can_travel) && when_can_travel < 3
+
+      params['user[selected_programmes]'] = peruvian_program(exchange_participant.registerable)
+    end
+
+    params
   end
 
   def exchange_participant_last_name(last_name)
@@ -85,5 +104,44 @@ class ExpaSignUp
 
   def sign_up_page
     Nokogiri::HTML(open('https://auth.aiesec.org/users/sign_in'))
+  end
+
+  def peruvian_referral_type(referral_type)
+    translations = {
+      'facebook' => 1,
+      'instagram' => 2,
+      'amigo o familia' => 3,
+      'evento em mi universidad' => 4,
+      'publicidad universitaria' => 5,
+      'otro' => 6
+    }
+
+    translations.key(referral_type)
+  end
+
+  def peruvian_exchange_reason(exchange_reason, program)
+    gv_participant = ['desarrollo', 'viajar', 'impacto', 'otra']
+    ge_participant = ['empleo', 'viajar', 'internacional', 'otra']
+    gt_participant = ['oportunidades', 'horizontes', 'networking', 'otra']
+
+    eval(program_snake_case(program)).fetch(exchange_reason)
+  end
+
+  def peruvian_program(program)
+    programmes = { gv_participant: 1, gt_participant: 2, ge_participant: 5 }
+
+    programmes[program_snake_case(program.to_s).to_sym]
+  end
+
+  def program_snake_case(program)
+    program.underscore.downcase
+  end
+
+  def peruvian_earliest_start_date(when_can_travel)
+    # as_soon_as_possible next_three_months next_six_months
+    date = [ Time.now, Time.now + 3.months, Time.now + 6.months]
+
+    # FIX-ME: check timezone
+    date[when_can_travel] + 3.hours
   end
 end
