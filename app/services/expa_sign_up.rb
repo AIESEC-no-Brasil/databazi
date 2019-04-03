@@ -67,10 +67,12 @@ class ExpaSignUp
       params['user[referral_type'] = "#{referral_type}&#{exchange_reason}"
 
       when_can_travel = exchange_participant.registerable.when_can_travel
-      params['user[earliest_start_date]'] = peruvian_earliest_start_date(when_can_travel) && when_can_travel < 3
+      params['user[earliest_start_date]'] = peruvian_earliest_start_date(when_can_travel) if when_can_travel < 3
 
-      params['user[selected_programmes]'] = peruvian_program(exchange_participant.registerable)
+      params['user[selected_programmes]'] = [peruvian_program(exchange_participant.registerable.class.name)]
     end
+
+    puts params
 
     params
   end
@@ -120,9 +122,9 @@ class ExpaSignUp
   end
 
   def peruvian_exchange_reason(exchange_reason, program)
-    gv_participant = ['desarrollo', 'viajar', 'impacto', 'otra']
-    ge_participant = ['empleo', 'viajar', 'internacional', 'otra']
-    gt_participant = ['oportunidades', 'horizontes', 'networking', 'otra']
+    gv_participant = ['Intelectual', 'Turista', 'Altruista', 'Otra']
+    ge_participant = ['Profesional', 'Viajero', 'Estudioso', 'Otra']
+    gt_participant = ['Oportunidades', 'Profesional', 'Networking', 'Otra']
 
     eval(program_snake_case(program)).fetch(exchange_reason)
   end
@@ -130,7 +132,7 @@ class ExpaSignUp
   def peruvian_program(program)
     programmes = { gv_participant: 1, gt_participant: 2, ge_participant: 5 }
 
-    programmes[program_snake_case(program.to_s).to_sym]
+    programmes[program_snake_case(program).to_sym]
   end
 
   def program_snake_case(program)
@@ -142,6 +144,6 @@ class ExpaSignUp
     date = [ Time.now, Time.now + 3.months, Time.now + 6.months]
 
     # FIX-ME: check timezone
-    date[when_can_travel] + 3.hours
+    (date[when_can_travel] + 3.hours).strftime('%Y-%m-%d')
   end
 end
