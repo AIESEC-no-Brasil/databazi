@@ -67,7 +67,7 @@ class ExpaSignUp
       params['user[referral_type'] = "#{referral_type}&#{exchange_reason}"
 
       when_can_travel = exchange_participant.registerable.when_can_travel
-      params['user[earliest_start_date]'] = peruvian_earliest_start_date(when_can_travel) if when_can_travel < 3
+      params['user[profile][earliest_start_date]'] = peruvian_earliest_start_date(when_can_travel) if when_can_travel < 3
 
       params['user[selected_programmes]'] = [peruvian_program(exchange_participant.registerable.class.name)]
     end
