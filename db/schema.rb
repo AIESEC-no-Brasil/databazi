@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_02_024042) do
+ActiveRecord::Schema.define(version: 2019_04_03_234126) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -148,6 +148,7 @@ ActiveRecord::Schema.define(version: 2019_04_02_024042) do
     t.datetime "updated_at", null: false
     t.integer "when_can_travel"
     t.integer "preferred_destination"
+    t.integer "work_experience"
   end
 
   create_table "gt_participants", force: :cascade do |t|
@@ -155,6 +156,7 @@ ActiveRecord::Schema.define(version: 2019_04_02_024042) do
     t.datetime "updated_at", null: false
     t.integer "preferred_destination"
     t.integer "when_can_travel"
+    t.integer "work_experience"
   end
 
   create_table "gv_participants", force: :cascade do |t|

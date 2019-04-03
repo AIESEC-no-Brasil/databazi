@@ -21,6 +21,8 @@ class GeParticipant < ApplicationRecord
 
   enum preferred_destination: { none: 0, brazil: 1, mexico: 2, peru: 3 }, _suffix: true
 
+  enum work_experience: %i[none less_than_3_months less_than_6_months more_than_6_months], _suffix: true
+
   validates :spanish_level, presence: true
   validates :when_can_travel, presence: true, if: :argentina?
   validates :preferred_destination, presence: true, if: :argentina?
