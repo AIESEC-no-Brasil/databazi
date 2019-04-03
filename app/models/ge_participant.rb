@@ -1,5 +1,5 @@
 class GeParticipant < ApplicationRecord
-  ARGENTINEAN_WHEN_CAN_TRAVEL = %i[as_soon_as_possible next_three_months
+  ARGENTINEAN_WHEN_CAN_TRAVEL = %i[none as_soon_as_possible next_three_months
                                    next_six_months in_one_year]
 
   PERUVIAN_WHEN_CAN_TRAVEL = %i[as_soon_as_possible next_three_months

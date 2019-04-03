@@ -62,7 +62,7 @@ class ExpaSignUp
     if ENV['COUNTRY'] == 'per'
       params['user[alignment_id]'] = exchange_participant.university.expa_id
 
-      referral_type = peruvian_referral_type(exchange_participant.referral_type)
+      referral_type = peruvian_referral_type(exchange_participant.referral_type) if exchange_participant.referral_type > 0
       exchange_reason = peruvian_exchange_reason(exchange_participant.exchange_reason, exchange_participant.registerable_type)
       params['user[referral_type'] = "#{referral_type}&#{exchange_reason}"
 
@@ -108,11 +108,12 @@ class ExpaSignUp
 
   def peruvian_referral_type(referral_type)
     translations = {
-      'facebook' => 0,
-      'instagram' => 1,
-      'amigo o familia' => 2,
-      'publicidad universitaria' => 3,
-      'otro' => 4
+      'facebook' => 1,
+      'instagram' => 2,
+      'amigo o familia' => 3,
+      'evento em mi universidad' => 4,
+      'publicidad universitaria' => 5,
+      'otro' => 6
     }
 
     translations.key(referral_type)
@@ -123,21 +124,17 @@ class ExpaSignUp
     ge_participant = ['empleo', 'viajar', 'internacional', 'otra']
     gt_participant = ['oportunidades', 'horizontes', 'networking', 'otra']
 
-    fetch_exchange_reason(exchange_reason, program)
+    eval(program_snake_case(program)).fetch(exchange_reason)
   end
 
   def peruvian_program(program)
     programmes = { gv_participant: 1, gt_participant: 2, ge_participant: 5 }
 
-    programmes[program_snake_case(program).to_sym]
+    programmes[program_snake_case(program.to_s).to_sym]
   end
 
   def program_snake_case(program)
     program.underscore.downcase
-  end
-
-  def fetch_exchange_reason(exchange_reason, program)
-    eval(program_snake_case(program)).fetch(exchange_reason)
   end
 
   def peruvian_earliest_start_date(when_can_travel)
@@ -145,6 +142,6 @@ class ExpaSignUp
     date = [ Time.now, Time.now + 3.months, Time.now + 6.months]
 
     # FIX-ME: check timezone
-    date + 3.hours
+    date[when_can_travel] + 3.hours
   end
 end
