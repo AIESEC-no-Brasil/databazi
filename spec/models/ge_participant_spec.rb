@@ -26,6 +26,10 @@ RSpec.describe GeParticipant, type: :model do
                  next_six_months in_one_year])
     end
     it do
+      expect(GeParticipant.new).to define_enum_for(:work_experience)
+        .with(%i[none less_than_3_months less_than_6_months more_than_6_months])
+    end
+    it do
       expect(GeParticipant.new).to define_enum_for(:preferred_destination)
         .with({none: 0, brazil: 1, mexico: 2, peru: 3 })
     end

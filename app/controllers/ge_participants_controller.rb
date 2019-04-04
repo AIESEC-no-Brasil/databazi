@@ -35,6 +35,7 @@ class GeParticipantsController < ApplicationController
       :preferred_destination,
       :spanish_level,
       :when_can_travel,
+      :work_experience,
       :curriculum,
       english_level_attributes: [:english_level],
       exchange_participant_attributes: %i[
@@ -50,6 +51,7 @@ class GeParticipantsController < ApplicationController
       ge_participant: {
         preferred_destination: ge_params[:preferred_destination].to_i,
         when_can_travel: ge_params[:when_can_travel].to_i,
+        work_experience: ge_params[:work_experience].to_i,
         spanish_level: ge_params[:spanish_level].to_i,
         curriculum: ge_params[:curriculum],
         exchange_participant_attributes: normalized_exchange_participant_params,

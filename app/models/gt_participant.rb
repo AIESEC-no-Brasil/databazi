@@ -21,6 +21,8 @@ class GtParticipant < ApplicationRecord
   enum preferred_destination: { none: 0, brazil: 4, colombia: 5, costa_rica: 6, hungary: 7,
                                 india: 8, mexico: 9, panama: 10, romania: 11 }, _suffix: true
 
+  enum work_experience: %i[none more_than_6_months more_than_a_year], _suffix: true
+
   validates :preferred_destination, presence: true, if: :argentina?
 
   validate :correct_document_mime_type, if: :argentina?
