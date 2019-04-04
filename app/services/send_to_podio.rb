@@ -20,6 +20,65 @@ class SendToPodio
     @status = send_to_podio(@params)
   end
 
+  def utm_source_to_podio(db_source)
+    podio_domains = {
+      'rdstation': 1,
+      'google': 2,
+      'facebook': 3,
+      'facebook-ads': 11,
+      'instagram': 4,
+      'twitter': 5,
+      'twitter-ads': 12,
+      'linkedin': 6,
+      'linkedin-ads': 13,
+      'youtube': 14,
+      'site': 7,
+      'blog': 8,
+      'offline': 9,
+      'outros': 10
+    }
+
+    podio_domain = podio_domains[db_source.downcase.to_sym]
+
+    return podio_domains[:outros] unless podio_domain
+
+    podio_domain
+  end
+
+  def utm_medium_to_podio(db_medium)
+    podio_domains = {
+      'banner': 19,
+      'banner-home': 1,
+      'pop-up': 10,
+      'post-form': 12,
+      'imagem': 7,
+      'interacao': 20,
+      'post-blog': 11,
+      'post-link': 13,
+      'stories': 15,
+      'video': 17,
+      'lead-ads': 9,
+      'cpc': 4,
+      'display': 5,
+      'search': 14,
+      'imagem-unica': 21,
+      'cartaz': 3,
+      'evento': 22,
+      'indicacao': 8,
+      'outro': 18,
+      'panfleto': 23,
+      'email': 6,
+      'bumper': 2,
+      'trueview': 16
+    }
+
+    podio_domain = podio_domains[db_medium.downcase.to_sym]
+
+    return podio_domains[:outro] unless podio_domain
+
+    podio_domain
+  end
+
   private
 
   def send_to_podio(params)
@@ -38,7 +97,7 @@ class SendToPodio
 
     podio_id
   end
-
+  
   def update_participant(podio_id)
     @gx_participant.exchange_participant.update_attributes(podio_id: podio_id)
 
@@ -130,8 +189,8 @@ class SendToPodio
       }
     }
 
-    params['tag-origem'] = sqs_params['utm_source'] if sqs_params['utm_source']
-    params['tag-meio'] = sqs_params['utm_medium'] if sqs_params['utm_medium']
+    params['tag-origem-2'] = utm_source_to_podio(sqs_params['utm_source']) if sqs_params['utm_source']
+    params['tag-meio-2'] = utm_medium_to_podio(sqs_params['utm_medium']) if sqs_params['utm_medium']
     params['tag-campanha'] = sqs_params['utm_campaign'] if sqs_params['utm_campaign']
     params['tag-termo'] = sqs_params['utm_term'] if sqs_params['utm_term']
     params['tag-conteudo-2'] = sqs_params['utm_content'] if sqs_params['utm_content']
@@ -170,5 +229,5 @@ class SendToPodio
 
   def gv_participant?
     registerable_class_name == 'GvParticipant'
-  end
+  end  
 end
