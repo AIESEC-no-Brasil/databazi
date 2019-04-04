@@ -16,7 +16,7 @@ RSpec.describe GtParticipant, type: :model do
     it do
       expect(GtParticipant.new).to define_enum_for(:preferred_destination)
         .with({ none: 0, brazil: 4, colombia: 5, costa_rica: 6, hungary: 7,
-                                india: 8, mexico: 9, panama: 10, romania: 11 })
+                                india: 8, mexico: 9, panama: 10, romania: 11, turkey: 12 })
     end
   end
 

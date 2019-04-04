@@ -13,7 +13,7 @@ class GtParticipant < ApplicationRecord
   accepts_nested_attributes_for :experience
 
   enum preferred_destination: { none: 0, brazil: 4, colombia: 5, costa_rica: 6, hungary: 7,
-                                india: 8, mexico: 9, panama: 10, romania: 11 }, _suffix: true
+                                india: 8, mexico: 9, panama: 10, romania: 11, turkey: 12 }, _suffix: true
 
   validates :preferred_destination, presence: true, if: :argentina?
 
