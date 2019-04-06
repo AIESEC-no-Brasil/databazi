@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_03_234126) do
+ActiveRecord::Schema.define(version: 2019_04_04_184626) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,10 +53,10 @@ ActiveRecord::Schema.define(version: 2019_04_03_234126) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "podio_item_id"
-    t.bigint "expas_id"
     t.integer "gv_podio_id"
     t.integer "ge_podio_id"
     t.integer "gt_podio_id"
+    t.bigint "expa_id"
   end
 
   create_table "english_levels", force: :cascade do |t|
