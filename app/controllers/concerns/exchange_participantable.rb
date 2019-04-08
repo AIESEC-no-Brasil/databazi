@@ -33,8 +33,8 @@ module ExchangeParticipantable
     lead = contact.by_email(exchange_participantable.email)
 
     contact_info = {
-      cf_persona: peruvian_referral_type(exchange_participantable.exchange_participant.referral_type),
-      cf_referral: peruvian_exchange_reason(exchange_participantable.exchange_participant.exchange_reason, exchange_participantable.class.name)
+      cf_persona: peruvian_exchange_reason(exchange_participantable.exchange_participant.exchange_reason, exchange_participantable.class.name),
+      cf_referral: peruvian_referral_type(exchange_participantable.exchange_participant.referral_type)
     }
 
     contact.update(lead['uuid'], contact_info)
