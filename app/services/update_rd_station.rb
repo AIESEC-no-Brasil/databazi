@@ -24,7 +24,7 @@ class UpdateRdStation
     access_token = rdstation_authentication_token
 
     contact = RDStation::Contacts.new(access_token)
-    lead = contact.by_email('apr08gv1@devmagic.com.br')
+    lead = contact.by_email(@exchange_participant.email)
 
     updated_lead = contact.update(lead['uuid'], contact_info)
 

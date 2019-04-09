@@ -18,7 +18,7 @@ module ExchangeParticipantable
   def perform_on_workers
     SendToPodioWorker.perform_async(ep_fields)
     SignUpWorker.perform_async(exchange_participantable.as_sqs)
-    UpdateRdStationWorkerUpdateRdStationWorker.perform_async(exchange_participantable.as_sqs) if ENV['COUNTRY'] == 'per'
+    UpdateRdStationWorker.perform_async(exchange_participantable.as_sqs) if ENV['COUNTRY'] == 'per'
   end
 
   def remove_campaign

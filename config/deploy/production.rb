@@ -6,9 +6,9 @@ server '13.52.15.16', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primar
 server '13.52.15.180', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
 
 # PER
-server '18.204.30.122', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
+# server '18.204.30.122', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
 
-set :branch, :'PE-5'
+set :branch, :master
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.
