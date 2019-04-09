@@ -5,6 +5,9 @@ server '13.52.15.16', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primar
 # ARG
 server '13.52.15.180', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
 
+# PER
+# server '18.204.30.122', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
+
 set :branch, :master
 # server-based syntax
 # ======================
