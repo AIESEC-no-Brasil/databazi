@@ -2,6 +2,7 @@ class University < ApplicationRecord
   scope :by_name, ->(name = '') { query_by_name(name) }
 
   has_many :exchange_participants
+  has_many :university_local_committees
   belongs_to :local_committee, optional: true
 
   validates :podio_id, presence: true

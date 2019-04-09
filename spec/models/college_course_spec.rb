@@ -38,6 +38,10 @@ RSpec.describe CollegeCourse, type: :model do
   describe '#attributes' do
     it { is_expected.to respond_to :name }
     it { is_expected.to respond_to :podio_id }
+    it { is_expected.to respond_to :gv_podio_id }
+    it { is_expected.to respond_to :ge_podio_id }
+    it { is_expected.to respond_to :gt_podio_id }
+    it { is_expected.to respond_to :expa_id }
   end
 
   describe '#validations' do

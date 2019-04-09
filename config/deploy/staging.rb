@@ -1,10 +1,13 @@
 # BRA
-server '52.8.184.67', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
+# server '52.8.184.67', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
 
 # ARG
 # server '13.52.15.180', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
 
-set :branch, :staging
+# PER
+server '3.210.8.113', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
+
+set :branch, :perstaging
 
 
 # server-based syntax

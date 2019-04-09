@@ -35,12 +35,13 @@ class GeParticipantsController < ApplicationController
       :preferred_destination,
       :spanish_level,
       :when_can_travel,
+      :work_experience,
       :curriculum,
       english_level_attributes: [:english_level],
       exchange_participant_attributes: %i[
         id fullname email birthdate cellphone local_committee_id
         university_id college_course_id password scholarity
-        campaign_id cellphone_contactable other_university referral_type
+        campaign_id cellphone_contactable other_university referral_type city exchange_reason
       ]
     )
   end
@@ -50,6 +51,7 @@ class GeParticipantsController < ApplicationController
       ge_participant: {
         preferred_destination: ge_params[:preferred_destination].to_i,
         when_can_travel: ge_params[:when_can_travel].to_i,
+        work_experience: ge_params[:work_experience].to_i,
         spanish_level: ge_params[:spanish_level].to_i,
         curriculum: ge_params[:curriculum],
         exchange_participant_attributes: normalized_exchange_participant_params,
@@ -78,6 +80,7 @@ class GeParticipantsController < ApplicationController
     params = exchange_participant_params
     params[:scholarity] = params[:scholarity].to_i
     params[:referral_type] = params[:referral_type].to_i
+    params[:exchange_reason] = params[:exchange_reason].to_i
 
     params
   end
@@ -87,7 +90,7 @@ class GeParticipantsController < ApplicationController
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
              :password, :scholarity, :campaign_id, :cellphone_contactable,
-             :other_university, :referral_type)
+             :other_university, :referral_type, :city, :exchange_reason)
   end
 
   def scholarity_human_name

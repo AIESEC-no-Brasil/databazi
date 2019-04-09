@@ -7,6 +7,7 @@ class LocalCommittee < ApplicationRecord
 
   has_many :exchange_participants
   has_many :universities
+  has_many :university_local_committees
 
   belongs_to :member_committee, optional: true
 
