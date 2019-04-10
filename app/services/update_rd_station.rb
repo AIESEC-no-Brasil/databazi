@@ -37,8 +37,16 @@ class UpdateRdStation
 
   def contact_info
     {
+      cf_campo_de_estudio: @exchange_participant.college_course.try(:name),
+      cf_ciudad: @exchange_participant.city,
+      cf_experiencia_laboral: @exchange_participant.try(:work_experience),
       cf_persona: peruvian_exchange_reason(@exchange_participant.exchange_reason, @exchange_participant.registerable.class.name),
-      cf_referral: peruvian_referral_type(@exchange_participant.referral_type)
+      cf_phone_communication: @exchange_participant.cellphone_contactable ? 'Sí' : 'No',
+      cf_programa_de_interes: @exchange_participant.registerable_type.upcase[0..1],
+      cf_referral: peruvian_referral_type(@exchange_participant.referral_type),
+      cf_universidad: @exchange_participant.university.try(:name),
+      cf_earliest_start_date: peruvian_earliest_start_date(@exchange_participant.created_at, @exchange_participant.when_can_travel),
+      cf_fecha_de_nacimiento: @exchange_participant.birthdate.strftime('%Y-%m-%d')
     }
   end
 
@@ -72,5 +80,15 @@ class UpdateRdStation
     rdstation_authentication.auth_url(ENV['RDSTATION_REDIRECT_URL'])
 
     rdstation_authentication.update_access_token(ENV['RDSTATION_REFRESH_TOKEN'])['access_token']
+  end
+
+  def peruvian_earliest_start_date(created_at, when_can_travel)
+    # as_soon_as_possible next_three_months next_six_months
+    date = [created_at, created_at + 3.months, created_at + 6.months]
+
+    return '-' if when_can_travel >= date.length
+
+    # FIX-ME: check timezone
+    (date[when_can_travel]).strftime('%Y-%m-%d')
   end
 end
