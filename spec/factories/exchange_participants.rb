@@ -17,6 +17,10 @@ FactoryBot.define do
       association(:registerable, factory: :gv_participant)
     end
 
+    trait :for_ge_participant do
+      association(:registerable, factory: :ge_participant)
+    end
+
     factory :ep_gv, traits: [:for_gv_participant]
   end
 end
