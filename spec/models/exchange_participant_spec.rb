@@ -65,6 +65,46 @@ RSpec.describe ExchangeParticipant, type: :model do
         registerable: build(:gv_participant), password: 'test')
     end
 
+    describe '#check_segmentation' do
+      let(:origin_local_committee) { create(:local_committee) }
+      let(:destination_local_committee) { create(:local_committee) }
+
+      let(:local_committee_segmentation) do
+        create(:local_committee_segmentation,
+               origin_local_committee_id: origin_local_committee.id,
+               destination_local_committee_id: destination_local_committee.id,
+               program: :ge)
+      end
+
+      let(:ge_exchange_participant) do
+        build(:exchange_participant, :for_ge_participant,
+              local_committee_id: origin_local_committee.id)
+      end
+
+      let(:gv_exchange_participant) do
+        build(:exchange_participant, :for_gv_participant,
+              local_committee_id: origin_local_committee.id)
+      end
+
+      context 'when segmentation exists' do
+        it 'changes the local_committee_id before creating' do
+          ge_exchange_participant.save
+          ge_exchange_participant.reload
+
+          expect(ge_exchange_participant.local_committee_id).to eq(destination_local_committee.id)    
+        end
+      end
+
+      context 'when no segmentation exists' do
+        it 'doesn\'t change the local_committee_id value' do
+          gv_exchange_participant.save
+          gv_exchange_participant.reload
+
+          expect(gv_exchange_participant.local_committee_id).to eq(origin_local_committee.id)
+        end
+      end
+    end
+
     describe '#scholarity_length' do
       context 'arg' do
         before(:each) { ENV['COUNTRY'] = 'arg' }
