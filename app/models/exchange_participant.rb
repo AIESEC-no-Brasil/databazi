@@ -1,7 +1,7 @@
 class ExchangeParticipant < ApplicationRecord
   include ActiveModel::Validations
   before_create :encrypted_password
-  before_create :check_segmentation if ENV['COUNTRY'] == 'arg'
+  before_save :check_segmentation if ENV['COUNTRY'] == 'arg'
 
   ARGENTINEAN_SCHOLARITY = %i[incomplete_highschool highschool graduating graduated post_graduating post_graduated]
   BRAZILIAN_SCHOLARITY = %i[highschool incomplete_graduation graduating post_graduated almost_graduated graduated other]
