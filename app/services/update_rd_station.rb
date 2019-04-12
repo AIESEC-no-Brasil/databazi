@@ -38,7 +38,7 @@ class UpdateRdStation
   def contact_info
     {
       cf_campo_de_estudio: @exchange_participant.college_course.try(:name),
-      cf_ciudad: @exchange_participant.city,
+      cf_ciudad_0: @exchange_participant.city,
       cf_experiencia_laboral: @exchange_participant.try(:work_experience),
       cf_persona: peruvian_exchange_reason(@exchange_participant.exchange_reason, @exchange_participant.registerable.class.name),
       cf_phone_communication: @exchange_participant.cellphone_contactable ? 'Sí' : 'No',
@@ -47,7 +47,7 @@ class UpdateRdStation
       cf_universidad: @exchange_participant.university.try(:name),
       cf_earliest_start_date: peruvian_earliest_start_date(@exchange_participant.created_at, @exchange_participant.registerable.when_can_travel),
       cf_fecha_de_nacimiento: @exchange_participant.birthdate.strftime('%Y-%m-%d'),
-      cf_departamento: @exchange_participant.department,
+      cf_departamento_0: @exchange_participant.department,
       cf_escolaridad: peruvian_scholarity(@exchange_participant.scholarity)
     }
   end
