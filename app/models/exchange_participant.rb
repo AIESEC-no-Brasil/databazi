@@ -4,6 +4,7 @@ class ExchangeParticipant < ApplicationRecord
 
   ARGENTINEAN_SCHOLARITY = %i[incomplete_highschool highschool graduating graduated post_graduating post_graduated]
   BRAZILIAN_SCHOLARITY = %i[highschool incomplete_graduation graduating post_graduated almost_graduated graduated other]
+  PERUVIAN_SCHOLARITY = %i[primary_complete secondary_complete graduating graduated technical_complete post_graduating]
 
   ARGENTINEAN_REFERRAL_TYPE = { none: 0, friend: 1, friend_facebook: 2, friend_instastories: 3,
                                 friend_social_network: 4, google: 5, facebook_group: 6, facebook_ad: 7,

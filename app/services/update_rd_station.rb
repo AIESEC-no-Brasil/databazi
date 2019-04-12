@@ -45,8 +45,10 @@ class UpdateRdStation
       cf_programa_de_interes: @exchange_participant.registerable_type.upcase[0..1],
       cf_referral: peruvian_referral_type(@exchange_participant.referral_type),
       cf_universidad: @exchange_participant.university.try(:name),
-      cf_earliest_start_date: peruvian_earliest_start_date(@exchange_participant.created_at, @exchange_participant.when_can_travel),
-      cf_fecha_de_nacimiento: @exchange_participant.birthdate.strftime('%Y-%m-%d')
+      cf_earliest_start_date: peruvian_earliest_start_date(@exchange_participant.created_at, @exchange_participant.registerable.when_can_travel),
+      cf_fecha_de_nacimiento: @exchange_participant.birthdate.strftime('%Y-%m-%d'),
+      cf_departamento: @exchange_participant.department,
+      cf_escolaridad: peruvian_scholarity(@exchange_participant.scholarity)
     }
   end
 
@@ -69,6 +71,19 @@ class UpdateRdStation
     }
 
     translations.key(referral_type)
+  end
+
+  def peruvian_scholarity(scholarity)
+    translations = {
+      'Primaria completa' => 0,
+      'Secundaria completa' => 1,
+      'Estudiante de pregrado' => 2,
+      'Universidad completa' => 3,
+      'Instituto tecnico completo' => 4,
+      'Estudiante de postgrado' => 5
+    }
+
+    translations.key(scholarity)
   end
 
   def program_snake_case(program)
