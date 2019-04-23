@@ -79,7 +79,7 @@ class RepositoryPodio
         }}
       else
         attrs = {'fields': {
-          'status-expa': map_status_prep(application.status.to_sym)
+          'status-expa': map_ogx_status_prep(application.status.to_sym)
         }}
       end
 
@@ -96,7 +96,7 @@ class RepositoryPodio
       check_podio
       update_icx_application_prep_podio_id(application) unless application.prep_podio_id
       attrs = {'fields': {
-        'status-expa': map_status_prep(application.status.to_sym)
+        'status-expa': map_icx_status_prep(application.status.to_sym)
       }}
 
       attrs[:fields]['expa-data-de-re'] = parse_date(application.realized_at) if application.realized_at
@@ -291,11 +291,21 @@ class RepositoryPodio
       mapper[status]
     end
 
-    def map_status_prep(status)
+    def map_ogx_status_prep(status)
       mapper = {
         realized: 2,
         finished: 3,
         completed: 4
+      }
+      mapper[status]
+    end
+
+    def map_icx_status_prep(status)
+      mapper = {
+        realized: 2,
+        finished: 3,
+        completed: 4,
+        realization_broken: 5
       }
       mapper[status]
     end
