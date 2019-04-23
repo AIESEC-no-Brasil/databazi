@@ -1,8 +1,6 @@
 require "#{Rails.root}/app/repos/chat_logger"
 
 class RepositoryPodio
-  @@is_podio_initialized = false
-
   class << self
     def create_ep(application, params)
       check_podio
@@ -330,10 +328,10 @@ class RepositoryPodio
     end
 
     def check_podio
-      return if @@is_podio_initialized
+      return unless Podio.client.nil?
+
       setup_podio
       authenticate_podio
-      @@is_podio_initialized = true
     end
 
     def authenticate_podio
