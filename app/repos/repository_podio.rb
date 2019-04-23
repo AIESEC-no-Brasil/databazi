@@ -328,8 +328,8 @@ class RepositoryPodio
         realized: 3, #this status is after 'approved' and it'll only be be used in ICX PREP, in this stage it must stop on 'approved' status
         completed: 3, #this status is after 'approved' and it'll only be be used in ICX PREP, in this stage it must stop on 'approved' status
         realization_broken: 3, #this status is after 'approved' and it'll only be be used in ICX PREP, in this stage it must stop on 'approved' status
-        break_approved: 4,
-        approval_broken: 4,
+        break_approved: 9,
+        approval_broken: 9,
         rejected: 5,
         withdrawn: 7
       }
