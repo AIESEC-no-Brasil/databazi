@@ -330,10 +330,10 @@ class RepositoryPodio
     end
 
     def check_podio
-      return if @@is_podio_initialized
+      return unless Podio.client.nil?
+
       setup_podio
       authenticate_podio
-      @@is_podio_initialized = true
     end
 
     def authenticate_podio
