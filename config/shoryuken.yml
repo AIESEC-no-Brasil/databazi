@@ -1,5 +1,5 @@
 concurrency: 1
-delay: 0
+delay: 30
 queues:
   - [databazi_sign_up_queue, 1]
   - [databazi_podio_queue_new, 1]
