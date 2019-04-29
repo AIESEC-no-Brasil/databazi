@@ -4,7 +4,7 @@ class RepositoryApplication
     normalize_home_lc(application)
     normalize_home_mc(application)
     normalize_ep(application)
-    Expa::Application
+    expa_application = Expa::Application
       .where(expa_id: application.expa_id)
       .first_or_create!(application.attributes)
       .update!(
@@ -29,6 +29,8 @@ class RepositoryApplication
         standards: application.standards,
         exchange_participant_id: application.exchange_participant.id
       )
+
+      check_impact_brazil_referral(expa_application)
   end
 
   def self.pending_podio_sync_icx_applications
@@ -44,6 +46,16 @@ class RepositoryApplication
   end
 
   private
+
+  def check_impact_brazil_referral(expa_application)
+    expa_application.update_attribute(:from_impact, true) if impact_brazil_referral(expa_application)
+  end
+
+  def impact_brazil_referral(expa_application)
+    ImpactBrazilReferral.find_by(ep_expa_id: expa_application.expa_ep_id,
+                                 opportunity_expa_id: expa_application.tnid,
+                                 application_expa_id: expa_application.expa_id)
+  end
 
   def self.normalize_ep(application)
     most_recent_ep = application.exchange_participant

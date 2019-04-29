@@ -39,6 +39,20 @@ class RepositoryExpaApi
 
     end
 
+    def load_impact_brazil_applications(person_id, opportunity_id, page = 1)
+      res = EXPAAPI::Client.query(
+        IMPACTBRAZILAPPLICATIONS,
+        variables: {
+          person_id: person_id,
+          opportunity_id: opportunity_id
+        }
+      )
+
+      total_pages = res&.data&.all_opportunity_application&.paging&.total_pages
+
+      apps = map_impact_brazil_applications(res&.data&.all_opportunity_application&.data) unless res.nil?
+    end
+
     private
 
     def map_applications(expa_applications)
@@ -91,6 +105,19 @@ class RepositoryExpaApi
         )
         application.standards = expa_application.standards
         # application.save
+        application
+      end
+      mapped
+    end
+
+    def map_impact_brazil_applications(expa_applications)
+      mapped = expa_applications.map do |expa_application|
+        application = Expa::Application.new
+        application.expa_id = expa_application.id
+        application.expa_ep_id = expa_application.person.id
+        application.applied_at = parse_time(expa_application.created_at)
+        application.tnid = expa_application&.opportunity&.id
+
         application
       end
       mapped
@@ -209,6 +236,34 @@ ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
         standards{
           constant_name
           option
+        }
+      }
+    }
+  }
+GRAPHQL
+
+IMPACTBRAZILAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
+  query ($person_id: Int, $opportunity_id: Int) {
+    allOpportunityApplication(
+      sort: "updated_at",
+      per_page: 500,
+      filters:{
+        opportunity_home_mc: 1606,
+        person_id: $person_id,
+        opportunity_id: $opportunity_id,
+      }
+    ) {
+      paging {
+        total_pages
+      }
+      data {
+        id
+        created_at
+        opportunity {
+          id
+        }
+        person {
+         id
         }
       }
     }

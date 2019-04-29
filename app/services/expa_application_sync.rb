@@ -73,7 +73,7 @@ class ExpaApplicationSync
     end
   end
 
-  
+
   private
 
   def exchange_participant_status_expa(status)
