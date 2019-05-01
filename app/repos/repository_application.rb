@@ -47,11 +47,11 @@ class RepositoryApplication
 
   private
 
-  def check_impact_brazil_referral(expa_application)
+  def self.check_impact_brazil_referral(expa_application)
     expa_application.update_attribute(:from_impact, true) if impact_brazil_referral(expa_application)
   end
 
-  def impact_brazil_referral(expa_application)
+  def self.impact_brazil_referral(expa_application)
     ImpactBrazilReferral.find_by(ep_expa_id: expa_application.expa_ep_id,
                                  opportunity_expa_id: expa_application.tnid,
                                  application_expa_id: expa_application.expa_id)
