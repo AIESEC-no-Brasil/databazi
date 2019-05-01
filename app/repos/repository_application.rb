@@ -4,7 +4,7 @@ class RepositoryApplication
     normalize_home_lc(application)
     normalize_home_mc(application)
     normalize_ep(application)
-    expa_application = Expa::Application
+    Expa::Application
       .where(expa_id: application.expa_id)
       .first_or_create!(application.attributes)
       .update!(
@@ -30,7 +30,7 @@ class RepositoryApplication
         exchange_participant_id: application.exchange_participant.id
       )
 
-      check_impact_brazil_referral(expa_application)
+      check_impact_brazil_referral(application)
   end
 
   def self.pending_podio_sync_icx_applications
