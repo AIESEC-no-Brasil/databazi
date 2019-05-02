@@ -8,6 +8,8 @@ class LocalCommittee < ApplicationRecord
   has_many :exchange_participants
   has_many :universities
   has_many :university_local_committees
+  has_many :local_committee_segmentation, as: :origin_local_committee
+  has_many :local_committee_segmentation, as: :destination_local_committee
 
   belongs_to :member_committee, optional: true
 

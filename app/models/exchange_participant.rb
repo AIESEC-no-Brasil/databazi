@@ -1,6 +1,7 @@
 class ExchangeParticipant < ApplicationRecord
   include ActiveModel::Validations
   before_create :encrypted_password
+  before_save :check_segmentation if ENV['COUNTRY'] == 'arg'
 
   ARGENTINEAN_SCHOLARITY = %i[incomplete_highschool highschool graduating graduated post_graduating post_graduated]
   BRAZILIAN_SCHOLARITY = %i[highschool incomplete_graduation graduating post_graduated almost_graduated graduated other]
@@ -182,4 +183,15 @@ class ExchangeParticipant < ApplicationRecord
                                      .generate_key(ENV['SALT'], 32)
     ActiveSupport::MessageEncryptor.new(key)
   end
+
+  def check_segmentation
+    programs = { gv: 0, ge: 1, gt: 2 }
+    program = self.registerable_type.downcase[0..1].to_sym
+    local_committee_segmentation = LocalCommitteeSegmentation.where('origin_local_committee_id = ? and program = ?', 
+                                                                      self.local_committee_id, 
+                                                                      programs[program]).first
+
+    self.local_committee_id = local_committee_segmentation.destination_local_committee_id if local_committee_segmentation
+  end
+
 end

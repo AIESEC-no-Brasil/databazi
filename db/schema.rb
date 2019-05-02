@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_02_024042) do
+ActiveRecord::Schema.define(version: 2019_04_10_162348) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -161,6 +161,14 @@ ActiveRecord::Schema.define(version: 2019_04_02_024042) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "when_can_travel"
+  end
+
+  create_table "local_committee_segmentations", force: :cascade do |t|
+    t.bigint "origin_local_committee_id"
+    t.bigint "destination_local_committee_id"
+    t.integer "program"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "local_committees", force: :cascade do |t|
