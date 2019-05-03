@@ -224,6 +224,8 @@ class RepositoryPodio
 
       params['quero-ser-contactado-por-telefone'] = application&.exchange_participant&.cellphone_contactable ? 1 : 2 #1 = Yes, 2 = No
 
+      params['da-onde-veio-este-ep'] = application.from_impact ? 2 : 1 #1 = YOP, 2 = Impact Brazil
+
       # rubocop:enable Metrics/LineLength
 
       params = cut_icx_params_by_program(params, application)
