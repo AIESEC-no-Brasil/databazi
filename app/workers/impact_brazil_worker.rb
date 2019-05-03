@@ -1,7 +1,7 @@
 class ImpactBrazilWorker
   include Shoryuken::Worker
 
-  QUEUE_NAME = 'impact_brazil_queue'.freeze
+  QUEUE_NAME = 'impact_brazil_referral'.freeze
 
   shoryuken_options queue: QUEUE_NAME,
                     auto_delete: false,
