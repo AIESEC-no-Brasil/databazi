@@ -48,7 +48,7 @@ class RepositoryApplication
   private
 
   def self.check_impact_brazil_referral(expa_application)
-    expa_application.update_attribute(:from_impact, true) if impact_brazil_referral(expa_application)
+    Expa::Application.where(expa_id: expa_application.expa_id).update_all({:from_impact => true}) if impact_brazil_referral(expa_application)
   end
 
   def self.impact_brazil_referral(expa_application)
