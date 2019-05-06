@@ -10,4 +10,5 @@ Rails.application.routes.draw do
   resources :ge_participants, only: :create
   resources :gt_participants, only: :create
   resources :gv_participants, only: :create
+  resources :exchange_student_hosts, only: :create
 end

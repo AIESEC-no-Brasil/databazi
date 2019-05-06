@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_10_162348) do
+ActiveRecord::Schema.define(version: 2019_05_06_205647) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,6 +93,23 @@ ActiveRecord::Schema.define(version: 2019_04_10_162348) do
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
     t.index ["university_id"], name: "index_exchange_participants_on_university_id"
+  end
+
+  create_table "exchange_student_hosts", force: :cascade do |t|
+    t.string "fullname"
+    t.string "email"
+    t.string "cellphone"
+    t.string "zipcode"
+    t.string "neighborhood"
+    t.string "city"
+    t.string "state"
+    t.boolean "cellphone_contactable", default: false
+    t.bigint "local_committee_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "icx_tests_podio_id"
+    t.bigint "central_icx_podio_id"
+    t.index ["local_committee_id"], name: "index_exchange_student_hosts_on_local_committee_id"
   end
 
   create_table "expa_applications", force: :cascade do |t|
