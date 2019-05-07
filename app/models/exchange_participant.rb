@@ -6,14 +6,6 @@ class ExchangeParticipant < ApplicationRecord
   ARGENTINEAN_SCHOLARITY = %i[incomplete_highschool highschool graduating graduated post_graduating post_graduated]
   BRAZILIAN_SCHOLARITY = %i[highschool incomplete_graduation graduating post_graduated almost_graduated graduated other]
 
-  ARGENTINEAN_REFERRAL_TYPE = { none: 0, friend: 1, friend_facebook: 2, friend_instastories: 3,
-                                friend_social_network: 4, google: 5, facebook_group: 6, facebook_ad: 7,
-                                instagram_ad: 8, university_presentation: 9, university_mail: 10,
-                                university_workshop: 11, university_website: 12, event_or_fair: 13,
-                                partner_organization: 14, spanglish_event: 15, potenciate_ad: 16, influencer: 17 }
-
-  PERUVIAN_REFERRAL_TYPE = { none: 0, facebook: 1, instagram: 2, friend_or_family: 3, university_event: 4, university_advertising: 5, other: 6 }
-
   validates_with YouthValidator, on: :create
   validates_with ScholarityValidator, on: :create
 
@@ -35,22 +27,29 @@ class ExchangeParticipant < ApplicationRecord
 
   accepts_nested_attributes_for :campaign
 
-  enum exchange_type: { ogx: 0, icx: 1 }
+  enum exchange_type: { ogx: 0, icx: 1}
 
   enum status: { open: 1, applied: 2, accepted: 3, approved_tn_manager: 4, approved_ep_manager: 5, approved: 6,
     break_approved: 7, rejected: 8, withdrawn: 9,
     realized: 100, approval_broken: 101, realization_broken: 102, matched: 103,
     completed: 104, finished: 105, other_status: 999 }
 
-  def scholarity_sym(scholarity)
-    ENV['COUNTRY'] == 'bra' ? brazilian_scholarity(scholarity) : argentinean_scholarity(scholarity)
+  enum referral_type: { none: 0, friend: 1, friend_facebook: 2, friend_instastories: 3,
+    friend_social_network: 4, google: 5, facebook_group: 6, facebook_ad: 7,
+    instagram_ad: 8, university_presentation: 9, university_mail: 10,
+    university_workshop: 11, university_website: 12, event_or_fair: 13,
+    partner_organization: 14, spanglish_event: 15, potenciate_ad: 16, influencer: 17 },
+    _suffix: true
+
+  def scholarity_sym
+    ENV['COUNTRY'] == 'bra' ? brazilian_scholarity : argentinean_scholarity
   end
 
-  def brazilian_scholarity(scholarity)
+  def brazilian_scholarity
     ExchangeParticipant::BRAZILIAN_SCHOLARITY[scholarity]
   end
 
-  def argentinean_scholarity(scholarity)
+  def argentinean_scholarity
     ExchangeParticipant::ARGENTINEAN_SCHOLARITY[scholarity]
   end
 
@@ -68,34 +67,6 @@ class ExchangeParticipant < ApplicationRecord
 
   def argentinean_scholarity_length
     ExchangeParticipant::ARGENTINEAN_SCHOLARITY.length
-  end
-
-  def referall_type_sym
-    ENV['COUNTRY'] == 'arg' ? argentinean_referral_type(referral_type) : peruvian_referral_type(referral_type)
-  end
-
-  def argentinean_referral_type(referral_type)
-    ExchangeParticipant::ARGENTINEAN_REFERRAL_TYPE[referral_type]
-  end
-
-  def peruvian_referral_type(referral_type)
-    ExchangeParticipant::PERUVIAN_REFERRAL_TYPE[referral_type]
-  end
-
-  def referral_type_length
-    if ENV['COUNTRY'] == 'arg'
-      argentinean_referral_type_length
-    else
-      peruvian_referral_type_length
-    end
-  end
-
-  def argentinean_referral_type_length
-    ExchangeParticipant::ARGENTINEAN_REFERRAL_TYPE.length
-  end
-
-  def peruvian_referral_type_length
-    ExchangeParticipant::PERUVIAN_REFERRAL_TYPE.length
   end
 
   def decrypted_password

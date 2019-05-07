@@ -28,8 +28,7 @@ RSpec.describe GvParticipantsController, type: :controller do
         utm_term: campaign.utm_term,
         utm_content: campaign.utm_content,
         when_can_travel: gv_participant.when_can_travel,
-        referral_type: 1,
-        city: exchange_participant.city
+        referral_type: 1
       }
     end
     let(:response) { JSON.parse(subject.body) }

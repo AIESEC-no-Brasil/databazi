@@ -43,7 +43,7 @@ class GvParticipantsController < ApplicationController
     %i[
       id fullname birthdate email cellphone local_committee_id
       university_id college_course_id password scholarity
-      campaign_id cellphone_contactable other_university referral_type city exchange_reason
+      campaign_id cellphone_contactable other_university referral_type
     ]
   end
 
@@ -61,14 +61,13 @@ class GvParticipantsController < ApplicationController
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
              :password, :scholarity, :campaign_id, :cellphone_contactable,
-             :other_university, :referral_type, :city, :exchange_reason)
+             :other_university, :referral_type)
   end
 
   def normalized_exchange_participant_params
     params = exchange_participant_params
     params[:scholarity] = params[:scholarity].to_i
     params[:referral_type] = params[:referral_type].to_i
-    params[:exchange_reason] = params[:exchange_reason].to_i
 
 
     params

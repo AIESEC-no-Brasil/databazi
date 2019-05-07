@@ -40,8 +40,7 @@ RSpec.describe GtParticipantsController, type: :controller do
         utm_content: campaign.utm_content,
         preferred_destination: gt_participant.read_attribute_before_type_cast(:preferred_destination),
         curriculum: fixture_file_upload('files/spec.pdf', 'application/pdf'),
-        referral_type: 1,
-        city: exchange_participant.city
+        referral_type: 1
       }
     end
     let(:response) { JSON.parse(subject.body) }
