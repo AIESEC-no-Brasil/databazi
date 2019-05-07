@@ -48,7 +48,7 @@ class ExchangeStudentHostToPodio
       'titulo' => @exchange_student_host.fullname,
       'email' => [{ 'type' => 'home', 'value' => @exchange_student_host.email }],
       'telefone' => [{ 'type' => 'home', 'value' => @exchange_student_host.cellphone }],
-      'comite-local-mais-proximo' => @exchange_student_host.local_committee.podio_id,
+      'aiesec-mais-proxima' => @exchange_student_host.local_committee.podio_id,
       'cep' => @exchange_student_host.zipcode,
       'bairro' => @exchange_student_host.neighborhood,
       'cidade' => @exchange_student_host.city,
