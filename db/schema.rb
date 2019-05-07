@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_07_134309) do
+ActiveRecord::Schema.define(version: 2019_05_07_223622) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,10 +103,10 @@ ActiveRecord::Schema.define(version: 2019_05_07_134309) do
     t.string "state"
     t.boolean "cellphone_contactable", default: false
     t.bigint "icx_tests_podio_id"
-    t.bigint "exchange_student_hosts"
     t.bigint "local_committee_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "central_icx_podio_id"
     t.index ["local_committee_id"], name: "index_exchange_student_hosts_on_local_committee_id"
   end
 
