@@ -6,7 +6,7 @@ class ExchangeStudentHostToPodio
   attr_reader :status, :exchange_student_host
 
   def initialize(params)
-    @exchange_student_host = ExchangeStudentHost.find(params[:exchange_student_host_id])
+    @exchange_student_host = ExchangeStudentHost.find(params['exchange_student_host_id'])
 
     @status = false
   end
