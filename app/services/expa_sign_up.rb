@@ -46,8 +46,8 @@ class ExpaSignUp
         'user[last_name]' => exchange_participant_last_name(exchange_participant.last_name),
         'user[password]' => exchange_participant.decrypted_password,
         'user[phone]' => exchange_participant.cellphone,
-        'user[country]' => 'Brazil',
-        'user[mc]' => '1606',
+        'user[country]' => ENV['EXPA_COUNTRY'],
+        'user[mc]' => ENV['EXPA_MC_ID'],
         'user[lc]' => exchange_participant.local_committee.expa_id,
         'user[lc_input]' => exchange_participant.local_committee.expa_id,
         'user[allow_phone_communication]' =>
