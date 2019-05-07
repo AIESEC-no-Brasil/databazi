@@ -3,46 +3,44 @@ class ExchangeStudentHostToPodio
     new(params).call
   end
 
-   attr_reader :status, :exchange_student_host
+  attr_reader :status, :exchange_student_host
 
-   def initialize(params)
-    puts params[:exchange_student_host_id]
+  def initialize(params)
     @exchange_student_host = ExchangeStudentHost.find(params[:exchange_student_host_id])
 
-     @status = false
+    @status = false
   end
 
-   def call
-    if expired_token?
+  def call
+    unless Podio.client
       setup_podio
-      auth = authenticate_podio
-      @@expires_at = auth.expires_at
+      authenticate_podio
     end
 
-     podio_sync
+    podio_sync
 
-     @exchange_student_host.reload
+    @exchange_student_host.reload
 
-     @status = true if @exchange_student_host.central_icx_podio_id && @exchange_student_host.icx_tests_podio_id
+    @status = true if @exchange_student_host.central_icx_podio_id && @exchange_student_host.icx_tests_podio_id
   end
 
-   private
+  private
 
-   def podio_sync
+  def podio_sync
     icx_tests_sync
     central_icx_sync
   end
 
-   def icx_tests_sync
+  def icx_tests_sync
     icx_tests_podio_id = Podio::Item.create(22529265, fields: podio_params).item_id unless @exchange_student_host.icx_tests_podio_id
 
-     @exchange_student_host.update_attribute(:icx_tests_podio_id, icx_tests_podio_id) if icx_tests_podio_id
+    @exchange_student_host.update_attribute(:icx_tests_podio_id, icx_tests_podio_id) if icx_tests_podio_id
   end
 
-   def central_icx_sync
+  def central_icx_sync
     central_icx_podio_id = Podio::Item.create(20409291, fields: podio_params).item_id unless @exchange_student_host.central_icx_podio_id
 
-     @exchange_student_host.update_attribute(:central_icx_podio_id, central_icx_podio_id) if central_icx_podio_id
+    @exchange_student_host.update_attribute(:central_icx_podio_id, central_icx_podio_id) if central_icx_podio_id
   end
 
    def podio_params
@@ -57,28 +55,24 @@ class ExchangeStudentHostToPodio
       'estado' => fetch_state
     }
 
-     params
+    params
   end
 
    def fetch_state
     items = Podio::Item.find_by_filter_values(
         '13101818',
         'abreviacao': @exchange_student_host.state.downcase
-      ).all.first.item_id
+    ).all.first.item_id
   end
 
-   def expired_token?
-    Podio.client.nil?
-  end
-
-   def authenticate_podio
+  def authenticate_podio
     Podio.client.authenticate_with_credentials(
       ENV['PODIO_USERNAME'],
       ENV['PODIO_PASSWORD']
     )
   end
 
-   def setup_podio
+  def setup_podio
     Podio.setup(
       api_key: ENV['PODIO_API_KEY'],
       api_secret: ENV['PODIO_API_SECRET']
