@@ -1,7 +1,7 @@
 class ExchangeStudentHostsController < ApplicationController
   expose :exchange_student_host
 
-   def create
+  def create
     if exchange_student_host.save
       perform_on_workers
       render json: { status: :success }
@@ -13,13 +13,13 @@ class ExchangeStudentHostsController < ApplicationController
     end
   end
 
-   private
+  private
 
-   def perform_on_workers
+  def perform_on_workers
     ExchangeStudentHostWorker.perform_async(exchange_student_host.as_sqs)
   end
 
-   def exchange_student_host_params
+  def exchange_student_host_params
     params.require(:exchange_student_host).permit(
       :fullname, :email, :cellphone, :zipcode,
       :neighborhood, :city, :state, :cellphone_contactable, :local_committee_id)

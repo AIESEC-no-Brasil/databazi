@@ -7,9 +7,9 @@ class ExchangeStudentHost < ApplicationRecord
   validates :city, presence: true
   validates :state, presence: true
 
-   belongs_to :local_committee
+  belongs_to :local_committee
 
-   def as_sqs
+  def as_sqs
     { exchange_student_host_id: id }
   end
 end

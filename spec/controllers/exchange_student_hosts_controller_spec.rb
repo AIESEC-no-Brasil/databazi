@@ -7,7 +7,7 @@ require 'rails_helper'
     )
   end
 
-   describe '#create', aws: true do
+  describe '#create', aws: true do
     subject(:do_create) { post :create, params: { exchange_student_host: host_params } }
 
      let(:host_params) do
@@ -23,11 +23,11 @@ require 'rails_helper'
       }
     end
 
-     let(:response) { JSON.parse(subject.body) }
+    let(:response) { JSON.parse(subject.body) }
 
-     it { is_expected.to be_successful }
+    it { is_expected.to be_successful }
 
-     context 'when successful' do
+    context 'when successful' do
       before do
         allow(ExchangeStudentHostWorker).to receive(:perform_async)
         allow(ExchangeStudentHostToPodio).to receive(:call)

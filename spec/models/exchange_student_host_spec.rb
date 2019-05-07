@@ -12,7 +12,7 @@ require 'rails_helper'
     it { is_expected.to respond_to :cellphone_contactable }
   end
 
-   describe '#validations' do
+  describe '#validations' do
     subject { build(:exchange_student_host) }
 
      it { is_expected.to validate_presence_of :fullname }
@@ -24,7 +24,7 @@ require 'rails_helper'
     it { is_expected.to validate_presence_of :state }
   end
 
-   describe 'methods' do
+  describe 'methods' do
     it '#as_sqs format' do
       exchange_student_host = create(:exchange_student_host)
       as_sqs = { exchange_student_host_id: exchange_student_host.id }
