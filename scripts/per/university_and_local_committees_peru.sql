@@ -70,6 +70,7 @@ INSERT INTO universities (expa_id, department, name, city, created_at, updated_a
 INSERT INTO universities (expa_id, department, name, city, created_at, updated_at) VALUES('8815', 'Lambayeque', 'Chiclayo - Universidad Particular de Chiclayo', 'Chiclayo', now(), now());
 INSERT INTO universities (expa_id, department, name, city, created_at, updated_at) VALUES('5775', 'Lambayeque', 'Chiclayo - Universidad San Martin de Porres', 'Chiclayo', now(), now());
 INSERT INTO universities (expa_id, department, name, city, created_at, updated_at) VALUES('5781', 'Lambayeque', 'Chiclayo - Universidad Señor de Sipán', 'Chiclayo', now(), now());
+INSERT INTO universities (expa_id, department, name, city, created_at, updated_at) VALUES('10692', 'Lima', 'Lima - Universidad Autonónoma del Perú', 'Lima', now(), now());
 INSERT INTO universities (expa_id, department, name, city, created_at, updated_at) VALUES('5878', 'Lima', 'Lima - ADEX', 'Lima', now(), now());
 INSERT INTO universities (expa_id, department, name, city, created_at, updated_at) VALUES('5753', 'Lima', 'Lima - CIBERTEC', 'Lima', now(), now());
 INSERT INTO universities (expa_id, department, name, city, created_at, updated_at) VALUES('5859', 'Lima', 'Lima - Escuela de Empresarios IPAE', 'Lima', now(), now());
