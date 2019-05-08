@@ -1,21 +1,23 @@
 class UniversitiesController < ApplicationController
   expose :universities, lambda {
+    if ENV['COUNTRY'] == 'per'
+      raise ArgumentError, 'missing program parameter' unless params[:program]
+      raise ArgumentError, 'missing department parameter' unless params[:department]
+      
+      return University.where("(unaccent(name) ILIKE unaccent(?) or lower(unaccent(name)) ILIKE unaccent('%otras%'))", "%#{params[:name]}%")
+        .joins(:university_local_committees)
+        .select('universities.id, name, city, university_local_committees.local_committee_id')        
+        .where('lower(unaccent(department)) = unaccent(?)', params[:department].downcase)
+        .where("(lower(unaccent(city)) ILIKE unaccent(?) or lower(unaccent(name)) ILIKE unaccent('%otras%'))", params[:city].downcase)
+        .where(university_local_committees: { program: params[:program] })
+        .limit(limit_response).order(name: :asc)
+
+    end
+
     results = University.by_name(query_by_name(params[:name]))
     # TODO: refactor this piece of code into an scope on its model
     if params[:city]
       results = results.where('unaccent(city) ILIKE unaccent(?)', params[:city])
-    end
-
-    if ENV['COUNTRY'] == 'per'
-      raise ArgumentError, 'missing program parameter' unless params[:program]
-      raise ArgumentError, 'missing department parameter' unless params[:department]
-
-      results = results.joins(:university_local_committees)
-        .select('universities.id, name, city, university_local_committees.local_committee_id')        
-        .where('lower(unaccent(department)) = unaccent(?)', params[:department].downcase)
-        .where('lower(unaccent(city)) ILIKE unaccent(?)', params[:city].downcase)
-        .where(university_local_committees: { program: params[:program] })
-
     end
 
     results.limit(limit_response).order(name: :asc)
@@ -65,7 +67,7 @@ class UniversitiesController < ApplicationController
     end
   end
 
-  def other_university_peru
+  def other_university_peru #TODO - check if this is still necessary
     return universities unless universities.blank?
 
     universities = University
