@@ -21,20 +21,20 @@ class ExchangeStudentHostToPodio
 
     @exchange_student_host.reload
 
-    @status = true if @exchange_student_host.central_icx_podio_id && @exchange_student_host.icx_tests_podio_id
+    @status = true if @exchange_student_host.central_icx_podio_id && @exchange_student_host.new_central_icx_podio_id
   end
 
   private
 
   def podio_sync
-    icx_tests_sync
+    new_central_icx_sync
     central_icx_sync
   end
 
-  def icx_tests_sync
-    icx_tests_podio_id = Podio::Item.create(22529265, fields: podio_params).item_id unless @exchange_student_host.icx_tests_podio_id
+  def new_central_icx_sync
+    new_central_icx_podio_id = Podio::Item.create(22785246, fields: podio_params).item_id unless @exchange_student_host.new_central_icx_podio_id
 
-    @exchange_student_host.update_attribute(:icx_tests_podio_id, icx_tests_podio_id) if icx_tests_podio_id
+    @exchange_student_host.update_attribute(:new_central_icx_podio_id, new_central_icx_podio_id) if new_central_icx_podio_id
   end
 
   def central_icx_sync
