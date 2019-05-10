@@ -1,6 +1,6 @@
 class UniversitiesController < ApplicationController
   expose :universities, lambda {
-    results = University.joins(:local_committee)
+    results = University.left_outer_joins(:local_committee)
                         .select('universities.id, universities.name, local_committee_id, city, local_committees.whatsapp_link')
                         .by_name(query_by_name(params[:name]))
     # TODO: refactor this piece of code into an scope on its model
