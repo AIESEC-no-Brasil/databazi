@@ -1,6 +1,8 @@
 class UniversitiesController < ApplicationController
   expose :universities, lambda {
-    results = University.by_name(query_by_name(params[:name]))
+    results = University.joins(:local_committee)
+                        .select('universities.id, universities.name, local_committee_id, city, local_committees.whatsapp_link')
+                        .by_name(query_by_name(params[:name]))
     # TODO: refactor this piece of code into an scope on its model
     if params[:city]
       results = results.where('unaccent(city) ILIKE unaccent(?)', params[:city])
@@ -22,8 +24,8 @@ class UniversitiesController < ApplicationController
   end
 
   def format_response
-    universities.as_json(only: %i[id name local_committee_id city]) +
-      other.as_json(only: %i[id name local_committee_id city])
+    universities.as_json +
+      other.as_json
   end
 
   def diacritic_trim(param)
@@ -38,10 +40,10 @@ class UniversitiesController < ApplicationController
 
   def other_university(city)
     if ENV['COUNTRY'] == 'arg'
-      University.where('unaccent(name) ILIKE unaccent(?)', 'otras - %')
+      University.where('unaccent(universities.name) ILIKE unaccent(?)', 'otras - %')
                 .where('unaccent(city) ILIKE unaccent(?)', city)
     else
-      University.where('lower(name) = ?', 'outra')
+      University.where('lower(universities.name) = ?', 'outra')
     end
   end
 end

@@ -8,8 +8,8 @@ class University < ApplicationRecord
   validates :name, presence: true
 
   def self.query_by_name(name)
-    where('unaccent(name) ILIKE unaccent(?)', "%#{name}%")
-      .where.not('name = ?', 'OUTRA')
-      .where.not('unaccent(name) ILIKE unaccent(?)', 'otras - %')
+    where('unaccent(universities.name) ILIKE unaccent(?)', "%#{name}%")
+      .where.not('universities.name = ?', 'OUTRA')
+      .where.not('unaccent(universities.name) ILIKE unaccent(?)', 'otras - %')
   end
 end
