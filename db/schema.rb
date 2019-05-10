@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_10_145519) do
+ActiveRecord::Schema.define(version: 2019_05_10_184619) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -192,6 +192,7 @@ ActiveRecord::Schema.define(version: 2019_05_10_145519) do
     t.datetime "updated_at", null: false
     t.boolean "active", default: true
     t.integer "member_committee_id"
+    t.string "whatsapp_link"
   end
 
   create_table "member_committees", force: :cascade do |t|
