@@ -21,26 +21,15 @@ class ExchangeStudentHostToPodio
 
     @exchange_student_host.reload
 
-    @status = true if @exchange_student_host.central_icx_podio_id && @exchange_student_host.new_central_icx_podio_id
+    @status = true if @exchange_student_host.podio_id
   end
 
   private
 
   def podio_sync
-    new_central_icx_sync
-    central_icx_sync
-  end
+    podio_id = Podio::Item.create(22785246, fields: podio_params).item_id unless @exchange_student_host.podio_id
 
-  def new_central_icx_sync
-    new_central_icx_podio_id = Podio::Item.create(22785246, fields: podio_params).item_id unless @exchange_student_host.new_central_icx_podio_id
-
-    @exchange_student_host.update_attribute(:new_central_icx_podio_id, new_central_icx_podio_id) if new_central_icx_podio_id
-  end
-
-  def central_icx_sync
-    central_icx_podio_id = Podio::Item.create(20409291, fields: podio_params).item_id unless @exchange_student_host.central_icx_podio_id
-
-    @exchange_student_host.update_attribute(:central_icx_podio_id, central_icx_podio_id) if central_icx_podio_id
+    @exchange_student_host.update_attribute(:podio_id, podio_id) if podio_id
   end
 
    def podio_params
@@ -52,7 +41,8 @@ class ExchangeStudentHostToPodio
       'cep' => @exchange_student_host.zipcode,
       'bairro' => @exchange_student_host.neighborhood,
       'cidade' => @exchange_student_host.city,
-      'estado' => fetch_state
+      'estado' => fetch_state,
+      'quero-ser-contactado-por-telefone' => @exchange_student_host.cellphone_contactable ? 1 : 2
     }
 
     params
