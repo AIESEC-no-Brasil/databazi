@@ -5,3 +5,4 @@ queues:
   - [databazi_podio_queue_new, 1]
   - [survey_processor, 1]
   - [update_podio_id, 1]
+  - [exchange_student_host, 1]
