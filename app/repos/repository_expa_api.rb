@@ -56,8 +56,8 @@ class RepositoryExpaApi
     private
 
     def map_applications(expa_applications)
-      #removing applications with 'TMP' product - we only work with GE, GT and GT products
-      mapped = expa_applications.reject{ |application| application&.opportunity&.programme&.short_name_display == 'TMP' }
+      #removing applications with 'TMP' and 'TLP' product or any other diffent from GE, GT and GT products
+      mapped = expa_applications.select{ |application| ['ge', 'gt', 'gv'].include?(application&.opportunity&.programme&.short_name_display.to_s.downcase) }
       mapped = mapped.map do |expa_application|
         application = Expa::Application.new
         application.updated_at_expa = Time.parse(expa_application.updated_at)
