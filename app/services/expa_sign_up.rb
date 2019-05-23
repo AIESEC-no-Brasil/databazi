@@ -41,7 +41,7 @@ class ExpaSignUp
       body: {
         'authenticity_token' => authenticity_token,
         'utf8' => '✓',
-        'user[email]' => exchange_participant.email,
+        'user[email]' => exchange_participant.email.downcase,
         'user[first_name]' => exchange_participant.first_name,
         'user[last_name]' => exchange_participant_last_name(exchange_participant.last_name),
         'user[password]' => exchange_participant.decrypted_password,
@@ -66,6 +66,7 @@ class ExpaSignUp
 
   def send_data_to_expa(exchange_participant)
     submit_data(exchange_participant)
+
     id = exchange_participant_expa_id(exchange_participant)
     unless id.nil?
       @status = true if exchange_participant.update_attributes(expa_id: id)
@@ -75,7 +76,7 @@ class ExpaSignUp
   def exchange_participant_expa_id(exchange_participant)
     EXPAAPI::Client.query(
       ExistsQuery,
-      variables: { email: exchange_participant.email }
+      variables: { email: exchange_participant.email.downcase }
     ).data&.check_person_present&.id
   end
 
