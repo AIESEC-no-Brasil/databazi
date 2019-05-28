@@ -52,6 +52,19 @@ RSpec.describe ExchangeParticipant, type: :model do
     # TODO: How to validate by rule of exchange type
     xit { is_expected.to validate_presence_of :password }
     xit { is_expected.to validate_presence_of :birthdate}
+    context 'email' do
+      let(:exchange_participant) { build(:exchange_participant, email: 'aaaahotmail.com') }
+
+      it 'is invalid when wrong email format provided' do
+        expect(exchange_participant.valid?).to eq false
+      end
+
+      it 'is valid when correct email format provided' do
+        exchange_participant.email = 'test@example.com'
+
+        expect(exchange_participant.valid?).to eq true
+      end
+    end
   end
 
   describe 'nested attributes' do
@@ -91,7 +104,7 @@ RSpec.describe ExchangeParticipant, type: :model do
           ge_exchange_participant.save
           ge_exchange_participant.reload
 
-          expect(ge_exchange_participant.local_committee_id).to eq(destination_local_committee.id)    
+          expect(ge_exchange_participant.local_committee_id).to eq(destination_local_committee.id)
         end
       end
 
