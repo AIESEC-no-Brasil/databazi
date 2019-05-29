@@ -32,7 +32,7 @@ class UpdateRdStation
   end
 
   def check_status(updated_lead)
-    @status = true if updated_lead['email'] == @exchange_participant.email
+    @status = true if updated_lead['email'].downcase == @exchange_participant.email.downcase
   end
 
   def contact_info
