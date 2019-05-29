@@ -40,7 +40,9 @@ class UniversitiesController < ApplicationController
 
   def other_university(city)
     if ENV['COUNTRY'] == 'arg'
-      University.where('unaccent(universities.name) ILIKE unaccent(?)', 'otras - %')
+      University.left_outer_joins(:local_committee)
+                .select('universities.id, universities.name, local_committee_id, city, local_committees.whatsapp_link')
+                .where('unaccent(universities.name) ILIKE unaccent(?)', 'otras - %')
                 .where('unaccent(city) ILIKE unaccent(?)', city)
     else
       University.where('lower(universities.name) = ?', 'outra')
