@@ -21,6 +21,7 @@ class RepositoryApplication
         sdg_target_index: application.sdg_target_index,
         tnid: application.tnid,
         opportunity_name: application.opportunity_name,
+        opportunity_date: application.opportunity_date,
         product: application.product,
         academic_backgrounds: application.academic_backgrounds,
         home_mc: application.home_mc,
