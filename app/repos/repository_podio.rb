@@ -94,9 +94,12 @@ class RepositoryPodio
 
     def update_icx_application_prep(application)
       check_podio
+
+      status = check_status(application.status, application.completed_at)
+
       update_icx_application_prep_podio_id(application) unless application.prep_podio_id
       attrs = {'fields': {
-        'status-expa': map_icx_status_prep(application.status.to_sym)
+        'status-expa': map_icx_status_prep(status.to_sym)
       }}
 
       attrs[:fields]['expa-data-de-re'] = parse_date(application.realized_at) if application.realized_at
@@ -259,6 +262,12 @@ class RepositoryPodio
     end
 
     private
+
+    def check_status(original_status, completed_at)
+      return 'finished' if original_status == 'realized' && completed_at
+
+      original_status
+    end
 
     def embed_id(application)
       Podio::Embed.create(application.opportunity_link).embed_id
