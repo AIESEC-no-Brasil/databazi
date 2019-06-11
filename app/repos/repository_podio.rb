@@ -264,7 +264,7 @@ class RepositoryPodio
     private
 
     def check_status(original_status, completed_at)
-      return 'finished' if original_status == 'realized' && completed_at
+      return 'finished' if original_status == 'realized' && completed_at <= Time.now
 
       original_status
     end
