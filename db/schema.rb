@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_30_193932) do
+ActiveRecord::Schema.define(version: 2019_06_21_161528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 2019_05_30_193932) do
     t.integer "approved_sync_count", default: 1
     t.text "academic_backgrounds", array: true
     t.integer "referral_type"
+    t.datetime "deleted_at"
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
@@ -126,6 +127,7 @@ ActiveRecord::Schema.define(version: 2019_05_30_193932) do
     t.boolean "prep_podio_sync_error", default: false
     t.boolean "from_impact", default: false
     t.datetime "opportunity_date"
+    t.datetime "opportunity_start_date"
     t.index ["home_lc_id"], name: "index_expa_applications_on_home_lc_id"
     t.index ["home_mc_id"], name: "index_expa_applications_on_home_mc_id"
     t.index ["host_lc_id"], name: "index_expa_applications_on_host_lc_id"
