@@ -75,7 +75,10 @@ class RepositoryExpaApi
         application.sdg_target_index = expa_application&.opportunity&.sdg_info&.sdg_target&.target_index
         application.tnid = expa_application&.opportunity&.id
         application.opportunity_name = expa_application&.opportunity&.title
+        # opportunity date
         application.opportunity_date = parse_time(expa_application&.opportunity&.date_opened)
+        application.opportunity_start_date = parse_time(expa_application&.opportunity&.date_opened)
+        # end opportunity date
         application.product = expa_application
           &.opportunity&.programme&.short_name_display&.downcase&.to_sym
         epp = exchange_programme(expa_application)
@@ -221,6 +224,7 @@ ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
           id
           title
           date_opened
+          earliest_start_date
           programme {
             id
             short_name_display

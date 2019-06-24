@@ -205,7 +205,7 @@ class RepositoryPodio
         'data-do-accepted': application.accepted_at ? parse_date(application.accepted_at) : nil,
         'data-do-approved': parse_date(application.approved_at),
         'opportunity-name': application.opportunity_name,
-        'opportunity-date-opened': parse_date(application.opportunity_date),
+        'opportunity-start-date': application.opportunity_start_date,
         'expa-opportunity-id': application.tnid.to_s,
         'host-lc': application&.host_lc&.podio_id,
         'home-lc': application&.home_lc&.podio_id,
@@ -229,6 +229,8 @@ class RepositoryPodio
       params['quero-ser-contactado-por-telefone'] = application&.exchange_participant&.cellphone_contactable ? 1 : 2 #1 = Yes, 2 = No
 
       params['da-onde-veio-este-ep'] = application.from_impact ? 2 : 1 #1 = YOP, 2 = Impact Brazil
+
+      params['opportunity-date-opened'] = parse_date(application.opportunity_date) unless application.product == :gv
 
       # rubocop:enable Metrics/LineLength
 
