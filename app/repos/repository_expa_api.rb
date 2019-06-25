@@ -76,7 +76,7 @@ class RepositoryExpaApi
         application.tnid = expa_application&.opportunity&.id
         application.opportunity_name = expa_application&.opportunity&.title
         application.opportunity_date = parse_time(expa_application&.opportunity&.date_opened)
-        application.opportunity_start_date = parse_time(expa_application&.opportunity&.date_opened)
+        application.opportunity_start_date = parse_time(expa_application&.opportunity&.earliest_start_date)
         application.product = expa_application
           &.opportunity&.programme&.short_name_display&.downcase&.to_sym
         epp = exchange_programme(expa_application)
