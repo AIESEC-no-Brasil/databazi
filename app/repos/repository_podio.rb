@@ -230,7 +230,7 @@ class RepositoryPodio
 
       params['da-onde-veio-este-ep'] = application.from_impact ? 2 : 1 #1 = YOP, 2 = Impact Brazil
 
-      params['opportunity-date-opened'] = parse_date(application.opportunity_date) unless application.product == :gv
+      params['opportunity-date-opened'] = parse_date(application.opportunity_date) unless application.product.to_sym == :gv
 
       # rubocop:enable Metrics/LineLength
 
