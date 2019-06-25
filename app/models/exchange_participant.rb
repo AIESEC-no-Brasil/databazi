@@ -13,6 +13,7 @@ class ExchangeParticipant < ApplicationRecord
   validates :fullname, presence: true, if: :ogx?
   validates :cellphone, presence: true, if: :ogx?
   validates :email, presence: true,
+                    format: { with: URI::MailTo::EMAIL_REGEXP },
                     uniqueness: true, if: :ogx?
   validates :birthdate, presence: true, if: :ogx?
   validates :password, presence: true, if: :ogx?
@@ -158,8 +159,8 @@ class ExchangeParticipant < ApplicationRecord
   def check_segmentation
     programs = { gv: 0, ge: 1, gt: 2 }
     program = self.registerable_type.downcase[0..1].to_sym
-    local_committee_segmentation = LocalCommitteeSegmentation.where('origin_local_committee_id = ? and program = ?', 
-                                                                      self.local_committee_id, 
+    local_committee_segmentation = LocalCommitteeSegmentation.where('origin_local_committee_id = ? and program = ?',
+                                                                      self.local_committee_id,
                                                                       programs[program]).first
 
     self.local_committee_id = local_committee_segmentation.destination_local_committee_id if local_committee_segmentation
