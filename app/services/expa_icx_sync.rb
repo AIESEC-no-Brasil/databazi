@@ -18,6 +18,7 @@ class ExpaIcxSync
       begin
         logger.info "Saving into Podio #{application.product} - #{application.updated_at_expa}"
         RepositoryPodio.save_icx_application(application)
+        application.update_attribute(:has_error, false) if application.has_error
       rescue => exception
         Raven.capture_exception(exception)
         logger.error exception.message
