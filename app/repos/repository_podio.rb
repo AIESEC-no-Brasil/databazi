@@ -205,7 +205,7 @@ class RepositoryPodio
         'data-do-accepted': application.accepted_at ? parse_date(application.accepted_at) : nil,
         'data-do-approved': parse_date(application.approved_at),
         'opportunity-name': application.opportunity_name,
-        'opportunity-start-date': application.opportunity_start_date,
+        'opportunity-start-date': parse_date(application.opportunity_start_date),
         'expa-opportunity-id': application.tnid.to_s,
         'host-lc': application&.host_lc&.podio_id,
         'home-lc': application&.home_lc&.podio_id,
