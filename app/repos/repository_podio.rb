@@ -105,6 +105,8 @@ class RepositoryPodio
       attrs[:fields]['expa-data-de-re'] = parse_date(application.realized_at) if application.realized_at
       attrs[:fields]['expa-data-de-fin'] = parse_date(application.completed_at) if application.completed_at
 
+      attrs[:fields]['nome-do-projeto'] = BrazilIcxProject.call(application.opportunity_name) if application.product == 'gv'
+
       attrs[:fields] = attrs[:fields].merge(map_standards(application.standards)) if application.standards
 
       item = Podio::Item.update(application.prep_podio_id, attrs)
