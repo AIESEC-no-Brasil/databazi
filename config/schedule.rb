@@ -5,6 +5,10 @@ every 5.minutes do
 end
 
 every 5.minutes do
+  runner "PodioEnableSynchronization.call", environment: 'production'
+end
+
+every 5.minutes do
   runner "ExpaIcxSync.call", environment: 'production'
 end
 
