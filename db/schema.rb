@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_27_125001) do
+ActiveRecord::Schema.define(version: 2019_07_12_185140) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +94,22 @@ ActiveRecord::Schema.define(version: 2019_06_27_125001) do
     t.index ["university_id"], name: "index_exchange_participants_on_university_id"
   end
 
+  create_table "exchange_student_hosts", force: :cascade do |t|
+    t.string "fullname"
+    t.string "email"
+    t.string "cellphone"
+    t.string "zipcode"
+    t.string "neighborhood"
+    t.string "city"
+    t.string "state"
+    t.boolean "cellphone_contactable", default: false
+    t.bigint "podio_id"
+    t.bigint "local_committee_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["local_committee_id"], name: "index_exchange_student_hosts_on_local_committee_id"
+  end
+
   create_table "expa_applications", force: :cascade do |t|
     t.integer "expa_id"
     t.integer "status"
@@ -129,6 +145,7 @@ ActiveRecord::Schema.define(version: 2019_06_27_125001) do
     t.datetime "opportunity_date"
     t.datetime "opportunity_start_date"
     t.boolean "resync", default: false
+    t.boolean "finished", default: false
     t.index ["home_lc_id"], name: "index_expa_applications_on_home_lc_id"
     t.index ["home_mc_id"], name: "index_expa_applications_on_home_mc_id"
     t.index ["host_lc_id"], name: "index_expa_applications_on_host_lc_id"
@@ -190,6 +207,7 @@ ActiveRecord::Schema.define(version: 2019_06_27_125001) do
     t.datetime "updated_at", null: false
     t.boolean "active", default: true
     t.integer "member_committee_id"
+    t.string "whatsapp_link"
   end
 
   create_table "member_committees", force: :cascade do |t|
