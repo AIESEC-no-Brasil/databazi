@@ -9,8 +9,7 @@ class PodioEnableSynchronization
 
     expa_applications = fetch_expa_applications
 
-    expa_applications.update_all(podio_last_sync: nil)
-    expa_applications.update_all(finished: true)
+    expa_applications.update_all(podio_last_sync: nil, finished: true)
 
     logger.info "Updated #{expa_applications.count} Expa::Applications"
   end
