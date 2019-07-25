@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_11_145222) do
+ActiveRecord::Schema.define(version: 2019_07_24_212039) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +94,9 @@ ActiveRecord::Schema.define(version: 2019_04_11_145222) do
     t.string "city"
     t.integer "exchange_reason"
     t.string "department"
+    t.boolean "rdstation_opportunity", default: false
+    t.integer "rdstation_lifecycle_stage", default: 0
+    t.string "rdstation_uuid"
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"

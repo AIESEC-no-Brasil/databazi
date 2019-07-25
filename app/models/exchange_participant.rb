@@ -1,6 +1,7 @@
 class ExchangeParticipant < ApplicationRecord
   include ActiveModel::Validations
   before_create :encrypted_password
+  after_save :check_funnel_stage
 
   ARGENTINEAN_SCHOLARITY = %i[incomplete_highschool highschool graduating graduated post_graduating post_graduated]
   BRAZILIAN_SCHOLARITY = %i[highschool incomplete_graduation graduating post_graduated almost_graduated graduated other]
@@ -13,6 +14,8 @@ class ExchangeParticipant < ApplicationRecord
                                 partner_organization: 14, spanglish_event: 15, potenciate_ad: 16, influencer: 17 }
 
   PERUVIAN_REFERRAL_TYPE = { none: 0, facebook: 1, instagram: 2, friend_or_family: 3, university_event: 4, university_advertising: 5, other: 6 }
+
+  RDSTATION_CLIENT_STATUSES = %w[approved realized completed finished]
 
   validates_with YouthValidator, on: :create
   validates_with ScholarityValidator, on: :create
@@ -36,6 +39,8 @@ class ExchangeParticipant < ApplicationRecord
   accepts_nested_attributes_for :campaign
 
   enum exchange_type: { ogx: 0, icx: 1 }
+
+  enum rdstation_lifecycle_stage: { lead: 0, qualified_lead: 1, client: 2 }
 
   enum status: { open: 1, applied: 2, accepted: 3, approved_tn_manager: 4, approved_ep_manager: 5, approved: 6,
     break_approved: 7, rejected: 8, withdrawn: 9,
@@ -173,6 +178,43 @@ class ExchangeParticipant < ApplicationRecord
   end
 
   private
+
+  def check_funnel_stage
+    clientify_lead if self.expa_id && self.qualified_lead? && self.status.in?(ExchangeParticipant::RDSTATION_CLIENT_STATUSES)
+    qualify_lead if self.expa_id && self.lead?
+  end
+
+  def qualify_lead
+    rdstation_integration = RdstationIntegration.new
+
+    synchronize_with_rdstation_and_save(rdstation_integration, "Qualified Lead")
+  end
+
+  def clientify_lead
+    rdstation_integration = RdstationIntegration.new
+
+    synchronize_with_rdstation_and_save(rdstation_integration, "Client")
+  end
+
+  def synchronize_with_rdstation_and_save(rdstation_integration, lifecycle_stage)
+    self.rdstation_uuid = fetch_rdstation_uuid(rdstation_integration) unless self.rdstation_uuid
+
+    # To be removed when Databazi starts handling RDstation opportunity status
+    self.rdstation_opportunity = rdstation_integration.fetch_funnel(self.rdstation_uuid)[:opportunity]
+
+    data = { "lifecycle_stage": lifecycle_stage, "opportunity": self.rdstation_opportunity }
+
+    funnel = rdstation_integration.update_funnel(self.rdstation_uuid, data)
+
+    self.rdstation_lifecycle_stage = funnel[:lifecycle_stage].parameterize(separator: '_').to_sym
+    self.rdstation_opportunity = funnel[:opportunity]
+
+    self.save
+  end
+
+  def fetch_rdstation_uuid(rdstation_integration)
+    rdstation_integration.fetch_contact_by_email(self.email)['uuid']
+  end
 
   def encrypted_password
     self.password = password_encryptor.encrypt_and_sign(password)

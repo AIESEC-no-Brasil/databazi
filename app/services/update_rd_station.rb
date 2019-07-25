@@ -26,6 +26,8 @@ class UpdateRdStation
     contact = RDStation::Contacts.new(access_token)
     lead = contact.by_email(@exchange_participant.email)
 
+    @exchange_participant.update_attributes(rdstation_uuid: lead['uuid']) unless @exchange_participant.rdstation_uuid
+
     updated_lead = contact.update(lead['uuid'], contact_info)
 
     check_status(updated_lead)
