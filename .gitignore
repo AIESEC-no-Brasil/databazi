@@ -39,3 +39,5 @@ config/local_env.yml
 /files/*
 
 /.idea/
+
+.vscode/*

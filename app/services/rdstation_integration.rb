@@ -8,7 +8,11 @@ class RdstationIntegration
   end
 
   def fetch_contact_by_email(email)
-    @contact.by_email(email)
+    begin
+      @contact.by_email(email)
+    rescue => exception
+      nil
+    end
   end
 
   def update_lead_by_uuid(uuid, contact_info = {})
