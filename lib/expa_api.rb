@@ -43,6 +43,7 @@ LoadApplications = EXPAAPI::Client.parse <<~'GRAPHQL'
         updated_at
         created_at
         matched_or_rejected_at
+        date_matched
         date_approved
         date_realized
         experience_end_date
