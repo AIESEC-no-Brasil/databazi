@@ -248,10 +248,16 @@ class RepositoryPodio
           podio_id: podio_item.item_id
         )
       else
-        Podio::Item.update(application.podio_id, fields: params)
-        application.update_attributes(
-          podio_last_sync: Time.now
-        )
+        begin
+          Podio::Item.update(application.podio_id, fields: params)
+          application.update_attributes(
+            podio_last_sync: Time.now
+          )
+        rescue Podio::GoneError => e
+          if e.message == 'Item has been deleted'
+            application.update_attribute(:podio_deleted, true)
+          end
+        end
       end
 
       begin
