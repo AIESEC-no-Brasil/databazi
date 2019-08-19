@@ -14,10 +14,18 @@ class ExpaPeopleSync
   def perform_on_exchange_participant(person)
     exchange_participant = ExchangeParticipant.find_by(expa_id: person.id)
 
-    if exchange_participant && status_modified?(exchange_participant&.status, person&.status)
-      exchange_participant.update_attributes(status: person.status.to_sym, updated_at_expa: person.updated_at)
-      update_rd_station(exchange_participant)
+    unless exchange_participant
+      ExchangeParticipant.new(expa_id: person.id, updated_at_expa: person.updated_at, origin: :expa, status: person.status).save(validate: false)
     end
+
+    if exchange_participant && exchange_participant.databazi?
+      if status_modified?(exchange_participant&.status, person&.status)
+        exchange_participant.update_attributes(status: person.status.to_sym)
+        update_rd_station(exchange_participant)
+      end
+    end
+
+    exchange_participant.update_attributes(updated_at_expa: person.updated_at) if exchange_participant
   end
 
   def load_expa_people(from, page = 1, &callback)
@@ -79,7 +87,7 @@ class ExpaPeopleSync
       exchange_participant.update_attribute(:rdstation_uuid, uuid) if uuid
     end
 
-    rdstation_integration.update_contact_by_uuid(uuid, { cf_status: exchange_participant.status }) if uuid
+    rdstation_integration.update_lead_by_uuid(uuid, { cf_status: exchange_participant.status }) if uuid
   end
 
   def rdstation_authentication_token

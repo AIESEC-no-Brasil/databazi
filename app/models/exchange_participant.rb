@@ -40,6 +40,8 @@ class ExchangeParticipant < ApplicationRecord
 
   enum exchange_type: { ogx: 0, icx: 1 }
 
+  enum origin: { databazi: 0, expa: 1 }
+
   enum rdstation_lifecycle_stage: { lead: 0, qualified_lead: 1, client: 2 }
 
   enum status: { open: 1, applied: 2, accepted: 3, approved_tn_manager: 4, approved_ep_manager: 5, approved: 6,
@@ -213,7 +215,8 @@ class ExchangeParticipant < ApplicationRecord
   end
 
   def fetch_rdstation_uuid(rdstation_integration)
-    rdstation_integration.fetch_contact_by_email(self.email)['uuid']
+    contact = rdstation_integration.fetch_contact_by_email(self.email)
+    contact['uuid'] if contact
   end
 
   def encrypted_password
