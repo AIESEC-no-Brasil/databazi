@@ -209,8 +209,6 @@ class ExchangeParticipant < ApplicationRecord
 
       funnel = rdstation_integration.update_funnel(self.rdstation_uuid, data)
 
-      puts "Funnel status: #{funnel}"
-
       self.rdstation_lifecycle_stage = funnel[:lifecycle_stage].parameterize(separator: '_').to_sym
       self.rdstation_opportunity = funnel[:opportunity]
 
