@@ -201,17 +201,21 @@ class ExchangeParticipant < ApplicationRecord
   def synchronize_with_rdstation_and_save(rdstation_integration, lifecycle_stage)
     self.rdstation_uuid = fetch_rdstation_uuid(rdstation_integration) unless self.rdstation_uuid
 
-    # To be removed when Databazi starts handling RDstation opportunity status
-    self.rdstation_opportunity = rdstation_integration.fetch_funnel(self.rdstation_uuid)[:opportunity]
+    if self.rdstation_uuid
+      # To be removed when Databazi starts handling RDstation opportunity status
+      self.rdstation_opportunity = rdstation_integration.fetch_funnel(self.rdstation_uuid)[:opportunity]
 
-    data = { "lifecycle_stage": lifecycle_stage, "opportunity": self.rdstation_opportunity }
+      data = { "lifecycle_stage": lifecycle_stage, "opportunity": self.rdstation_opportunity }
 
-    funnel = rdstation_integration.update_funnel(self.rdstation_uuid, data)
+      funnel = rdstation_integration.update_funnel(self.rdstation_uuid, data)
 
-    self.rdstation_lifecycle_stage = funnel[:lifecycle_stage].parameterize(separator: '_').to_sym
-    self.rdstation_opportunity = funnel[:opportunity]
+      puts "Funnel status: #{funnel}"
 
-    self.save
+      self.rdstation_lifecycle_stage = funnel[:lifecycle_stage].parameterize(separator: '_').to_sym
+      self.rdstation_opportunity = funnel[:opportunity]
+
+      self.save
+    end
   end
 
   def fetch_rdstation_uuid(rdstation_integration)
