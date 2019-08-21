@@ -19,8 +19,9 @@ class ExpaPeopleSync
     end
 
     if exchange_participant && exchange_participant.databazi?
-      if status_modified?(exchange_participant&.status, person&.status)
-        exchange_participant.update_attributes(status: person.status.to_sym)
+      person_status = expa_person_status(person&.status)
+      if status_modified?(exchange_participant&.status, person_status)
+        exchange_participant.update_attributes(status: person_status.to_sym)
         begin
           update_rd_station(exchange_participant)
         rescue => e
@@ -75,6 +76,9 @@ class ExpaPeopleSync
       .first&.updated_at_expa  || 7.days.ago) + 1
   end
 
+  def expa_person_status(status)
+    status == 'other' ? 'other_status' : status
+  end
 
   def status_modified?(status, expa_status)
     status != expa_status
