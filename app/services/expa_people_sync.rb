@@ -14,10 +14,28 @@ class ExpaPeopleSync
   def perform_on_exchange_participant(person)
     exchange_participant = ExchangeParticipant.find_by(expa_id: person.id)
 
-    if exchange_participant && status_modified?(exchange_participant&.status, person&.status)
-      exchange_participant.update_attributes(status: person.status.to_sym, updated_at_expa: person.updated_at)
-      update_rd_station(exchange_participant)
+    unless exchange_participant || person.status == 'deleted'
+      ExchangeParticipant.new(expa_id: person.id, updated_at_expa: person.updated_at, origin: :expa, status: person.status).save(validate: false)
     end
+
+    if exchange_participant && exchange_participant.databazi?
+      if status_modified?(exchange_participant&.status, person&.status)
+        exchange_participant.update_attributes(status: person.status.to_sym)
+        begin
+          update_rd_station(exchange_participant)
+        rescue => e
+          Raven.capture_message "Error updating RDStation",
+          extra: {
+            exchange_participant_id: exchange_participant.id,
+            exception: e
+          }
+        end
+      end
+    end
+
+    exchange_participant.update_attributes(updated_at_expa: person.updated_at) if exchange_participant
+
+    sleep 5
   end
 
   def load_expa_people(from, page = 1, &callback)
@@ -26,6 +44,7 @@ class ExpaPeopleSync
     total_pages = res&.data&.all_people&.paging&.total_pages
 
     people = res&.data&.all_people&.data
+
     people.each do |person|
       begin
         callback.call(person)
@@ -51,6 +70,7 @@ class ExpaPeopleSync
 
   def from
     (ExchangeParticipant
+      .where.not(updated_at_expa: nil)
       .order(updated_at_expa: :desc)
       .first&.updated_at_expa  || 7.days.ago) + 1
   end
@@ -74,12 +94,12 @@ class ExpaPeopleSync
     uuid = exchange_participant.rdstation_uuid
 
     unless uuid
-      contact = rdstation_integration.fetch_contact_by_email(exchange_participant.email)
+      contact = rdstation_integration.fetch_contact_by_email(exchange_participant.try(:email))
       uuid = contact['uuid'] if contact
       exchange_participant.update_attribute(:rdstation_uuid, uuid) if uuid
     end
 
-    rdstation_integration.update_contact_by_uuid(uuid, { cf_status: exchange_participant.status }) if uuid
+    rdstation_integration.update_lead_by_uuid(uuid, { cf_status: exchange_participant.status }) if uuid
   end
 
   def rdstation_authentication_token

@@ -2,7 +2,4 @@ concurrency: 1
 delay: 0
 queues:
   - [databazi_sign_up_queue, 1]
-  - [databazi_podio_queue_new, 1]
-  - [survey_processor, 1]
-  - [update_podio_id, 1]
   - [update_rd_station, 1]
