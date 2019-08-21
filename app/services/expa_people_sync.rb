@@ -77,7 +77,7 @@ class ExpaPeopleSync
   end
 
   def expa_person_status(status)
-    status == 'other' ? :other_status : status
+    status == 'other' ? 'other_status' : status
   end
 
   def status_modified?(status, expa_status)
