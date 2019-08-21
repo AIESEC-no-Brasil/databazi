@@ -253,8 +253,8 @@ class RepositoryPodio
           application.update_attributes(
             podio_last_sync: Time.now
           )
-        rescue Podio::GoneError => e
-          if e.message == 'Item has been deleted'
+        rescue Podio::GoneError, Podio::NotFoundError => e
+          if e.message == 'Item has been deleted' || e.message == 'Object not found'
             application.update_attribute(:podio_deleted, true)
           end
         end
