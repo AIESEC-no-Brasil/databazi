@@ -15,7 +15,11 @@ class ExpaPeopleSync
     exchange_participant = ExchangeParticipant.find_by(expa_id: person.id)
 
     unless exchange_participant || person.status == 'deleted'
-      ExchangeParticipant.new(expa_id: person.id, updated_at_expa: person.updated_at, origin: :expa, status: person.status).save(validate: false)
+      ExchangeParticipant.new(expa_id: person.id,
+                              updated_at_expa: person.updated_at,
+                              origin: :expa,
+                              status: expa_person_status(person&.status)
+                            ).save(validate: false)
     end
 
     if exchange_participant && exchange_participant.databazi?
