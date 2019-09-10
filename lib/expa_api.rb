@@ -3,11 +3,11 @@ require 'graphql/client/http'
 
 module EXPAAPI
   def self.access_token
-    HTTParty.get("#{ENV['TOKEN_URL']}?token=#{token_token}").body
+    HTTParty.post(ENV['TOKEN_URL'], body: token_body ).body
   end
 
-  def self.token_token
-    ENV['API_AUTHENTICITY_TOKEN']
+  def self.token_body
+    { username: ENV['EXPA_USERNAME'], password: ENV['EXPA_PASSWORD'] }.to_json
   end
 
   HTTP = GraphQL::Client::HTTP.new("https://gis-api.aiesec.org/graphql?access_token=#{access_token}")
