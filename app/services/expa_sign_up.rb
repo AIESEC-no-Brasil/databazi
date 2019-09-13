@@ -1,5 +1,3 @@
-require 'slack-notifier'
-require 'concerns/check_person_present'
 require 'open-uri'
 
 class ExpaSignUp
@@ -7,84 +5,49 @@ class ExpaSignUp
     new(params).call
   end
 
+  attr_accessor :res
   attr_reader :exchange_participant, :status
 
   def initialize(params)
-    @status = false
     @exchange_participant = ExchangeParticipant.find_by(
       id: params['exchange_participant_id']
     )
   end
 
   def call
-    send_data_to_expa(@exchange_participant)
+    @res = sign_up_user
+    update_exchange_participant_id if @res.code == 201
 
-    notify_slack("Error synching EP:\n#{@exchange_participant.fullname} - #{@exchange_participant.email} on ENV: #{ENV['ENV']}") unless @status
-
-    @status
+    @res
   end
 
   private
 
-  def notify_slack(message)
-    notifier = Slack::Notifier.new ENV['SLACK_WEBHOOK_URL'] do
-      defaults channel: "##{ENV['SLACK_CHANNEL']}",
-               username: "notifier"
-    end
-
-    notifier.ping(message)
-  end
-
-  def submit_data(exchange_participant)
-    HTTParty.post(
-      'https://auth.aiesec.org/users/',
-      body: {
-        'authenticity_token' => authenticity_token,
-        'utf8' => '✓',
-        'user[email]' => exchange_participant.email.downcase,
-        'user[first_name]' => exchange_participant.first_name,
-        'user[last_name]' => exchange_participant_last_name(exchange_participant.last_name),
-        'user[password]' => exchange_participant.decrypted_password,
-        'user[phone]' => exchange_participant.cellphone,
-        'user[country]' => ENV['EXPA_COUNTRY'],
-        'user[mc]' => ENV['EXPA_MC_ID'],
-        'user[lc]' => exchange_participant.local_committee.expa_id,
-        'user[lc_input]' => exchange_participant.local_committee.expa_id,
-        'user[allow_phone_communication]' =>
-          exchange_participant.cellphone_contactable
-      }
+  def sign_up_user
+    HTTParty.post(ENV['EXPA_SIGNUP_URL'],
+      body: payload,
+      headers: { 'Content-Type' => 'application/json' }
     )
   end
 
-  def exchange_participant_last_name(last_name)
-    unless last_name.empty?
-      last_name
-    else
-      '-'
-    end
+  def payload
+    {
+      user: {
+        first_name: @exchange_participant.first_name,
+        last_name: @exchange_participant.last_name,
+        email: @exchange_participant.email,
+        country_code: ENV['COUNTRY_CODE'],
+        phone: @exchange_participant.cellphone,
+        password: @exchange_participant.decrypted_password,
+        lc: @exchange_participant.local_committee.expa_id,
+        mc: ENV['EXPA_MC_ID'],
+        allow_phone_communication: @exchange_participant.cellphone_contactable,
+        created_via: "json"
+      }
+    }.to_json
   end
 
-  def send_data_to_expa(exchange_participant)
-    submit_data(exchange_participant)
-
-    id = exchange_participant_expa_id(exchange_participant)
-    unless id.nil?
-      @status = true if exchange_participant.update_attributes(expa_id: id)
-    end
-  end
-
-  def exchange_participant_expa_id(exchange_participant)
-    EXPAAPI::Client.query(
-      ExistsQuery,
-      variables: { email: exchange_participant.email.downcase }
-    ).data&.check_person_present&.id
-  end
-
-  def authenticity_token
-    sign_up_page.css('.signup_op [name=authenticity_token]').first['value']
-  end
-
-  def sign_up_page
-    Nokogiri::HTML(open('https://auth.aiesec.org/users/sign_in'))
+  def update_exchange_participant_id
+    @exchange_participant.update_attribute(:expa_id, @res.parsed_response['person_id'])
   end
 end
