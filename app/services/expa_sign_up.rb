@@ -38,7 +38,7 @@ class ExpaSignUp
         email: @exchange_participant.email,
         country_code: ENV['COUNTRY_CODE'],
         phone: @exchange_participant.cellphone,
-        password: @exchange_participant.password,
+        password: @exchange_participant.decrypted_password,
         lc: @exchange_participant.local_committee.expa_id,
         mc: ENV['EXPA_MC_ID'],
         allow_phone_communication: @exchange_participant.cellphone_contactable,
