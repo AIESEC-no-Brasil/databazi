@@ -42,7 +42,7 @@ class ExpaSignUp
         lc: @exchange_participant.local_committee.expa_id,
         mc: ENV['EXPA_MC_ID'],
         allow_phone_communication: @exchange_participant.cellphone_contactable,
-        selected_programmes: [peruvian_program(@exchange_participant.registerable.class.name)]
+        selected_programmes: [peruvian_program(@exchange_participant.registerable.class.name).to_s],
         alignment_id: @exchange_participant.university.expa_id,
         referral_type: "#{referral_type}&#{exchange_reason}",
         created_via: "json"
