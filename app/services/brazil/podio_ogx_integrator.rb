@@ -59,8 +59,8 @@ module Brazil
         'nivel-de-ingles': ['english_level', 'language_level_to_podio'],
         'nivel-de-espanhol': ['spanish_level', 'language_level_to_podio'],
         'universidade-2': ['university', nil],
-        'curso': ['college_course', nil],
-        'sub-produto': ['experience', nil],
+        'curso': ['college_course', 'id_to_podio'],
+        'sub-produto': ['experience', 'id_to_podio'],
         'gostaria-de-ser-contactado-por-celular-2': ['cellphone_contacble', 'cellphone_contactable_option']
       }
     end
@@ -74,6 +74,10 @@ module Brazil
       else
         eval("#{method}(#{value})")
       end
+    end
+
+    def id_to_podio(incoming)
+      incoming.to_i
     end
 
     def language_level_to_podio(level)

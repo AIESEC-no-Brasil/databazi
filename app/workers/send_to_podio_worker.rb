@@ -9,7 +9,6 @@ class SendToPodioWorker
 
   def perform(sqs_msg, body)
     if ENV['COUNTRY_MODULE'] == 'Brazil'
-      Shoryuken.logger.info("EVALing")
       integrator = eval(ENV['COUNTRY_MODULE'] + "::PodioOgxIntegrator")
 
       sqs_msg.delete if integrator.call(body)
