@@ -50,18 +50,18 @@ module Brazil
     def optional_keys
       {
         'tag-origem-2': ['utm_source', 'utm_source_to_podio'],
-        'tag-meio-2': ['utm_medium', 'utm_medium_to_podio'],
-        'tag-campanha': ['utm_campaign', nil],
-        'tag-termo': ['utm_term', nil],
-        'tag-conteudo-2': ['utm_content', nil],
+        'tag-meio-2-2': ['utm_medium', 'utm_medium_to_podio'],
+        'tag-campanha-2': ['utm_campaign', nil],
+        'tag-termo-2': ['utm_term', nil],
+        'tag-conteudo-2-2': ['utm_content', nil],
         'escolaridade': ['scholarity', 'scholarity_name'],
         'cl-marcado-no-expa-nao-conta-expansao-ainda': ['local_committee', nil],
         'nivel-de-ingles': ['english_level', 'language_level_to_podio'],
         'nivel-de-espanhol': ['spanish_level', 'language_level_to_podio'],
-        'universidade': ['university', nil],
+        'universidade-2': ['university', nil],
         'curso': ['college_course', nil],
         'sub-produto': ['experience', nil],
-        'gostaria-de-ser-contactado-por-celular': ['cellphone_contacble', 'cellphone_contactable_option']
+        'gostaria-de-ser-contactado-por-celular-2': ['cellphone_contacble', 'cellphone_contactable_option']
       }
     end
 
