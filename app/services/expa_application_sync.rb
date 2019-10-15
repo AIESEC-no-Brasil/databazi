@@ -25,7 +25,7 @@ class ExpaApplicationSync
                               expa_ep_id: application.person.id,
                               updated_at_expa: parsed_date(application.updated_at),
                               applied_at: parsed_date(application.created_at),
-                              accepted_at: application.status != 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
+                              accepted_at: parsed_date(application.date_matched),
                               approved_at: parsed_date(application.date_approved),
                               break_approved_at: application.status == 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
                               realized_at: parsed_date(application.date_realized),
@@ -45,7 +45,7 @@ class ExpaApplicationSync
                               expa_ep_id: application.person.id,
                               updated_at_expa: parsed_date(application.updated_at),
                               applied_at: parsed_date(application.created_at),
-                              accepted_at: application.status != 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
+                              accepted_at: parsed_date(application.date_matched),
                               approved_at: parsed_date(application.date_approved),
                               break_approved_at: application.status == 'rejected' ? parsed_date(application.matched_or_rejected_at) : nil,
                               realized_at: parsed_date(application.date_realized),
@@ -73,7 +73,7 @@ class ExpaApplicationSync
     end
   end
 
-  
+
   private
 
   def exchange_participant_status_expa(status)

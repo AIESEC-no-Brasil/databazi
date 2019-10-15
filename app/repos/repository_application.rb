@@ -21,6 +21,8 @@ class RepositoryApplication
         sdg_target_index: application.sdg_target_index,
         tnid: application.tnid,
         opportunity_name: application.opportunity_name,
+        opportunity_date: application.opportunity_date,
+        opportunity_start_date: application.opportunity_start_date,
         product: application.product,
         academic_backgrounds: application.academic_backgrounds,
         home_mc: application.home_mc,
@@ -29,6 +31,8 @@ class RepositoryApplication
         standards: application.standards,
         exchange_participant_id: application.exchange_participant.id
       )
+
+      check_impact_brazil_referral(application)
   end
 
   def self.pending_podio_sync_icx_applications
@@ -44,6 +48,16 @@ class RepositoryApplication
   end
 
   private
+
+  def self.check_impact_brazil_referral(expa_application)
+    Expa::Application.where(expa_id: expa_application.expa_id).update_all({:from_impact => true}) if impact_brazil_referral(expa_application)
+  end
+
+  def self.impact_brazil_referral(expa_application)
+    ImpactBrazilReferral.find_by(ep_expa_id: expa_application.expa_ep_id,
+                                 opportunity_expa_id: expa_application.tnid,
+                                 application_expa_id: expa_application.expa_id)
+  end
 
   def self.normalize_ep(application)
     most_recent_ep = application.exchange_participant

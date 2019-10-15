@@ -77,7 +77,7 @@ class RepositoryPodio
         }}
       else
         attrs = {'fields': {
-          'status-expa': map_status_prep(application.status.to_sym)
+          'status-expa': map_ogx_status_prep(application.status.to_sym)
         }}
       end
 
@@ -92,10 +92,12 @@ class RepositoryPodio
 
     def update_icx_application_prep(application)
       check_podio
-      update_icx_application_prep_podio_id(application) unless application.prep_podio_id
 
+      status = check_status(application.status, application.completed_at)
+
+      update_icx_application_prep_podio_id(application) unless application.prep_podio_id
       attrs = {'fields': {
-        'status-expa': map_status_prep(application.status.to_sym)
+        'status-expa': map_icx_status_prep(status.to_sym)
       }}
 
       attrs[:fields]['expa-data-de-re'] = parse_date(application.realized_at) if application.realized_at
@@ -110,8 +112,9 @@ class RepositoryPodio
     def map_standards(standards)
       podio_standards_fields = {}
       standards.each do |standard|
-        podio_key = map_standard_constant_to_podio(standard['data']['constant_name'])
-        podio_value = map_standard_option_to_podio(standard['data']['option'])
+        standard_data = standard['data'] || standard['table']
+        podio_key = map_standard_constant_to_podio(standard_data['constant_name'])
+        podio_value = map_standard_option_to_podio(standard_data['option'])
         podio_standards_fields[podio_key] = podio_value if podio_key
       end
       podio_standards_fields
@@ -140,6 +143,8 @@ class RepositoryPodio
     end
 
     def map_standard_option_to_podio(option)
+      return 1 unless option #default is 'not filled'
+
       map_option = {
         'true': 2,
         'false': 3,
@@ -195,28 +200,38 @@ class RepositoryPodio
         ],
         #'data-de-nascimento': parse_date(application.exchange_participant.birthdate),
         'data-do-applied': parse_date(application.applied_at),
-        'data-do-accepted': parse_date(application.accepted_at),
+        'data-do-accepted': application.accepted_at ? parse_date(application.accepted_at) : nil,
         'data-do-approved': parse_date(application.approved_at),
         'opportunity-name': application.opportunity_name,
+        'opportunity-start-date': parse_date(application.opportunity_start_date),
         'expa-opportunity-id': application.tnid.to_s,
         'host-lc': application&.host_lc&.podio_id,
         'home-lc': application&.home_lc&.podio_id,
         'home-mc': application&.home_mc&.podio_id,
         'background-academico-do-ep': application&.exchange_participant&.academic_backgrounds,
         'background-da-vaga': application&.academic_backgrounds,
-        'aplicante-qualificado': map_aplicante_qualificado(application),
         "celular": [
           {
             'type': 'mobile',
-            value: application.exchange_participant.cellphone
+            value: application.exchange_participant.cellphone ? application.exchange_participant.cellphone[0...50] : nil #maximum of 50 characters (podio limit)
           }
         ],
         'sdg-de-interesse': application.sdg_goal_index,
         'expa-application-id': application.expa_id.to_s
       }
+
+      params['aplicante-qualificado'] = map_aplicante_qualificado(application) if application.home_mc&.name
+
       params['data-do-break-approval'] = application.break_approved_at ? parse_date(application.break_approved_at) : nil
 
       params['quero-ser-contactado-por-telefone'] = application&.exchange_participant&.cellphone_contactable ? 1 : 2 #1 = Yes, 2 = No
+
+      params['da-onde-veio-este-ep'] = application.from_impact ? 2 : 1 #1 = YOP, 2 = Impact Brazil
+
+      params['opportunity-date-opened'] = parse_date(application.opportunity_date) unless application.product.to_sym == :gv
+
+      params['projeto'] = BrazilIcxProject.call(application.opportunity_name) if application.product == 'gv'
+
 
       # rubocop:enable Metrics/LineLength
 
@@ -250,6 +265,12 @@ class RepositoryPodio
     end
 
     private
+
+    def check_status(original_status, completed_at)
+      return 'finished' if original_status == 'realized' && completed_at <= Time.now
+
+      original_status
+    end
 
     def embed_id(application)
       Podio::Embed.create(application.opportunity_link).embed_id
@@ -285,11 +306,21 @@ class RepositoryPodio
       mapper[status]
     end
 
-    def map_status_prep(status)
+    def map_ogx_status_prep(status)
       mapper = {
         realized: 2,
         finished: 3,
         completed: 4
+      }
+      mapper[status]
+    end
+
+    def map_icx_status_prep(status)
+      mapper = {
+        realized: 2,
+        finished: 3,
+        completed: 4,
+        realization_broken: 5
       }
       mapper[status]
     end
@@ -306,14 +337,14 @@ class RepositoryPodio
       mapping = {
         open: 1,
         applied: 1,
-        matched: 8,
-        accepted: 2,
+        matched: 8, #accepted
+        accepted: 2, #lda preenchido
         approved: 3,
         realized: 3, #this status is after 'approved' and it'll only be be used in ICX PREP, in this stage it must stop on 'approved' status
         completed: 3, #this status is after 'approved' and it'll only be be used in ICX PREP, in this stage it must stop on 'approved' status
         realization_broken: 3, #this status is after 'approved' and it'll only be be used in ICX PREP, in this stage it must stop on 'approved' status
-        break_approved: 4,
-        approval_broken: 4,
+        break_approved: 9,
+        approval_broken: 9,
         rejected: 5,
         withdrawn: 7
       }
@@ -420,7 +451,8 @@ class RepositoryPodio
       'background-da-vaga': [:gv]
     }
     to_cut.each do |key, value|
-      params = params.except(key) if value.include? application.product.to_sym
+      params = params.except(key.to_s) if value.include?(application.product.to_sym)
+      params = params.except(key.to_sym) if value.include?(application.product.to_sym)
     end
     params
   end
