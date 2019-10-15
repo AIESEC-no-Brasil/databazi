@@ -58,9 +58,9 @@ module Brazil
         'cl-marcado-no-expa-nao-conta-expansao-ainda': ['local_committee', nil],
         'nivel-de-ingles': ['english_level', 'language_level_to_podio'],
         'nivel-de-espanhol': ['spanish_level', 'language_level_to_podio'],
-        'universidade-2': ['university', nil],
+        'universidade-2': ['university', 'id_to_podio'],
         'curso': ['college_course', 'id_to_podio'],
-        'sub-produto': ['experience', 'id_to_podio'],
+        'sub-produto': ['experience', nil],
         'gostaria-de-ser-contactado-por-celular-2': ['cellphone_contacble', 'cellphone_contactable_option']
       }
     end
