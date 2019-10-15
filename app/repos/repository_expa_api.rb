@@ -2,25 +2,63 @@ require "#{Rails.root}/lib/expa_api"
 
 class RepositoryExpaApi
   class << self
-    def load_icx_applications(from)
+    def load_icx_applications(from, page = 1, &callback)
       res = EXPAAPI::Client.query(
         ICXAPPLICATIONS,
         variables: {
           from: from
         }
       )
-      map_applications(res) unless res.nil?
+
+      total_pages = res&.data&.all_opportunity_application&.paging&.total_pages
+
+      apps = map_applications(res&.data&.all_opportunity_application&.data) unless res.nil?
+
+      apps.each do |expa_application|
+        begin
+          callback.call(expa_application)
+        rescue => exception
+          Raven.extra_context application_expa_id: expa_application&.expa_id
+          Raven.capture_exception(exception)
+          logger = logger || Logger.new(STDOUT)
+          logger.error exception.message
+          logger.error(exception.backtrace.map { |s| "\n#{s}" })
+          break
+        end
+      end if apps
+
+      apps = nil
       # File.write("#{Rails.root}/spec/fixtures/json/icx_applications_full.json", res.to_h.to_json)
       # &.data&.all_opportunity_application&.data
+
+      return load_icx_applications(
+        from,
+        page + 1,
+        &callback
+      ) unless res.nil? || page + 1 > total_pages
+
+    end
+
+    def load_impact_brazil_applications(person_id, opportunity_id, page = 1)
+      res = EXPAAPI::Client.query(
+        IMPACTBRAZILAPPLICATIONS,
+        variables: {
+          person_id: person_id,
+          opportunity_id: opportunity_id
+        }
+      )
+
+      total_pages = res&.data&.all_opportunity_application&.paging&.total_pages
+
+      apps = map_impact_brazil_applications(res&.data&.all_opportunity_application&.data) unless res.nil?
     end
 
     private
 
     def map_applications(expa_applications)
-      #removing applications with 'TMP' product - we only work with GE, GT and GT products
-      mapped = expa_applications&.data&.all_opportunity_application&.data&.reject{ |application| application&.opportunity&.programme&.short_name_display == 'TMP' }
+      #removing applications with 'TMP' and 'TLP' product or any other diffent from GE, GT and GT products
+      mapped = expa_applications.select{ |application| ['ge', 'gt', 'gv'].include?(application&.opportunity&.programme&.short_name_display.to_s.downcase) }
       mapped = mapped.map do |expa_application|
-        pp expa_application.to_json
         application = Expa::Application.new
         application.updated_at_expa = Time.parse(expa_application.updated_at)
         application.status = expa_application.status
@@ -31,12 +69,14 @@ class RepositoryExpaApi
         application.realized_at = parse_time(expa_application.date_realized)
         application.completed_at = parse_time(expa_application.experience_end_date)
         # The two date are the same from expa. Relies on status
-        application.accepted_at = parse_time(expa_application.matched_or_rejected_at)
+        application.accepted_at = parse_time(expa_application.date_matched)
         application.break_approved_at = parse_time(expa_application.matched_or_rejected_at) if rejected_application?(expa_application.status)
         application.sdg_goal_index = expa_application&.opportunity&.sdg_info&.sdg_target&.goal_index
         application.sdg_target_index = expa_application&.opportunity&.sdg_info&.sdg_target&.target_index
         application.tnid = expa_application&.opportunity&.id
         application.opportunity_name = expa_application&.opportunity&.title
+        application.opportunity_date = parse_time(expa_application&.opportunity&.date_opened)
+        application.opportunity_start_date = parse_time(expa_application&.opportunity&.earliest_start_date)
         application.product = expa_application
           &.opportunity&.programme&.short_name_display&.downcase&.to_sym
         epp = exchange_programme(expa_application)
@@ -67,6 +107,19 @@ class RepositoryExpaApi
         )
         application.standards = expa_application.standards
         # application.save
+        application
+      end
+      mapped
+    end
+
+    def map_impact_brazil_applications(expa_applications)
+      mapped = expa_applications.map do |expa_application|
+        application = Expa::Application.new
+        application.expa_id = expa_application.id
+        application.expa_ep_id = expa_application.person.id
+        application.applied_at = parse_time(expa_application.created_at)
+        application.tnid = expa_application&.opportunity&.id
+
         application
       end
       mapped
@@ -116,7 +169,8 @@ end
 ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
   query ($from: DateTime) {
     allOpportunityApplication(
-      sort: "ASC_updated_at",
+      sort: "updated_at",
+      per_page: 500,
       filters:{
         opportunity_home_mc: 1606,
         last_interaction: {from: $from}
@@ -131,6 +185,7 @@ ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
         updated_at
         created_at
         matched_or_rejected_at
+        date_matched
         date_approved
         date_realized
         experience_end_date
@@ -167,6 +222,8 @@ ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
         opportunity {
           id
           title
+          date_opened
+          earliest_start_date
           programme {
             id
             short_name_display
@@ -184,6 +241,34 @@ ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
         standards{
           constant_name
           option
+        }
+      }
+    }
+  }
+GRAPHQL
+
+IMPACTBRAZILAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
+  query ($person_id: Int, $opportunity_id: Int) {
+    allOpportunityApplication(
+      sort: "updated_at",
+      per_page: 500,
+      filters:{
+        opportunity_home_mc: 1606,
+        person_id: $person_id,
+        opportunity_id: $opportunity_id,
+      }
+    ) {
+      paging {
+        total_pages
+      }
+      data {
+        id
+        created_at
+        opportunity {
+          id
+        }
+        person {
+         id
         }
       }
     }
