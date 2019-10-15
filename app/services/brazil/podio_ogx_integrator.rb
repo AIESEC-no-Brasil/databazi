@@ -61,7 +61,7 @@ module Brazil
         'universidade-2': ['university', 'id_to_podio'],
         'curso': ['college_course', 'id_to_podio'],
         'sub-produto': ['experience', nil],
-        'gostaria-de-ser-contactado-por-celular-2': ['cellphone_contacble', 'cellphone_contactable_option']
+        'gostaria-de-ser-contactado-por-celular-2': ['cellphone_contactable', 'cellphone_contactable_option']
       }
     end
 
