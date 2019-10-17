@@ -61,7 +61,8 @@ module Brazil
         'universidade-2': ['university', 'id_to_podio'],
         'curso': ['college_course', 'id_to_podio'],
         'sub-produto': ['experience', nil],
-        'gostaria-de-ser-contactado-por-celular-2': ['cellphone_contactable', 'cellphone_contactable_option']
+        'gostaria-de-ser-contactado-por-celular-2': ['cellphone_contactable', 'cellphone_contactable_option'],
+        'produto': ['program', 'program_to_podio']
       }
     end
 
@@ -74,6 +75,12 @@ module Brazil
       else
         eval("#{method}(#{value})")
       end
+    end
+
+    def program_to_podio(program)
+      programmes = { gv: 1, ge: 2, gt: 3 }
+
+      programmes[program.to_sym]
     end
 
     def id_to_podio(incoming)
