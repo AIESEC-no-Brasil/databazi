@@ -40,8 +40,4 @@ class Expa::Application < ApplicationRecord
 
     integrator.call(self) if self.status == 'approved' && self.prep_podio_id.blank?
   end
-
-  def approved_at_string
-    self.approved_at.to_s
-  end
 end

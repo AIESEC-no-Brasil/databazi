@@ -18,8 +18,6 @@ module Brazil
 
       prep_keys.each { |k,v| @application.try(v[0].to_sym) ? podio_params.store(k.to_s, normalize_data(@application.send(v[0].to_sym), v[1])) : next }
 
-      puts podio_params
-
       podio_id = RepositoryPodio.create_ep(ENV['PODIO_APP_PREP_OGX'], podio_params.stringify_keys).item_id
 
       @status = update_podio_id(podio_id)
