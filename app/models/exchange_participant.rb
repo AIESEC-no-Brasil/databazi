@@ -144,6 +144,10 @@ class ExchangeParticipant < ApplicationRecord
     scholarity[symbol]
   end
 
+  def local_committee_podio_id
+    self.local_committee.podio_id
+  end
+
   private
 
   def encrypted_password
@@ -165,5 +169,4 @@ class ExchangeParticipant < ApplicationRecord
 
     self.local_committee_id = local_committee_segmentation.destination_local_committee_id if local_committee_segmentation
   end
-
 end
