@@ -24,10 +24,7 @@ class GtParticipantsController < ApplicationController
 
   def params_filled
     params[:gt_participant][:utm_source] &&
-      params[:gt_participant][:utm_medium] &&
-      params[:gt_participant][:utm_campaign] &&
-      params[:gt_participant][:utm_term] &&
-      params[:gt_participant][:utm_content]
+      params[:gt_participant][:utm_campaign]
   end
 
   def gt_participant_params

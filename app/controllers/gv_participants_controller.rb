@@ -23,11 +23,8 @@ class GvParticipantsController < ApplicationController
   end
 
   def params_filled
-    params[:gv_participant][:utm_source] &&
-      params[:gv_participant][:utm_medium] &&
-      params[:gv_participant][:utm_campaign] &&
-      params[:gv_participant][:utm_term] &&
-      params[:gv_participant][:utm_content]
+    params[:gt_participant][:utm_source] &&
+      params[:gt_participant][:utm_campaign]
   end
 
   def gv_participant_params
