@@ -7,8 +7,6 @@ class ExchangeParticipant < ApplicationRecord
   BRAZILIAN_SCHOLARITY = %i[highschool incomplete_graduation graduating post_graduated almost_graduated graduated other]
 
   validates_with YouthValidator, on: :create
-  validates_with ScholarityValidator, on: :create
-
 
   validates :fullname, presence: true, if: :ogx?
   validates :cellphone, presence: true, if: :ogx?

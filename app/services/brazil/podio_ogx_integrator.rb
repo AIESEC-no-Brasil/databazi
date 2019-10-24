@@ -30,7 +30,11 @@ module Brazil
       # then for each optional_key we check wether it's available on the incoming @params and assign it to params
       optional_keys.each { |k,v| @params[v[0]].present? ? podio_params.store(k, normalize_data(@params[v[0]], v[1])) : next }
 
+      campaign_tag = @params.delete('utm_campaign')
+
       podio_id = RepositoryPodio.create_ep(ENV['PODIO_APP_LEADS_OGX'], podio_params).item_id
+
+      create_campaign_tag(campaign_tag, podio_id) if podio_id
 
       @status = update_podio_id(podio_id)
 
@@ -38,6 +42,12 @@ module Brazil
     end
 
     private
+
+    def create_campaign_tag(campaign_tag, podio_id)
+      return false unless podio_id
+
+      Podio::Tag.create('item', podio_id, [campaign_tag])
+    end
 
     def update_podio_id(podio_id)
       return false unless podio_id
@@ -51,7 +61,6 @@ module Brazil
       {
         'tag-origem-2': ['utm_source', 'utm_source_to_podio'],
         'tag-meio-2-2': ['utm_medium', 'utm_medium_to_podio'],
-        'tag-campanha-2': ['utm_campaign', nil],
         'tag-termo-2': ['utm_term', nil],
         'tag-conteudo-2-2': ['utm_content', nil],
         'escolaridade': ['scholarity', 'scholarity_name'],
