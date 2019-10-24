@@ -44,8 +44,6 @@ module Brazil
     private
 
     def create_campaign_tag(campaign_tag, podio_id)
-      return false unless podio_id
-
       Podio::Tag.create('item', podio_id, [campaign_tag])
     end
 
