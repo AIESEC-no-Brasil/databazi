@@ -24,10 +24,7 @@ class GeParticipantsController < ApplicationController
 
   def params_filled
     params[:ge_participant][:utm_source] &&
-      params[:ge_participant][:utm_medium] &&
-      params[:ge_participant][:utm_campaign] &&
-      params[:ge_participant][:utm_term] &&
-      params[:ge_participant][:utm_content]
+      params[:ge_participant][:utm_campaign]
   end
 
   def ge_participant_params

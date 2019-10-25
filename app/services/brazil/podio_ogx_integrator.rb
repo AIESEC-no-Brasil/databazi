@@ -30,7 +30,11 @@ module Brazil
       # then for each optional_key we check wether it's available on the incoming @params and assign it to params
       optional_keys.each { |k,v| @params[v[0]].present? ? podio_params.store(k, normalize_data(@params[v[0]], v[1])) : next }
 
+      campaign_tag = @params.delete('utm_campaign')
+
       podio_id = RepositoryPodio.create_ep(ENV['PODIO_APP_LEADS_OGX'], podio_params).item_id
+
+      create_campaign_tag(campaign_tag, podio_id) if campaign_tag
 
       @status = update_podio_id(podio_id)
 
@@ -38,6 +42,12 @@ module Brazil
     end
 
     private
+
+    def create_campaign_tag(campaign_tag, podio_id)
+      return false unless podio_id
+
+      Podio::Tag.create('item', podio_id, [campaign_tag])
+    end
 
     def update_podio_id(podio_id)
       return false unless podio_id
@@ -50,15 +60,8 @@ module Brazil
     def optional_keys
       {
         'tag-origem-2': ['utm_source', 'utm_source_to_podio'],
-        'tag-meio-2-2': ['utm_medium', 'utm_medium_to_podio'],
-        'tag-campanha-2': ['utm_campaign', nil],
-        'tag-termo-2': ['utm_term', nil],
-        'tag-conteudo-2-2': ['utm_content', nil],
-        'escolaridade': ['scholarity', 'scholarity_name'],
         'cl-marcado-no-expa-nao-conta-expansao-ainda': ['local_committee', nil],
         'nivel-de-ingles': ['english_level', 'language_level_to_podio'],
-        'nivel-de-espanhol': ['spanish_level', 'language_level_to_podio'],
-        'universidade-2': ['university', 'id_to_podio'],
         'curso': ['college_course', 'id_to_podio'],
         'sub-produto': ['experience', nil],
         'gostaria-de-ser-contactado-por-celular-2': ['cellphone_contactable', 'cellphone_contactable_option'],
