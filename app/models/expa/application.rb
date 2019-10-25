@@ -36,8 +36,31 @@ class Expa::Application < ApplicationRecord
   private
 
   def prep_phase_check
+    setup_and_dispatch if pending_initial_sync
+    update_status if pending_status_change
+  end
+
+  def setup_and_dispatch
     integrator = eval(ENV['COUNTRY_MODULE'] + "::PodioOgxPrepIntegrator")
 
-    integrator.call(self) if self.status == 'approved' && self.prep_podio_id.blank?
+    update_application_locally if integrator.call(self)
+  end
+
+  def update_application_locally
+    self.update_attribute(:podio_last_synched_status, self.status)
+  end
+
+  def update_status
+    integrator = eval(ENV['COUNTRY_MODULE'] + "::PodioOgxStatusUpdate")
+
+    integrator.call(self)
+  end
+
+  def pending_initial_sync
+    self.status == 'approved' && self.prep_podio_id.blank?
+  end
+
+  def pending_status_change
+    self.status != self.podio_last_synched_status && self.prep_podio_id
   end
 end

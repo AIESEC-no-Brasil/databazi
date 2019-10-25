@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_12_185140) do
+ActiveRecord::Schema.define(version: 2019_10_25_180322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -146,6 +146,7 @@ ActiveRecord::Schema.define(version: 2019_07_12_185140) do
     t.datetime "opportunity_start_date"
     t.boolean "resync", default: false
     t.boolean "finished", default: false
+    t.string "podio_last_synched_status"
     t.index ["home_lc_id"], name: "index_expa_applications_on_home_lc_id"
     t.index ["home_mc_id"], name: "index_expa_applications_on_home_mc_id"
     t.index ["host_lc_id"], name: "index_expa_applications_on_host_lc_id"
