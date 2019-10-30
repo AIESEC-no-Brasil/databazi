@@ -21,7 +21,7 @@ module Brazil
         (ExchangeParticipant
           .where.not(updated_at_expa: nil)
           .order(updated_at_expa: :desc)
-          .first&.updated_at_expa  || 1.days.ago) + 1
+          .first&.updated_at_expa  || 1.days.ago) - 1.hour
       end
 
       def load_expa_people(from, page = 1, &callback)
@@ -66,6 +66,7 @@ module Brazil
         unless exchange_participant
           ExchangeParticipant.new(expa_id: person.id,
                                   updated_at_expa: person.updated_at,
+                                  created_at_expa: person.created_at,
                                   fullname: person.full_name,
                                   email: person.email,
                                   birthdate: person.dob,
@@ -122,7 +123,7 @@ ALLPEOPLEOGX = EXPAAPI::Client.parse <<~'GRAPHQL'
             short_name
             short_name_display
           }
-
+          created_at
           updated_at
         }
     }

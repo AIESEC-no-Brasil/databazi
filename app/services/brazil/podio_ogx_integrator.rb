@@ -63,7 +63,8 @@ module Brazil
         'curso': ['college_course', 'id_to_podio'],
         'sub-produto': ['experience', nil],
         'gostaria-de-ser-contactado-por-celular-2': ['cellphone_contactable', 'cellphone_contactable_to_podio'],
-        'produto': ['program', 'program_to_podio']
+        'produto': ['program', 'program_to_podio'],
+        'origem-aplicacao': ['origin', 'origin_to_podio']
       }
     end
 
@@ -102,6 +103,10 @@ module Brazil
       return 5 if level.zero?
 
       level
+    end
+
+    def origin_to_podio(origin)
+      { databazi: 1, expa: 2 }[origin.to_sym]
     end
 
     def program_to_podio(program)

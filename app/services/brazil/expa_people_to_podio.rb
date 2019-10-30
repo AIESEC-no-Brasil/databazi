@@ -14,8 +14,6 @@ module Brazil
       pending_exchange_participants.each do |exchange_participant|
         @status = Brazil::PodioOgxIntegrator.call(assemble_message(exchange_participant))
 
-        puts "@status = #{@status} for ep #{exchange_participant.fullname}"
-
         exchange_participant.update_attribute(:has_error, true) unless @status
 
         sleep 3
@@ -42,11 +40,11 @@ module Brazil
         fullname
         local_committee_podio_id
         status
+        origin
       ]
     end
 
     # key trimming method so we match the expected identifiers established in Brazil::PodioOgxIntegrator#optional_keys
-    # reserved keys, i.e. those not to be trimmed, goes into RESERVED_DATABAZI_IDENTIFIERS
     def trim_key(key)
       key.gsub(/_podio_id$/, '')
     end

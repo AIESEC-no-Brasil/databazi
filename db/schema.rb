@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_29_174729) do
+ActiveRecord::Schema.define(version: 2019_10_30_201416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,8 @@ ActiveRecord::Schema.define(version: 2019_10_29_174729) do
     t.datetime "deleted_at"
     t.datetime "updated_at_expa"
     t.integer "origin"
+    t.boolean "has_error", default: false
+    t.datetime "created_at_expa"
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
