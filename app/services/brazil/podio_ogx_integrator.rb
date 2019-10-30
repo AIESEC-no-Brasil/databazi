@@ -18,13 +18,7 @@ module Brazil
 
       # params gets initialized with the minimum amount of information which is known to always be existent
       podio_params = {
-        'data-inscricao' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
-        'title' => @params['fullname'],
-        'email' => [{ 'type' => 'home', 'value' => @params['email'] }],
-        'telefone' => [{ 'type' => 'home', 'value' => @params['cellphone'] }],
-        'data-de-nascimento' => {
-          start: Date.parse(@params['birthdate'].to_s).strftime('%Y-%m-%d %H:%M:%S')
-        }
+        'data-inscricao' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') }
       }
 
       # then for each optional_key we check wether it's available on the incoming @params and assign it to params
@@ -59,12 +53,16 @@ module Brazil
     # optional_keys = { 'podio-external-id': ['corresponding_databazi_key', ('data_manipulation_method' | nil)], ... }
     def optional_keys
       {
+        'title': ['fullname', nil],
+        'email': ['email', 'email_to_podio'],
+        'telefone': ['cellphone', 'cellphone_to_podio'],
+        'data-de-nascimento': ['birthdate', 'birthdate_to_podio'],
         'tag-origem-2': ['utm_source', 'utm_source_to_podio'],
         'cl-marcado-no-expa-nao-conta-expansao-ainda': ['local_committee', nil],
         'nivel-de-ingles': ['english_level', 'language_level_to_podio'],
         'curso': ['college_course', 'id_to_podio'],
         'sub-produto': ['experience', nil],
-        'gostaria-de-ser-contactado-por-celular-2': ['cellphone_contactable', 'cellphone_contactable_option'],
+        'gostaria-de-ser-contactado-por-celular-2': ['cellphone_contactable', 'cellphone_contactable_to_podio'],
         'produto': ['program', 'program_to_podio']
       }
     end
@@ -73,17 +71,27 @@ module Brazil
     def normalize_data(value, method)
       return value unless method
 
-      if value.is_a? String
+      if value&.is_a? String
         eval("#{method}(\"#{value}\")")
       else
         eval("#{method}(#{value})")
       end
     end
 
-    def program_to_podio(program)
-      programmes = { gv: 1, ge: 2, gt: 3 }
+    def birthdate_to_podio(birthdate)
+      { 'start' => Date.parse(birthdate.to_s).strftime('%Y-%m-%d %H:%M:%S') }
+    end
 
-      programmes[program.to_sym]
+    def cellphone_contactable_to_podio(value)
+      value ? 1 : 2
+    end
+
+    def cellphone_to_podio(cellphone)
+      [{ 'type' => 'home', 'value' => cellphone }]
+    end
+
+    def email_to_podio(email)
+      [{ 'type' => 'home', 'value' => email }]
     end
 
     def id_to_podio(incoming)
@@ -96,29 +104,14 @@ module Brazil
       level
     end
 
-    def utm_source_to_podio(db_source)
-      podio_domains = {
-        'rdstation': 1,
-        'google': 2,
-        'facebook': 3,
-        'facebook-ads': 11,
-        'instagram': 4,
-        'twitter': 5,
-        'twitter-ads': 12,
-        'linkedin': 6,
-        'linkedin-ads': 13,
-        'youtube': 14,
-        'site': 7,
-        'blog': 8,
-        'offline': 9,
-        'outros': 10
-      }
+    def program_to_podio(program)
+      programmes = { gv: 1, ge: 2, gt: 3 }
 
-      podio_domain = podio_domains[db_source.downcase.to_sym]
+      programmes[program.to_sym]
+    end
 
-      return podio_domains[:outros] unless podio_domain
-
-      podio_domain
+    def scholarity_name(index)
+      ExchangeParticipant.brazilian_scholarity(ExchangeParticipant::BRAZILIAN_SCHOLARITY[index])
     end
 
     def utm_medium_to_podio(db_medium)
@@ -155,12 +148,29 @@ module Brazil
       podio_domain
     end
 
-    def scholarity_name(index)
-      ExchangeParticipant.brazilian_scholarity(ExchangeParticipant::BRAZILIAN_SCHOLARITY[index])
-    end
+    def utm_source_to_podio(db_source)
+      podio_domains = {
+        'rdstation': 1,
+        'google': 2,
+        'facebook': 3,
+        'facebook-ads': 11,
+        'instagram': 4,
+        'twitter': 5,
+        'twitter-ads': 12,
+        'linkedin': 6,
+        'linkedin-ads': 13,
+        'youtube': 14,
+        'site': 7,
+        'blog': 8,
+        'offline': 9,
+        'outros': 10
+      }
 
-    def cellphone_contactable_option(value)
-      value ? 1 : 2
+      podio_domain = podio_domains[db_source.downcase.to_sym]
+
+      return podio_domains[:outros] unless podio_domain
+
+      podio_domain
     end
   end
 end

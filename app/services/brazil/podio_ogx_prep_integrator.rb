@@ -14,7 +14,7 @@ module Brazil
     def call
       podio_params = {}
 
-      podio_params.store('nome-do-ep', @application.exchange_participant.podio_id)
+      podio_params.store('nome-do-ep', @application.try(:exchange_participant).try(:podio_id))
 
       prep_keys.each { |k,v| @application.try(v[0].to_sym) ? podio_params.store(k.to_s, normalize_data(@application.send(v[0].to_sym), v[1])) : next }
 
