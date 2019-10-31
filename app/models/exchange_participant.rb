@@ -2,19 +2,21 @@ class ExchangeParticipant < ApplicationRecord
   include ActiveModel::Validations
   before_create :encrypted_password
   before_save :check_segmentation if ENV['COUNTRY'] == 'arg'
+  before_save :check_expa_id
+  before_save :check_status
 
   ARGENTINEAN_SCHOLARITY = %i[incomplete_highschool highschool graduating graduated post_graduating post_graduated]
   BRAZILIAN_SCHOLARITY = %i[highschool incomplete_graduation graduating post_graduated almost_graduated graduated other]
 
   validates_with YouthValidator, on: :create
 
-  validates :fullname, presence: true, if: :ogx?
-  validates :cellphone, presence: true, if: :ogx?
+  validates :fullname, presence: true, if: :databazi?
+  validates :cellphone, presence: true, if: :databazi?
   validates :email, presence: true,
                     format: { with: URI::MailTo::EMAIL_REGEXP },
-                    uniqueness: true, if: :ogx?
-  validates :birthdate, presence: true, if: :ogx?
-  validates :password, presence: true, if: :ogx?
+                    uniqueness: true, if: :databazi?
+  validates :birthdate, presence: true, if: :databazi?
+  validates :password, presence: true, if: :databazi?
 
   has_many :expa_applications, class_name: 'Expa::Application'
 
@@ -148,6 +150,20 @@ class ExchangeParticipant < ApplicationRecord
     scholarity[symbol]
   end
 
+  def status_to_podio
+    statuses = {
+      open: 1,
+      applied: 2,
+      accepted: 3,
+      approved: 4,
+      break_approval: 5,
+      rejected: 6,
+      withdrawn: 7
+    }
+
+    statuses[status.to_sym]
+  end
+
   private
 
   def encrypted_password
@@ -168,5 +184,13 @@ class ExchangeParticipant < ApplicationRecord
                                                                       programs[program]).first
 
     self.local_committee_id = local_committee_segmentation.destination_local_committee_id if local_committee_segmentation
+  end
+
+  def check_expa_id
+    RepositoryPodio.update_fields(podio_id, { 'di-ep-id-2' => expa_id.to_s }) if expa_id_changed? && status_to_podio && podio_id
+  end
+
+  def check_status
+    RepositoryPodio.update_fields(podio_id, { 'status-expa' => status_to_podio }) if status_changed? && status_to_podio && podio_id
   end
 end
