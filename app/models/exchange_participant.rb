@@ -161,7 +161,7 @@ class ExchangeParticipant < ApplicationRecord
       withdrawn: 7
     }
 
-    statuses[status.to_sym]
+    statuses[status&.to_sym]
   end
 
   private
