@@ -60,7 +60,7 @@ module Brazil
         return if person.status == 'deleted'
 
         if exchange_participant
-          update_exchange_participant(exchange_participant, person) unless person.status == exchange_participant.status
+          update_exchange_participant(exchange_participant, person) unless expa_person_status(person.status) == exchange_participant.status
         else
           exchange_participant = create_new_exchange_participant(person)
         end
@@ -78,7 +78,7 @@ module Brazil
       end
 
       def update_exchange_participant(exchange_participant, person)
-        exchange_participant.update_attributes(status: person.status, updated_at_expa: person.updated_at)
+        exchange_participant.update_attributes(status: expa_person_status(person.status), updated_at_expa: person.updated_at)
       end
 
       def create_new_exchange_participant(person)
