@@ -148,10 +148,6 @@ class ExchangeParticipant < ApplicationRecord
     scholarity[symbol]
   end
 
-  def local_committee_podio_id
-    self.local_committee.podio_id
-  end
-
   private
 
   def encrypted_password

@@ -78,7 +78,7 @@ module Brazil
 
         exchange_participant.update_attributes(updated_at_expa: person.updated_at) if exchange_participant
 
-        sleep 3
+        sleep 2
       end
 
       def query_all_people(from)

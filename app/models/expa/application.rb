@@ -8,7 +8,7 @@ class Expa::Application < ApplicationRecord
   scope :approveds, -> { where.not(approved_at: nil).order(:approved_at) }
   scope :synchronized_approveds, -> { approveds.where.not(podio_id: nil) }
 
-  delegate :expa_id, :email, :cellphone, :local_committee_podio_id, to: :exchange_participant, prefix: :exchange_participant
+  delegate :expa_id, :email, :cellphone, :local_committee_podio_id, to: :exchange_participant, prefix: :exchange_participant, allow_nil: true
 
   belongs_to :exchange_participant, foreign_key: :exchange_participant_id, optional: true
   belongs_to :host_lc, class_name: 'LocalCommittee', optional: true
