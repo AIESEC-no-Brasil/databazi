@@ -187,7 +187,11 @@ class ExchangeParticipant < ApplicationRecord
   end
 
   def check_expa_id
-    RepositoryPodio.update_fields(podio_id, { 'di-ep-id-2' => expa_id.to_s }) if expa_id_changed? && status_to_podio && podio_id
+    if ((expa_id_changed? || expa_id_sync) && podio_id)
+      res = RepositoryPodio.update_fields(podio_id, { 'di-ep-id-2' => expa_id.to_s })
+
+      update_attribute(:expa_id_sync, false) if res == 200
+    end
   end
 
   def check_status
