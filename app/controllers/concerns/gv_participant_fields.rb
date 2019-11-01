@@ -19,6 +19,7 @@ module GvParticipantFields
       'local_committee' => gv_participant.exchange_participant&.local_committee&.podio_id,
       'college_course' => gv_participant.exchange_participant&.college_course&.podio_item_id,
       'cellphone_contactable' => gv_participant.exchange_participant.cellphone_contactable,
+      'signup_source' => gv_participant.exchange_participant.signup_source,
       'program' => 'gv'
     }
   end

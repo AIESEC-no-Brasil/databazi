@@ -21,6 +21,7 @@ module GtParticipantFields
       'college_course' => gt_participant.exchange_participant&.college_course&.podio_item_id,
       'experience' => gt_participant&.experience&.for_podio,
       'cellphone_contactable' => gt_participant.exchange_participant.cellphone_contactable,
+      'signup_source' => gt_participant.exchange_participant.signup_source,
       'program' => 'gt'
     }
   end
