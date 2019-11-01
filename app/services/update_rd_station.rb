@@ -70,7 +70,8 @@ class UpdateRdStation
       'amigo o familia' => 3,
       'evento em mi universidad' => 4,
       'publicidad universitaria' => 5,
-      'otro' => 6
+      'otro' => 6,
+      'blog' => 7
     }
 
     translations.key(referral_type)
