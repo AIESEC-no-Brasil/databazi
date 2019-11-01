@@ -16,7 +16,11 @@ class ExpaSignUp
 
   def call
     @res = sign_up_user
-    update_exchange_participant_id if @res.code == 201
+
+    if @res.code == 201
+      update_exchange_participant_id
+      send_mail if @exchange_participant.prospect_signup_source?
+    end
 
     @res
   end
@@ -49,5 +53,9 @@ class ExpaSignUp
 
   def update_exchange_participant_id
     @exchange_participant.update_attributes(expa_id: @res.parsed_response['person_id'])
+  end
+
+  def send_mail
+    Utils::SesSendMail.call(@exchange_participant.id)
   end
 end

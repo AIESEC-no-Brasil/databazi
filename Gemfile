@@ -6,6 +6,7 @@ ruby '2.5.1'
 gem 'sentry-raven'
 gem 'aws-sdk-s3', '~> 1', require: false
 gem 'aws-sdk-sqs'
+gem 'aws-sdk-rails'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'decent_exposure'
 gem 'expa', '0.1.2.10', git: 'http://github.com/AIESEC-no-Brasil/expa-rb'
