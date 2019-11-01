@@ -31,10 +31,6 @@ module Brazil
 
         people = res&.data&.all_people&.data
 
-        # puts total_pages
-        # puts res&.data&.all_people&.paging&.total_items
-        # puts "Current page: #{page}"
-
         people.each do |person|
           begin
             callback.call(person)
@@ -63,20 +59,11 @@ module Brazil
 
         return if person.status == 'deleted'
 
-        unless exchange_participant
-          ExchangeParticipant.new(expa_id: person.id,
-                                  updated_at_expa: person.updated_at,
-                                  created_at_expa: person.created_at,
-                                  fullname: person.full_name,
-                                  email: person.email,
-                                  birthdate: person.dob,
-                                  local_committee: LocalCommittee.find_by(expa_id: person.try(:home_lc).try(:id)),
-                                  origin: :expa,
-                                  status: expa_person_status(person&.status)
-                                ).save(validate: false)
+        if exchange_participant
+          update_exchange_participant(exchange_participant, person) unless expa_person_status(person.status) == exchange_participant.status
+        else
+          exchange_participant = create_new_exchange_participant(person)
         end
-
-        exchange_participant.update_attributes(updated_at_expa: person.updated_at) if exchange_participant
 
         sleep 2
       end
@@ -88,6 +75,23 @@ module Brazil
             from: from
           }
         )
+      end
+
+      def update_exchange_participant(exchange_participant, person)
+        exchange_participant.update_attributes(status: expa_person_status(person.status), updated_at_expa: person.updated_at)
+      end
+
+      def create_new_exchange_participant(person)
+        ExchangeParticipant.new(expa_id: person.id,
+                                  updated_at_expa: person.updated_at,
+                                  created_at_expa: person.created_at,
+                                  fullname: person.full_name,
+                                  email: person.email,
+                                  birthdate: person.dob,
+                                  local_committee: LocalCommittee.find_by(expa_id: person.try(:home_lc).try(:id)),
+                                  origin: :expa,
+                                  status: expa_person_status(person&.status)
+                                ).save(validate: false)
       end
     end
   end
@@ -119,8 +123,6 @@ ALLPEOPLEOGX = EXPAAPI::Client.parse <<~'GRAPHQL'
           }
 
           programmes {
-            id
-            short_name
             short_name_display
           }
           created_at

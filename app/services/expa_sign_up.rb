@@ -48,6 +48,6 @@ class ExpaSignUp
   end
 
   def update_exchange_participant_id
-    @exchange_participant.update_attribute(:expa_id, @res.parsed_response['person_id'])
+    @exchange_participant.update_attributes(expa_id: @res.parsed_response['person_id'])
   end
 end
