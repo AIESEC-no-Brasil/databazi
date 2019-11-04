@@ -45,10 +45,17 @@ class ExpaSignUp
         password: @exchange_participant.decrypted_password,
         lc: @exchange_participant.local_committee.expa_id,
         mc: ENV['EXPA_MC_ID'],
+        selected_programmes: [selected_programme(@exchange_participant.registerable.class.name).to_s],
         allow_phone_communication: @exchange_participant.cellphone_contactable,
         created_via: "json"
       }
     }.to_json
+  end
+
+  def selected_programme
+    programmes = { gv_participant: 1, gt_participant: 2, ge_participant: 5 }
+
+    programmes[program_snake_case(program).to_sym]
   end
 
   def update_exchange_participant_id
