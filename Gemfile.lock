@@ -64,9 +64,15 @@ GEM
     aws-sdk-kms (1.13.0)
       aws-sdk-core (~> 3, >= 3.39.0)
       aws-sigv4 (~> 1.0)
+    aws-sdk-rails (3.0.5)
+      aws-sdk-ses (~> 1)
+      railties (>= 5.2.0)
     aws-sdk-s3 (1.29.0)
       aws-sdk-core (~> 3, >= 3.39.0)
       aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.0)
+    aws-sdk-ses (1.14.0)
+      aws-sdk-core (~> 3, >= 3.39.0)
       aws-sigv4 (~> 1.0)
     aws-sdk-sqs (1.10.0)
       aws-sdk-core (~> 3, >= 3.39.0)
@@ -351,6 +357,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aws-sdk-rails
   aws-sdk-s3 (~> 1)
   aws-sdk-sqs
   bootsnap (>= 1.1.0)

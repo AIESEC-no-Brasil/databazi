@@ -64,7 +64,8 @@ module Brazil
         'sub-produto': ['experience', nil],
         'gostaria-de-ser-contactado-por-celular-2': ['cellphone_contactable', 'cellphone_contactable_to_podio'],
         'produto': ['program', 'program_to_podio'],
-        'origem-aplicacao': ['origin', 'origin_to_podio']
+        'origem-aplicacao': ['origin', 'origin_to_podio'],
+        'interno': ['signup_source', 'signup_source_to_podio']
       }
     end
 
@@ -109,10 +110,12 @@ module Brazil
       { databazi: 1, expa: 2 }[origin.to_sym]
     end
 
-    def program_to_podio(program)
-      programmes = { gv: 1, ge: 2, gt: 3 }
+    def signup_source_to_podio(signup_source)
+      { prospect: 1, databazi: 2 }[signup_source.to_sym]
+    end
 
-      programmes[program.to_sym]
+    def program_to_podio(program)
+      { gv: 1, ge: 2, gt: 3 }[program.to_sym]
     end
 
     def scholarity_name(index)

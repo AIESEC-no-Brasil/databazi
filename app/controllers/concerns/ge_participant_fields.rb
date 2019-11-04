@@ -19,6 +19,7 @@ module GeParticipantFields
       'english_level' => ge_participant&.english_level&.read_attribute_before_type_cast(:english_level),
       'college_course' => ge_participant.exchange_participant&.college_course&.podio_item_id,
       'cellphone_contactable' => ge_participant.exchange_participant.cellphone_contactable,
+      'signup_source' => ge_participant.exchange_participant.signup_source,
       'program' => 'ge'
     }
   end
