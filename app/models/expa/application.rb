@@ -1,10 +1,14 @@
 class Expa::Application < ApplicationRecord
+  after_save :prep_phase_check
+
   PREP_STATUS = [:realized, :completed, :finished]
   PREP_BROKEN_STATUS = [:approval_broken, :realization_broken]
 
   scope :first_approved_at, -> { approveds.order(:approved_at).first }
   scope :approveds, -> { where.not(approved_at: nil).order(:approved_at) }
   scope :synchronized_approveds, -> { approveds.where.not(podio_id: nil) }
+
+  delegate :expa_id, :email, :cellphone, :local_committee_podio_id, to: :exchange_participant, prefix: :exchange_participant, allow_nil: true
 
   belongs_to :exchange_participant, foreign_key: :exchange_participant_id, optional: true
   belongs_to :host_lc, class_name: 'LocalCommittee', optional: true
@@ -27,5 +31,36 @@ class Expa::Application < ApplicationRecord
 
   def product_upcase
     product.to_s.upcase
+  end
+
+  private
+
+  def prep_phase_check
+    setup_and_dispatch if pending_initial_sync
+    update_status if pending_status_change
+  end
+
+  def setup_and_dispatch
+    integrator = eval(ENV['COUNTRY_MODULE'] + "::PodioOgxPrepIntegrator")
+
+    update_application_locally if integrator.call(self)
+  end
+
+  def update_application_locally
+    self.update_attribute(:podio_last_synched_status, self.status)
+  end
+
+  def update_status
+    integrator = eval(ENV['COUNTRY_MODULE'] + "::PodioOgxStatusUpdate")
+
+    integrator.call(self)
+  end
+
+  def pending_initial_sync
+    self.status == 'approved' && self.prep_podio_id.blank?
+  end
+
+  def pending_status_change
+    self.status != self.podio_last_synched_status && self.prep_podio_id
   end
 end

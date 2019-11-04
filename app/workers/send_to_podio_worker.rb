@@ -8,6 +8,12 @@ class SendToPodioWorker
                     body_parser: JSON
 
   def perform(sqs_msg, body)
-    sqs_msg.delete if SendToPodio.call(body)
+    if ENV['COUNTRY_MODULE'] == 'Brazil'
+      integrator = eval(ENV['COUNTRY_MODULE'] + "::PodioOgxIntegrator")
+
+      sqs_msg.delete if integrator.call(body)
+    else
+      sqs_msg.delete if SendToPodio.call(body)
+    end
   end
 end
