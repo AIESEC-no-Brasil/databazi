@@ -52,10 +52,14 @@ class ExpaSignUp
     }.to_json
   end
 
-  def selected_programme
+  def selected_programme(program)
     programmes = { gv_participant: 1, gt_participant: 2, ge_participant: 5 }
 
     programmes[program_snake_case(program).to_sym]
+  end
+
+  def program_snake_case(program)
+    program.underscore.downcase
   end
 
   def update_exchange_participant_id
