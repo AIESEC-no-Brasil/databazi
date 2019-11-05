@@ -32,6 +32,7 @@ class GtParticipantsController < ApplicationController
       :curriculum,
       :preferred_destination,
       :work_experience,
+      :subproduct,
       english_level_attributes: [:english_level],
       exchange_participant_attributes:
         exchange_participant_permitted_attributes,
@@ -43,7 +44,7 @@ class GtParticipantsController < ApplicationController
     %i[
       id fullname email birthdate cellphone local_committee_id
       university_id college_course_id password scholarity
-      campaign_id cellphone_contactable other_university referral_type city department signup_source
+      campaign_id cellphone_contactable other_university referral_type city department signup_source scholarity_stage
     ]
   end
 
@@ -62,7 +63,8 @@ class GtParticipantsController < ApplicationController
         english_level_attributes: normalized_english_level_params,
         exchange_participant_attributes: normalized_exchange_participant_params,
         experience_attributes: experience_params,
-        work_experience: gt_params[:work_experience].to_i
+        work_experience: gt_params[:work_experience].to_i,
+        subproduct: gt_params[:subproduct].to_i
       }
     )
   end
@@ -97,7 +99,7 @@ class GtParticipantsController < ApplicationController
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
              :password, :scholarity, :campaign_id, :cellphone_contactable,
-             :other_university, :referral_type, :city, :department, :signup_source)
+             :other_university, :referral_type, :city, :department, :signup_source, :scholarity_stage)
   end
 
   def experience_params

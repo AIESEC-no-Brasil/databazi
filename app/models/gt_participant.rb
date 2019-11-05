@@ -17,6 +17,8 @@ class GtParticipant < ApplicationRecord
 
   enum work_experience: %i[none less_than_3_months more_than_3_months more_than_6_months more_than_a_year], _suffix: true
 
+  enum subproduct: %i[business_administration, marketing, teaching, other], _suffix: true
+
   validates :preferred_destination, presence: true, if: :argentina?
 
   validate :correct_document_mime_type, if: :argentina?

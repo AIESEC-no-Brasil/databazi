@@ -22,6 +22,11 @@ RSpec.describe GtParticipant, type: :model do
       expect(GtParticipant.new).to define_enum_for(:work_experience)
         .with(%i[none less_than_3_months more_than_3_months more_than_6_months more_than_a_year])
     end
+
+    it do
+      expect(GtParticipant.new).to define_enum_for(:subproduct)
+        .with(%i[business_administration, marketing, teaching, other])
+    end
   end
 
   describe '#associations' do

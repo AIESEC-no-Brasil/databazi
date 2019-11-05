@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_01_014641) do
+ActiveRecord::Schema.define(version: 2019_11_05_140108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -96,6 +96,7 @@ ActiveRecord::Schema.define(version: 2019_11_01_014641) do
     t.integer "signup_source", default: 0
     t.string "city"
     t.string "department"
+    t.string "scholarity_stage"
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
@@ -185,6 +186,7 @@ ActiveRecord::Schema.define(version: 2019_11_01_014641) do
     t.datetime "updated_at", null: false
     t.integer "preferred_destination"
     t.integer "work_experience"
+    t.integer "subproduct"
   end
 
   create_table "gv_participants", force: :cascade do |t|
