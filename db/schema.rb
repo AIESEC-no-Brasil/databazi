@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 2019_11_01_014641) do
     t.datetime "created_at_expa"
     t.boolean "expa_id_sync", default: true
     t.integer "signup_source", default: 0
+    t.string "city"
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
