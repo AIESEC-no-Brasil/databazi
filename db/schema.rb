@@ -177,12 +177,14 @@ ActiveRecord::Schema.define(version: 2019_11_01_014641) do
     t.datetime "updated_at", null: false
     t.integer "when_can_travel"
     t.integer "preferred_destination"
+    t.integer "work_experience"
   end
 
   create_table "gt_participants", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "preferred_destination"
+    t.integer "work_experience"
   end
 
   create_table "gv_participants", force: :cascade do |t|

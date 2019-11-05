@@ -31,6 +31,7 @@ class GtParticipantsController < ApplicationController
     nested_params.require(:gt_participant).permit(
       :curriculum,
       :preferred_destination,
+      :work_experience,
       english_level_attributes: [:english_level],
       exchange_participant_attributes:
         exchange_participant_permitted_attributes,
@@ -60,7 +61,8 @@ class GtParticipantsController < ApplicationController
         curriculum: gt_params[:curriculum],
         english_level_attributes: normalized_english_level_params,
         exchange_participant_attributes: normalized_exchange_participant_params,
-        experience_attributes: experience_params
+        experience_attributes: experience_params,
+        work_experience: gt_params[:work_experience].to_i
       }
     )
   end
