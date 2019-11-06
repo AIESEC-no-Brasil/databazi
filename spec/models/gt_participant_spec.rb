@@ -18,6 +18,15 @@ RSpec.describe GtParticipant, type: :model do
         .with({ none: 0, brazil: 4, colombia: 5, costa_rica: 6, hungary: 7,
                                 india: 8, mexico: 9, panama: 10, romania: 11, turkey: 12 })
     end
+    it do
+      expect(GtParticipant.new).to define_enum_for(:work_experience)
+        .with(%i[none less_than_3_months more_than_3_months more_than_6_months more_than_a_year])
+    end
+
+    it do
+      expect(GtParticipant.new).to define_enum_for(:subproduct)
+        .with(%i[business_administration, marketing, teaching, other])
+    end
   end
 
   describe '#associations' do
