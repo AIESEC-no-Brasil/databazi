@@ -25,13 +25,17 @@ module Italy
       # params gets initialized with the minimum amount of information which is known to always be existent
       podio_params = {        
         'title' => @exchange_participant.fullname,
-        'email' => email_to_podio(@exchange_participant.email),
-        'birthdate' => birthdate_to_podio(@exchange_participant.birthdate),
+        'email2' => @exchange_participant.email,
+        'birthdate2' => birthdate_to_podio(@exchange_participant.birthdate),
         'city' => @exchange_participant.city,
-        'region' => @exchange_participant.department
+        'region' => @exchange_participant.department,
+        'product-registered-to' => exchange_participant.registerable_type.upcase[0..1],
+        'home-lc' => @exchange_participant.local_committee.name,
+        'home-lc-id' => @exchange_participant.local_committee.id.to_s,
+        'databazi-id' => @exchange_participant.id.to_s
       }      
 
-      podio_params.store('cellphone', cellphone_to_podio(@exchange_participant.cellphone)) if @exchange_participant.cellphone_contactable
+      podio_params.store('cellphone2', @exchange_participant.cellphone) if @exchange_participant.cellphone_contactable
 
       podio_params.store('english-level', english_level_name(@exchange_participant.registerable.english_level)) if @exchange_participant.registerable.try(:english_level)
 
@@ -41,12 +45,11 @@ module Italy
 
       podio_params.store('education-level', scholarity_name(@exchange_participant.scholarity)) if @exchange_participant.scholarity
 
-      
-      #TODO - missing "Product Registered to:" and "HOME LC" - create these field on Podio
-      
+      podio_params.store('expa-id', @exchange_participant.expa_id.to_s) if @exchange_participant.expa_id
+
       #TODO - missing university and referral (front-end it's not sending this yet)
       #TODO - missing Preferred Start Date - this is field it's not in the form doc (?)      
-      #TODO - Form ID - find out what this is
+      #TODO - Form ID ('form-id') - find out what this is
 
       podio_id = RepositoryPodio.create_ep(ENV['PODIO_APP_LEADS_OGX'], podio_params).item_id      
       @status = update_podio_id(podio_id)      
@@ -74,8 +77,6 @@ module Italy
     end
 
     def work_experience_name(work_experience)
-      p 'hmm'
-      p work_experience
       {
         'none' => 'Non ho esperienza',
         'less_than_3_months' => 'Meno di 3 mesi',
@@ -104,15 +105,7 @@ module Italy
     end
 
     def birthdate_to_podio(birthdate)
-      { 'start' => birthdate.strftime('%Y-%m-%d %H:%M:%S') }
-    end
-
-    def cellphone_to_podio(cellphone)
-      [{ 'type' => 'home', 'value' => cellphone }]
-    end
-
-    def email_to_podio(email)
-      [{ 'type' => 'home', 'value' => email }]
+      birthdate.strftime('%Y-%m-%d')
     end
 
     def id_to_podio(incoming)
