@@ -19,10 +19,6 @@ module Italy
     def call    
       Shoryuken.logger.info("=>SQS PARAMS:\n=>#{@params}\n=>SQS PARAMS END")
 
-
-      #'data-inscricao' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
-
-      # params gets initialized with the minimum amount of information which is known to always be existent
       podio_params = {        
         'title' => @exchange_participant.fullname,
         'email2' => @exchange_participant.email,
@@ -52,13 +48,6 @@ module Italy
       podio_params.store('form-id', @exchange_participant.exchange_reason) if @exchange_participant.exchange_reason
 
       podio_params.store('referral', @exchange_participant.referral_type) if @exchange_participant.referral_type
-      
-
-      #TODO - missing university (front-end it's not sending this yet)
-      #TODO - missing Preferred Start Date - this is field it's not in the form doc (?)            
-
-      #p podio_params
-      #return;
 
       podio_id = RepositoryPodio.create_ep(ENV['PODIO_APP_LEADS_OGX'], podio_params).item_id      
       @status = update_podio_id(podio_id)      
