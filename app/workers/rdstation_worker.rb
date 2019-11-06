@@ -33,16 +33,18 @@ class RdstationWorker
       cf_birthday: @exchange_participant.birthdate,
       cf_allow_phone_communication: @exchange_participant.cellphone_contactable ? "True" : "False",
       cf_terms_conditions: 'True',
+      cf_databazi_id: @exchange_participant.id.to_s,
     }
 
     fields.store('cf_english_level', english_level_name(@exchange_participant&.registerable&.english_level)) if @exchange_participant.registerable.try(:english_level)
     fields.store('cf_subproduct_of_interest', subproduct_of_interest_name(@exchange_participant.registerable.subproduct)) if @exchange_participant.registerable.try(:subproduct)
     fields.store('cf_work_experience', work_experience_name(@exchange_participant.registerable.work_experience)) if @exchange_participant.registerable.try(:work_experience)
     fields.store('cf_education_level', scholarity_name(@exchange_participant.scholarity)) if @exchange_participant.scholarity
-    fields.store('conversion_event', @exchange_participant.exchange_reason) if @exchange_participant.exchange_reason
     fields.store('cf_region', @exchange_participant.department) if @exchange_participant.try(:department)
     fields.store('city', @exchange_participant.city) if @exchange_participant.try(:city)
     fields.store('cf_conversion_events', @exchange_participant.exchange_reason) if @exchange_participant.try(:exchange_reason)
+    fields.store('cf_referral', @exchange_participant.referral_type) if @exchange_participant.try(:referral_type)
+    fields.store('cf_university', @exchange_participant.university) if @exchange_participant.try(:university)
 
     fields
   end
