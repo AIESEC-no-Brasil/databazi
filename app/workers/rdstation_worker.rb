@@ -44,7 +44,7 @@ class RdstationWorker
     fields.store('city', @exchange_participant.city) if @exchange_participant.try(:city)
     fields.store('cf_conversion_events', @exchange_participant.exchange_reason) if @exchange_participant.try(:exchange_reason)
     fields.store('cf_referral', @exchange_participant.referral_type) if @exchange_participant.try(:referral_type)
-    fields.store('cf_university', @exchange_participant.university) if @exchange_participant.try(:university)
+    fields.store('cf_university', @exchange_participant.university_name) if @exchange_participant.try(:university_name)
 
     fields
   end
