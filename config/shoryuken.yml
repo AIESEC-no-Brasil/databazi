@@ -7,3 +7,4 @@ queues:
   - [impact_brazil_referral, 1]
   - [update_podio_id, 1]
   - [exchange_student_host, 1]
+  - [rdstation_queue, 1]
