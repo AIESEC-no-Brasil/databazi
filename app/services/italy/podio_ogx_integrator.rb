@@ -32,6 +32,7 @@ module Italy
         'product-registered-to' => exchange_participant.registerable_type.upcase[0..1],
         'home-lc' => @exchange_participant.local_committee.name,
         'home-lc-id' => @exchange_participant.local_committee.id.to_s,
+        'home-lc-expa-id' => @exchange_participant.local_committee.expa_id.to_s,
         'databazi-id' => @exchange_participant.id.to_s
       }      
 
@@ -47,9 +48,15 @@ module Italy
 
       podio_params.store('expa-id', @exchange_participant.expa_id.to_s) if @exchange_participant.expa_id
 
+      podio_params.store('form-id', @exchange_participant.exchange_reason) if @exchange_participant.exchange_reason
+      
+
       #TODO - missing university and referral (front-end it's not sending this yet)
       #TODO - missing Preferred Start Date - this is field it's not in the form doc (?)      
-      #TODO - Form ID ('form-id') - find out what this is
+      
+
+      #p podio_params
+      #return;
 
       podio_id = RepositoryPodio.create_ep(ENV['PODIO_APP_LEADS_OGX'], podio_params).item_id      
       @status = update_podio_id(podio_id)      
