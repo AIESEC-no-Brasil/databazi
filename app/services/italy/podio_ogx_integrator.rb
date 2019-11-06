@@ -29,7 +29,7 @@ module Italy
         'birthdate2' => birthdate_to_podio(@exchange_participant.birthdate),
         'city' => @exchange_participant.city,
         'region' => @exchange_participant.department,
-        'university' => @exchange_participant.university,
+        'university' => @exchange_participant.university_name,
         'product-registered-to' => exchange_participant.registerable_type.upcase[0..1],
         'home-lc' => @exchange_participant.local_committee.name,
         'home-lc-id' => @exchange_participant.local_committee.id.to_s,
