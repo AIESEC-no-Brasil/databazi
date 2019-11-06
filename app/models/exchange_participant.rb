@@ -2,7 +2,7 @@ class ExchangeParticipant < ApplicationRecord
   include ActiveModel::Validations
   before_create :encrypted_password
   before_save :check_segmentation if ENV['COUNTRY'] == 'arg'
-  before_save :check_expa_id
+  before_save :check_expa_id if ENV['COUNTRY'] == 'bra'
   before_save :check_status
 
   ARGENTINEAN_SCHOLARITY = %i[incomplete_highschool highschool graduating graduated post_graduating post_graduated]
@@ -56,7 +56,7 @@ class ExchangeParticipant < ApplicationRecord
 
   def argentinean_scholarity
     ExchangeParticipant::ARGENTINEAN_SCHOLARITY[scholarity]
-  end
+  end 
 
   def scholarity_length
     if ENV['COUNTRY'] == 'bra'
