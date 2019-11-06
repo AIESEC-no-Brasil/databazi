@@ -19,10 +19,6 @@ module Italy
     def call    
       Shoryuken.logger.info("=>SQS PARAMS:\n=>#{@params}\n=>SQS PARAMS END")
 
-
-      #'data-inscricao' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
-
-      # params gets initialized with the minimum amount of information which is known to always be existent
       podio_params = {        
         'title' => @exchange_participant.fullname,
         'email2' => @exchange_participant.email,
@@ -52,13 +48,6 @@ module Italy
       podio_params.store('form-id', @exchange_participant.exchange_reason) if @exchange_participant.exchange_reason
 
       podio_params.store('referral', @exchange_participant.referral_type) if @exchange_participant.referral_type
-      
-
-      #TODO - missing university (front-end it's not sending this yet)
-      #TODO - missing Preferred Start Date - this is field it's not in the form doc (?)            
-
-      #p podio_params
-      #return;
 
       podio_id = RepositoryPodio.create_ep(ENV['PODIO_APP_LEADS_OGX'], podio_params).item_id      
       @status = update_podio_id(podio_id)      
@@ -116,73 +105,6 @@ module Italy
     def birthdate_to_podio(birthdate)
       birthdate.strftime('%Y-%m-%d')
     end
-
-    def id_to_podio(incoming)
-      incoming.to_i
-    end
-
-    def program_to_podio(program)
-      { gv: 1, ge: 2, gt: 3 }[program.to_sym]
-    end
-
-
-    def utm_medium_to_podio(db_medium)
-      podio_domains = {
-        'banner': 19,
-        'banner-home': 1,
-        'pop-up': 10,
-        'post-form': 12,
-        'imagem': 7,
-        'interacao': 20,
-        'post-blog': 11,
-        'post-link': 13,
-        'stories': 15,
-        'video': 17,
-        'lead-ads': 9,
-        'cpc': 4,
-        'display': 5,
-        'search': 14,
-        'imagem-unica': 21,
-        'cartaz': 3,
-        'evento': 22,
-        'indicacao': 8,
-        'outro': 18,
-        'panfleto': 23,
-        'email': 6,
-        'bumper': 2,
-        'trueview': 16
-      }
-
-      podio_domain = podio_domains[db_medium.downcase.to_sym]
-
-      return podio_domains[:outro] unless podio_domain
-
-      podio_domain
-    end
-
-    def utm_source_to_podio(db_source)
-      podio_domains = {
-        'rdstation': 1,
-        'google': 2,
-        'facebook': 3,
-        'facebook-ads': 11,
-        'instagram': 4,
-        'twitter': 5,
-        'twitter-ads': 12,
-        'linkedin': 6,
-        'linkedin-ads': 13,
-        'youtube': 14,
-        'site': 7,
-        'blog': 8,
-        'offline': 9,
-        'outros': 10
-      }
-
-      podio_domain = podio_domains[db_source.downcase.to_sym]
-
-      return podio_domains[:outros] unless podio_domain
-
-      podio_domain
-    end
+        
   end
 end
