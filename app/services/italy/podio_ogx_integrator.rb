@@ -49,11 +49,12 @@ module Italy
       podio_params.store('expa-id', @exchange_participant.expa_id.to_s) if @exchange_participant.expa_id
 
       podio_params.store('form-id', @exchange_participant.exchange_reason) if @exchange_participant.exchange_reason
+
+      podio_params.store('referral', @exchange_participant.referral_type) if @exchange_participant.referral_type
       
 
-      #TODO - missing university and referral (front-end it's not sending this yet)
-      #TODO - missing Preferred Start Date - this is field it's not in the form doc (?)      
-      
+      #TODO - missing university (front-end it's not sending this yet)
+      #TODO - missing Preferred Start Date - this is field it's not in the form doc (?)            
 
       #p podio_params
       #return;
