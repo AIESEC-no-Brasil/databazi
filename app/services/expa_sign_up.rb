@@ -47,10 +47,27 @@ class ExpaSignUp
         mc: ENV['EXPA_MC_ID'],
         selected_programmes: [selected_programme(@exchange_participant.registerable.class.name).to_s],
         allow_phone_communication: @exchange_participant.cellphone_contactable,
-        created_via: "json",        
-        referral_type: "#{@exchange_participant.referral_type}&#{@exchange_participant.exchange_reason}",
+        created_via: "json",
+        referral_type: "#{referral_type_translation(@exchange_participant.try(:referral_type))}&#{@exchange_participant.try(:xchange_reason)}",
       }
     }.to_json
+  end
+
+  def referral_type_translation(referral_type)
+    return 'Altro' unless referral_type
+
+    {
+      'facebook_ad' => 'Facebook',
+      'instagram_ad' => 'Instagram',
+      'friend' => 'Amici',
+      'teacher' => 'Professore',
+      'event_or_fair' => 'Evento',
+      'flyer' => 'Volantini o Poster',
+      'search_engine' => 'Motore di ricerca',
+      'email' => 'Email',
+      'other_website' => 'Altre Sitio Web',
+      'other' => 'Altro',
+    }[referral_type]
   end
 
   def selected_programme(program)

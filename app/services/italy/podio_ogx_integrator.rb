@@ -10,16 +10,16 @@ module Italy
     def initialize(params)
       @params = params
       @exchange_participant = ExchangeParticipant.find_by(id: params['exchange_participant_id'])
-      
+
       puts @exchange_participant
 
       @status = false
     end
 
-    def call    
+    def call
       Shoryuken.logger.info("=>SQS PARAMS:\n=>#{@params}\n=>SQS PARAMS END")
 
-      podio_params = {        
+      podio_params = {
         'title' => @exchange_participant.fullname,
         'email2' => @exchange_participant.email,
         'birthdate2' => birthdate_to_podio(@exchange_participant.birthdate),
@@ -31,7 +31,7 @@ module Italy
         'home-lc-id' => @exchange_participant.local_committee.id.to_s,
         'home-lc-expa-id' => @exchange_participant.local_committee.expa_id.to_s,
         'databazi-id' => @exchange_participant.id.to_s
-      }      
+      }
 
       podio_params.store('cellphone2', @exchange_participant.cellphone) if @exchange_participant.cellphone_contactable
 
@@ -47,14 +47,31 @@ module Italy
 
       podio_params.store('form-id', @exchange_participant.exchange_reason) if @exchange_participant.exchange_reason
 
-      podio_params.store('referral', @exchange_participant.referral_type) if @exchange_participant.referral_type
+      podio_params.store('referral', referral_type_translation(@exchange_participant.referral_type)) if @exchange_participant.referral_type
 
-      podio_id = RepositoryPodio.create_ep(ENV['PODIO_APP_LEADS_OGX'], podio_params).item_id      
-      @status = update_podio_id(podio_id)      
+      podio_id = RepositoryPodio.create_ep(ENV['PODIO_APP_LEADS_OGX'], podio_params).item_id
+      @status = update_podio_id(podio_id)
       @status
     end
 
     private
+
+    def referral_type_translation(referral_type)
+      return 'Altro' unless referral_type
+
+      {
+        'facebook_ad' => 'Facebook',
+        'instagram_ad' => 'Instagram',
+        'friend' => 'Amici',
+        'teacher' => 'Professore',
+        'event_or_fair' => 'Evento',
+        'flyer' => 'Volantini o Poster',
+        'search_engine' => 'Motore di ricerca',
+        'email' => 'Email',
+        'other_website' => 'Altre Sitio Web',
+        'other' => 'Altro',
+      }[referral_type]
+    end
 
     def english_level_name(english_level)
       {
@@ -105,6 +122,6 @@ module Italy
     def birthdate_to_podio(birthdate)
       birthdate.strftime('%Y-%m-%d')
     end
-        
+
   end
 end
