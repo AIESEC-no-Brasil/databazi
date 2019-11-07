@@ -23,7 +23,17 @@ class RdstationWorker
 
     client = RDStation::Client.new(access_token: access_token)
 
-    client.contacts.upsert('email', @exchange_participant.email, contact_info)
+    res = client.contacts.upsert('email', @exchange_participant.email, contact_info)
+
+    if res['uuid']
+      @exchange_participant.update_attribute(:rdstation_uuid, res['uuid'])
+
+      integrator = RdstationIntegration.new
+
+      integrator.update_funnel(@exchange_participant.rdstation_uuid, { lifecycle_stage: 'Qualified Lead', opportunity: false })
+    end
+
+    res
   end
 
   def contact_info
@@ -34,6 +44,7 @@ class RdstationWorker
       cf_allow_phone_communication: @exchange_participant.cellphone_contactable ? "True" : "False",
       cf_terms_conditions: 'True',
       cf_databazi_id: @exchange_participant.id.to_s,
+      cf_newsletter_interest: newsletter_interest(@exchange_participant.program_symbol),
     }
 
     fields.store('cf_english_level', english_level_name(@exchange_participant&.registerable&.english_level)) if @exchange_participant.registerable.try(:english_level)
@@ -47,6 +58,10 @@ class RdstationWorker
     fields.store('cf_university', @exchange_participant.university) if @exchange_participant.try(:university)
 
     fields
+  end
+
+  def newsletter_interest(program)
+    { gv: 'Volontariato', ge: 'Stage in Startup', gt: 'Stage in Aziende' }[program]
   end
 
   def english_level_name(english_level)

@@ -56,7 +56,7 @@ class ExchangeParticipant < ApplicationRecord
 
   def argentinean_scholarity
     ExchangeParticipant::ARGENTINEAN_SCHOLARITY[scholarity]
-  end 
+  end
 
   def scholarity_length
     if ENV['COUNTRY'] == 'bra'
@@ -86,6 +86,10 @@ class ExchangeParticipant < ApplicationRecord
 
   def last_name
     fullname.split(' ').drop(1).join(' ')
+  end
+
+  def program_symbol
+    registerable.class.name[0..1].downcase.to_sym
   end
 
   def local_committee_podio_id
