@@ -47,7 +47,8 @@ class ExpaSignUp
         mc: ENV['EXPA_MC_ID'],
         selected_programmes: [selected_programme(@exchange_participant.registerable.class.name).to_s],
         allow_phone_communication: @exchange_participant.cellphone_contactable,
-        created_via: "json"
+        created_via: "json",        
+        referral_type: "#{@exchange_participant.referral_type}&#{@exchange_participant.exchange_reason}",
       }
     }.to_json
   end
