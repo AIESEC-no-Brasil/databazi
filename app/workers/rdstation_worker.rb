@@ -41,10 +41,11 @@ class RdstationWorker
       name: @exchange_participant.fullname,
       mobile_phone: @exchange_participant.cellphone,
       cf_birthday: @exchange_participant.birthdate,
-      cf_allow_phone_communication: @exchange_participant.cellphone_contactable ? "True" : "False",
+      cf_allow_phone_communication: @exchange_participant.cellphone_contactable ? 'True' : 'False',
       cf_terms_conditions: 'True',
       cf_databazi_id: @exchange_participant.id.to_s,
       cf_newsletter_interest: newsletter_interest(@exchange_participant.program_symbol),
+      cf_not_finished_form: 'False',
     }
 
     fields.store('cf_english_level', english_level_name(@exchange_participant&.registerable&.english_level)) if @exchange_participant.registerable.try(:english_level)
