@@ -14,6 +14,6 @@ class RdstationController < ApplicationController
 
     client.contacts.upsert('email', params[:email], params['rdstation'].except('email'))
 
-    render plain: 'Success'
+    render json: { status: 200, message: 'Success' }
   end
 end

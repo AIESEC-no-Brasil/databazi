@@ -55,10 +55,27 @@ class RdstationWorker
     fields.store('cf_region', @exchange_participant.department) if @exchange_participant.try(:department)
     fields.store('city', @exchange_participant.city) if @exchange_participant.try(:city)
     fields.store('cf_conversion_events', @exchange_participant.exchange_reason) if @exchange_participant.try(:exchange_reason)
-    fields.store('cf_referral', @exchange_participant.referral_type) if @exchange_participant.try(:referral_type)
+    fields.store('cf_referral', referral_type_translation(@exchange_participant.referral_type)) if @exchange_participant.try(:referral_type)
     fields.store('cf_university', @exchange_participant.university_name) if @exchange_participant.try(:university_name)
 
     fields
+  end
+
+  def referral_type_translation(referral_type)
+    return 'Altro' unless referral_type
+
+    {
+      'facebook_ad' => 'Facebook',
+      'instagram_ad' => 'Instagram',
+      'friend' => 'Amici',
+      'teacher' => 'Professore',
+      'event_or_fair' => 'Evento',
+      'flyer' => 'Volantini o Poster',
+      'search_engine' => 'Motore di ricerca',
+      'email' => 'Email',
+      'other_website' => 'Altre Sitio Web',
+      'other' => 'Altro',
+    }[referral_type]
   end
 
   def newsletter_interest(program)
