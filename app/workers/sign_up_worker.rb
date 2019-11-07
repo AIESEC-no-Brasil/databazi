@@ -8,6 +8,8 @@ class SignUpWorker
                     body_parser: JSON
 
   def perform(sqs_msg, body)
-    sqs_msg.delete if ExpaSignUp.call(body).code == 201
+    response_code = ExpaSignUp.call(body).code
+
+    sqs_msg.delete if  response_code.in?([200, 422])
   end
 end
