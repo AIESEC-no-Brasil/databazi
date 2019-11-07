@@ -43,7 +43,7 @@ class ExchangeParticipant < ApplicationRecord
     friend_social_network: 4, google: 5, facebook_group: 6, facebook_ad: 7,
     instagram_ad: 8, university_presentation: 9, university_mail: 10,
     university_workshop: 11, university_website: 12, event_or_fair: 13,
-    partner_organization: 14, spanglish_event: 15, potenciate_ad: 16, influencer: 17, search_engine: 18, teacher: 19, flyer: 20, other: 21 },
+    partner_organization: 14, spanglish_event: 15, potenciate_ad: 16, influencer: 17, search_engine: 18, teacher: 19, flyer: 20, other: 21, email: 22, other_website: 23 },
     _suffix: true
 
   def scholarity_sym
@@ -56,7 +56,7 @@ class ExchangeParticipant < ApplicationRecord
 
   def argentinean_scholarity
     ExchangeParticipant::ARGENTINEAN_SCHOLARITY[scholarity]
-  end 
+  end
 
   def scholarity_length
     if ENV['COUNTRY'] == 'bra'
@@ -86,6 +86,10 @@ class ExchangeParticipant < ApplicationRecord
 
   def last_name
     fullname.split(' ').drop(1).join(' ')
+  end
+
+  def program_symbol
+    registerable.class.name[0..1].downcase.to_sym
   end
 
   def local_committee_podio_id
