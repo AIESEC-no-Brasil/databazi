@@ -4,6 +4,9 @@ Rails.application.routes.draw do
   root 'empty#index'
   get 'exchange_participants' => 'exchange_participants#validate_email'
 
+  post 'rdstation/new_lead' => 'rdstation#new_lead'
+  
+
   resources :universities, only: :index
   resources :college_courses, only: :index
   resources :local_committees, only: :index
