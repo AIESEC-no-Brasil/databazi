@@ -48,7 +48,7 @@ class ExpaSignUp
         selected_programmes: [selected_programme(@exchange_participant.registerable.class.name).to_s],
         allow_phone_communication: @exchange_participant.cellphone_contactable,
         created_via: "json",
-        referral_type: "#{referral_type_translation(@exchange_participant.try(:referral_type))}&#{@exchange_participant.try(:xchange_reason)}",
+        referral_type: "#{referral_type_translation(@exchange_participant.try(:referral_type))}&#{@exchange_participant.try(:exchange_reason)}",
       }
     }.to_json
   end
