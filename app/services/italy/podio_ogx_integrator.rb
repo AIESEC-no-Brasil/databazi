@@ -26,8 +26,8 @@ module Italy
         'city' => @exchange_participant.city,
         'region' => @exchange_participant.department,
         'university' => @exchange_participant.university_name,
-        'product-registered-to' => exchange_participant.registerable_type.upcase[0..1],
-        'home-lc' => @exchange_participant.local_committee.name,
+        'product' => product_registered_to(exchange_participant.program_symbol),
+        'local-committee' => local_committee_category_id(@exchange_participant.local_committee.name),
         'home-lc-id' => @exchange_participant.local_committee.id.to_s,
         'home-lc-expa-id' => @exchange_participant.local_committee.expa_id.to_s,
         'databazi-id' => @exchange_participant.id.to_s
@@ -111,6 +111,43 @@ module Italy
         '5' => 'Master',
         '6' => 'Studi conclusi',
       }[scholarity.to_s]
+    end
+
+    def product_registered_to(program)
+      { gv: 1, ge: 2, gt: 3 }[program]
+    end
+
+    def local_committee_category_id(local_committee)
+      {
+        "Ancona" => 1,
+        "Bari" => 2,
+        "Bologna" => 3,
+        "Brescia" => 4,
+        "Cagliari" => 5,
+        "Catania" => 6,
+        "Ferrara" => 7,
+        "Firenze" => 8,
+        "Genova" => 9,
+        "Lecce" => 10,
+        "Milano" => 11,
+        "Napoli Federico II" => 12,
+        "Napoli Parthenope" => 13,
+        "Padova" => 14,
+        "Palermo" => 15,
+        "Parma" => 16,
+        "Pavia" => 17,
+        "Perugia" => 18,
+        "PoliTO" => 19,
+        "Roma Sapienza" => 20,
+        "Roma Tor Vergata" => 21,
+        "Roma Tre" => 22,
+        "Torino" => 23,
+        "Trento" => 24,
+        "Trieste" => 25,
+        "Urbino" => 26,
+        "Venezia" => 27,
+        "Verona" => 28,
+      }[local_committee]
     end
 
     def update_podio_id(podio_id)

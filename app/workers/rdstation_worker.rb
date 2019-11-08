@@ -45,6 +45,7 @@ class RdstationWorker
       cf_terms_conditions: 'True',
       cf_databazi_id: @exchange_participant.id.to_s,
       cf_newsletter_interest: newsletter_interest(@exchange_participant.program_symbol),
+      cf_product: product_registered_to(@exchange_participant.program_symbol),
       cf_not_finished_form: 'False',
     }
 
@@ -76,6 +77,10 @@ class RdstationWorker
       'other_website' => 'Altre Sitio Web',
       'other' => 'Altro',
     }[referral_type]
+  end
+
+  def product_registered_to(program)
+    { gv: 'GV', ge: 'GE', gt: 'GT' }[program]
   end
 
   def newsletter_interest(program)
