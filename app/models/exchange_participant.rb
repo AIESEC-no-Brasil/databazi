@@ -202,6 +202,15 @@ class ExchangeParticipant < ApplicationRecord
   end
 
   def check_status
-    RepositoryPodio.update_fields(podio_id, { 'status-expa' => status_to_podio }) if status_changed? && status_to_podio && podio_id
+    if ENV['COUNTRY'] == 'bra'
+      RepositoryPodio.update_fields(podio_id, { 'status-expa' => status_to_podio }) if status_changed? && status_to_podio && podio_id
+    end
+
+    if ENV['COUNTRY'] == 'ita'
+      integration = RdstationIntegration.new
+      contact_info = { cf_application_status: status }
+
+      integration.update_lead_by_uuid(rdstation_uuid, contact_info)if status_changed? && rdstation_uuid
+    end
   end
 end
