@@ -16,21 +16,17 @@ class RdstationWorker
   def upsert(params)
     @exchange_participant = ExchangeParticipant.find_by(id: params['exchange_participant_id'])
 
-    rdstation_authentication = RDStation::Authentication.new(ENV['RDSTATION_CLIENT_ID'], ENV['RDSTATION_CLIENT_SECRET'])
-    rdstation_authentication.auth_url(ENV['RDSTATION_REDIRECT_URL'])
+    integrator = RdstationIntegration.new
 
-    access_token = rdstation_authentication.update_access_token(ENV['RDSTATION_REFRESH_TOKEN'])['access_token']
-
-    client = RDStation::Client.new(access_token: access_token)
-
-    res = client.contacts.upsert('email', @exchange_participant.email, contact_info)
+    res = integrator.upsert_contact(@exchange_participant.email, contact_info)
 
     if res['uuid']
       @exchange_participant.update_attribute(:rdstation_uuid, res['uuid'])
 
-      integrator = RdstationIntegration.new
-
       integrator.update_funnel(@exchange_participant.rdstation_uuid, { lifecycle_stage: 'Qualified Lead', opportunity: false })
+
+      integrator.create_conversion_event(@exchange_participant.email, @exchange_participant.exchange_reason) if @exchange_participant.try(:exchange_reason)
+      
     end
 
     res

@@ -43,6 +43,21 @@ class RdstationIntegration
     { lifecycle_stage: res["lifecycle_stage"], opportunity: res["opportunity"] }
   end
 
+  def create_conversion_event(email, conversion_event)
+    @client.events.create({
+      'event_type' => 'CONVERSION',
+      'event_family' => 'CDP',
+      'payload' => {
+        'conversion_identifier'=> conversion_event,
+        'email'=> email
+      }
+    })
+  end
+
+  def upsert_contact(email, payload)
+    @client.contacts.upsert('email', email, payload)
+  end
+
   private
 
   def funnel_endpoint(uuid)
@@ -59,4 +74,5 @@ class RdstationIntegration
 
     rdstation_authentication.update_access_token(ENV['RDSTATION_REFRESH_TOKEN'])['access_token']
   end
+  
 end
