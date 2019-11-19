@@ -3,17 +3,11 @@ class RdstationController < ApplicationController
 
     raise 'missing email' if !params['email'].presence()
 
-    rdstation_authentication = RDStation::Authentication.new(ENV['RDSTATION_CLIENT_ID'], ENV['RDSTATION_CLIENT_SECRET'])
-    rdstation_authentication.auth_url(ENV['RDSTATION_REDIRECT_URL'])
+    integrator = RdstationIntegration.new
 
-    access_token = rdstation_authentication.update_access_token(ENV['RDSTATION_REFRESH_TOKEN'])['access_token']
-
-    #p access_token
-
-    client = RDStation::Client.new(access_token: access_token)
-
-    client.contacts.upsert('email', params[:email], params['rdstation'].except('email'))
-
+    integrator.upsert_contact(params[:email], params['rdstation'].except('email'))
+    integrator.create_conversion_event(params['rdstation']['email'], params['rdstation']['cf_conversion_events']) if params['rdstation']['cf_conversion_events'].presence()
+    
     render json: { status: 200, message: 'Success' }
   end
 end
