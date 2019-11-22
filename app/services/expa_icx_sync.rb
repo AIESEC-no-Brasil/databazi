@@ -9,20 +9,22 @@ class ExpaIcxSync
 
     logger.info "Loading ICX Applications from expa"
 
-    RepositoryExpaApi.load_icx_applications(from) {|application|
-      logger.info "Saving into databazi"
-      RepositoryApplication.save_icx_from_expa(application)
-    }
-
-    RepositoryApplication.pending_podio_sync_icx_applications.each do |application|
-      begin
-        logger.info "Saving into Podio #{application.product} - #{application.updated_at_expa}"
-        RepositoryPodio.save_icx_application(application)
-        application.update_attribute(:has_error, false) if application.has_error
-      rescue => exception
-        Raven.capture_exception(exception)
-        logger.error exception.message
-        application.update_attribute(:has_error, true)
+    # RepositoryExpaApi.load_icx_applications(from) {|application|
+    #   logger.info "Saving into databazi"
+    #   RepositoryApplication.save_icx_from_expa(application)
+    # }
+    while(1) do
+      RepositoryApplication.pending_podio_sync_icx_applications.each do |application|
+        begin
+          logger.info "Saving into Podio #{application.product} - #{application.updated_at_expa}"
+          RepositoryPodio.save_icx_application(application)
+          application.update_attribute(:has_error, false) if application.has_error
+          sleep 3
+        rescue => exception
+          Raven.capture_exception(exception)
+          logger.error exception.message
+          application.update_attribute(:has_error, true)
+        end
       end
     end
     logger.info "Done sync"

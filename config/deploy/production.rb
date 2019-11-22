@@ -1,11 +1,11 @@
-# BRA
-server '52.8.202.239', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
-server '13.52.15.16', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
+# # BRA
+# server '52.8.202.239', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
+server '52.53.222.195', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
 
-# ARG
-server '13.52.15.180', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
+# # ARG
+# server '13.52.15.180', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
 
-set :branch, :master
+set :branch, :'retro-icx'
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.
