@@ -2,11 +2,12 @@ require "#{Rails.root}/lib/expa_api"
 
 class RepositoryExpaApi
   class << self
-    def load_icx_applications(from, page = 1, &callback)
+    def load_icx_applications(from, to, page = 1, &callback)
       res = EXPAAPI::Client.query(
         ICXAPPLICATIONS,
         variables: {
-          from: from
+          from: from,
+          to: to
         }
       )
 
@@ -33,6 +34,7 @@ class RepositoryExpaApi
 
       return load_icx_applications(
         from,
+        to,
         page + 1,
         &callback
       ) unless res.nil? || page + 1 > total_pages
@@ -167,13 +169,13 @@ class RepositoryExpaApi
 end
 
 ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
-  query ($from: DateTime) {
+  query ($from: DateTime, $to: DateTime) {
     allOpportunityApplication(
       sort: "ASC_updated_at",
       per_page: 500,
       filters:{
         opportunity_home_mc: 1606,
-        last_interaction: {from: $from}
+        last_interaction: {from: $from, to: $to}
       }
     ) {
       paging {
