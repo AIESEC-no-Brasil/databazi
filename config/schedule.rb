@@ -2,7 +2,7 @@ COUNTRY_MODULE = ENV['COUNTRY_MODULE']
 
 set :output, path + "/cron_log.log"
 
-every 5.minutes do
+every 10.minutes do
   runner "Italy::Expa::People.call", environment: 'production'
 end
 
