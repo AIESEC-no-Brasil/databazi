@@ -60,7 +60,11 @@ module Italy
         return if person.status == 'deleted'
 
         if exchange_participant
-          update_exchange_participant(exchange_participant, person) unless expa_person_status(person.status) == exchange_participant.status
+          unless expa_person_status(person.status) == exchange_participant.status
+            update_exchange_participant(exchange_participant, person)
+          else
+            exchange_participant.update_attributes(updated_at_expa: person.updated_at)
+          end
         else
           exchange_participant = create_new_exchange_participant(person)
         end
