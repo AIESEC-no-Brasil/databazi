@@ -2,6 +2,11 @@ require "#{Rails.root}/app/repos/chat_logger"
 
 class RepositoryPodio
   class << self
+    def create_item(application, params)
+      check_podio
+      Podio::Item.create(application, fields: params)
+    end
+
     def create_ep(application, params)
       check_podio
       Podio::Item.create(application, fields: params)
