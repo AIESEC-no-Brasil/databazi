@@ -169,7 +169,7 @@ end
 ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
   query ($from: DateTime) {
     allOpportunityApplication(
-      sort: "updated_at",
+      sort: "ASC_updated_at",
       per_page: 500,
       filters:{
         opportunity_home_mc: 1606,

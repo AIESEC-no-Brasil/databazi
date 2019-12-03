@@ -35,6 +35,6 @@ class ExpaIcxSync
       .joins(:exchange_participant)
       .where(exchange_participants: { exchange_type: :icx })
       .order(updated_at_expa: :desc)
-      .first&.updated_at_expa  || 7.days.ago) + 1
+      .first&.updated_at_expa  || 7.days.ago) + 1 - 1.hour
   end
 end
