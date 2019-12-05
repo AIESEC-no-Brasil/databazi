@@ -26,7 +26,7 @@ class RdstationWorker
       integrator.update_funnel(@exchange_participant.rdstation_uuid, { lifecycle_stage: 'Qualified Lead', opportunity: false })
 
       integrator.create_conversion_event(@exchange_participant.email, @exchange_participant.exchange_reason) if @exchange_participant.try(:exchange_reason)
-      
+
     end
 
     res
@@ -43,6 +43,7 @@ class RdstationWorker
       cf_newsletter_interest: newsletter_interest(@exchange_participant.program_symbol),
       cf_product: product_registered_to(@exchange_participant.program_symbol),
       cf_not_finished_form: 'False',
+      cf_home_lc: @exchange_participant.local_committee.name,
     }
 
     fields.store('cf_english_level', english_level_name(@exchange_participant&.registerable&.english_level)) if @exchange_participant.registerable.try(:english_level)

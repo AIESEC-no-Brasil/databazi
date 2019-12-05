@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_07_163945) do
+ActiveRecord::Schema.define(version: 2019_12_05_145049) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,18 +88,19 @@ ActiveRecord::Schema.define(version: 2019_11_07_163945) do
     t.text "academic_backgrounds", array: true
     t.integer "referral_type"
     t.datetime "deleted_at"
+    t.string "city"
+    t.string "exchange_reason"
+    t.string "department"
     t.datetime "updated_at_expa"
     t.integer "origin"
     t.boolean "has_error", default: false
     t.datetime "created_at_expa"
     t.boolean "expa_id_sync", default: true
     t.integer "signup_source", default: 0
-    t.string "city"
-    t.string "department"
     t.string "scholarity_stage"
-    t.string "exchange_reason"
     t.string "university_name"
     t.string "rdstation_uuid"
+    t.boolean "pending_sync", default: false
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
@@ -234,6 +235,22 @@ ActiveRecord::Schema.define(version: 2019_11_07_163945) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "memberships", force: :cascade do |t|
+    t.string "fullname"
+    t.string "cellphone"
+    t.date "birthdate"
+    t.string "email"
+    t.string "city"
+    t.string "state"
+    t.boolean "cellphone_contactable"
+    t.bigint "college_course_id"
+    t.bigint "local_committee_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["college_course_id"], name: "index_memberships_on_college_course_id"
+    t.index ["local_committee_id"], name: "index_memberships_on_local_committee_id"
+  end
+
   create_table "survey_histories", force: :cascade do |t|
     t.integer "podio_id"
     t.jsonb "surveys"
@@ -285,6 +302,8 @@ ActiveRecord::Schema.define(version: 2019_11_07_163945) do
   add_foreign_key "expa_applications", "local_committees", column: "home_lc_id"
   add_foreign_key "expa_applications", "local_committees", column: "host_lc_id"
   add_foreign_key "expa_applications", "member_committees", column: "home_mc_id"
+  add_foreign_key "memberships", "college_courses"
+  add_foreign_key "memberships", "local_committees"
   add_foreign_key "universities", "local_committees"
   add_foreign_key "university_local_committees", "local_committees"
   add_foreign_key "university_local_committees", "universities"
