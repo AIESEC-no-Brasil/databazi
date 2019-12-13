@@ -46,7 +46,7 @@ class ExchangeParticipant < ApplicationRecord
   enum status: { open: 1, applied: 2, accepted: 3, approved_tn_manager: 4, approved_ep_manager: 5, approved: 6,
     break_approved: 7, rejected: 8, withdrawn: 9,
     realized: 100, approval_broken: 101, realization_broken: 102, matched: 103,
-    completed: 104, finished: 105, other_status: 999 }
+    completed: 104, finished: 105, other_status: 999, deleted: -1 }
 
   def scholarity_sym(scholarity)
     ENV['COUNTRY'] == 'bra' ? brazilian_scholarity(scholarity) : argentinean_scholarity(scholarity)
