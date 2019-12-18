@@ -173,7 +173,7 @@ ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
       per_page: 500,
       filters:{
         opportunity_home_mc: 1606,
-        last_interaction: {from: $from}
+        date_realized: { from: $from }
       }
     ) {
       paging {

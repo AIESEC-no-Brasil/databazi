@@ -29,7 +29,8 @@ class RepositoryApplication
         host_lc: application.host_lc,
         home_lc: application.home_lc,
         standards: application.standards,
-        exchange_participant_id: application.exchange_participant.id
+        exchange_participant_id: application.exchange_participant.id,
+        resync: false
       )
 
       check_impact_brazil_referral(application)
