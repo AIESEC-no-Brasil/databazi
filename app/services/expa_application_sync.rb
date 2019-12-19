@@ -11,7 +11,7 @@ class ExpaApplicationSync
     from = (Expa::Application.order(updated_at_expa: :desc).first&.updated_at_expa  || 3.month.ago) + 1
     logger.info "Start sync"
     logger.debug"Sync from #{from}"
-    applications = load_applications(from)
+    applications = load_applications("2019-12-01T00:00:00Z")
     logger.debug "Applications count #{applications.count}"
     applications = applications.sort { |a, b| Time.parse(a.updated_at) <=> Time.parse(b.updated_at) }
     applications.each do |application|

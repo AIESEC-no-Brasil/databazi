@@ -32,7 +32,7 @@ LoadApplications = EXPAAPI::Client.parse <<~'GRAPHQL'
       sort: "ASC_updated_at",
       filters:{
       person_home_mc: 1606,
-      last_interaction: {from: $from}
+      date_realized: { from: $from }
     }) {
       paging {
         total_pages

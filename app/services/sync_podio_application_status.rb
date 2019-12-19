@@ -9,19 +9,20 @@ class SyncPodioApplicationStatus
 
     applications = last_applications
 
-    applications.each do |application|
-      begin
-        @logger.debug ''
-        ep = application.exchange_participant
-        update_podio(application) if ep.most_actual_application(application).id == application.id
-        application.update_attributes(podio_last_sync: Time.now)
-      rescue => exception
-        Raven.capture_exception(exception)
-        application.update_attribute(:has_error, true)
-        @logger.error exception.message
-        # Ignore errors
-      end
-    end
+    # applications.each do |application|
+    #   begin
+    #     @logger.debug ''
+    #     ep = application.exchange_participant
+    #     update_podio(application) if ep.most_actual_application(application).id == application.id
+    #     application.update_attributes(podio_last_sync: Time.now)
+    #     sleep(3)
+    #   rescue => exception
+    #     Raven.capture_exception(exception)
+    #     application.update_attribute(:has_error, true)
+    #     @logger.error exception.message
+    #     # Ignore errors
+    #   end
+    # end
 
     applications.select { |application| application.approved_at }.sort_by { |application| application.approved_at }.each do |application|
       begin
@@ -39,6 +40,10 @@ class SyncPodioApplicationStatus
           application.update_attribute(:prep_podio_sync_error, true)
         end
 
+      ################################################
+      application.update_attribute(:resync, false)
+      sleep(3)
+      ################################################
       rescue => exception
         Raven.capture_exception(exception)
         @logger.error exception.message
@@ -68,16 +73,19 @@ class SyncPodioApplicationStatus
   end
 
   def last_applications
-    Expa::Application
-      .where('exchange_participant_id is not null')
-      .where(podio_last_sync: nil)
-      .where(has_error: false)
-      .joins(:exchange_participant)
-      .where('exchange_participants.podio_id is not null')
-      .where.not('exchange_participants.status = -1')
-      .where(exchange_participants: { exchange_type: :ogx })
-      .order('updated_at_expa': :desc)
-      .limit 10
+    # Expa::Application
+    #   .where('exchange_participant_id is not null')
+    #   .where(podio_last_sync: nil)
+    #   .where(has_error: false)
+    #   .joins(:exchange_participant)
+    #   .where('exchange_participants.podio_id is not null')
+    #   .where.not('exchange_participants.status = -1')
+    #   .where(exchange_participants: { exchange_type: :ogx })
+    #   .order('updated_at_expa': :desc)
+    #   .limit 10
+    ################################################
+    Expa::Application.where(resync: true)
+    ################################################
   end
 
   def update_podio(application)
