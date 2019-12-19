@@ -13,17 +13,10 @@ class ExchangeParticipantsController < ApplicationController
   private
 
   def check_email_existence(email)
-    find_exchange_participant(email) || bazicon_email_validation(email)
+    find_exchange_participant(email)
   end
 
   def find_exchange_participant(email)
     true if ExchangeParticipant.find_by(email: email)
-  end
-
-  def bazicon_email_validation(email)
-    uri = URI.parse('http://bazicon.aiesec.org.br/' \
-      "api/v1/expa_person?email=#{email}")
-
-    JSON.parse(Net::HTTP.get_response(uri).read_body)['email_exists']
   end
 end
