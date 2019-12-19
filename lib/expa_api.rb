@@ -69,8 +69,13 @@ LoadApplications = EXPAAPI::Client.parse <<~'GRAPHQL'
           }
         }
         standards{
-          constant_name
-          option
+          constant {
+            name
+          }
+          standard_option {
+            name
+            option
+          }
         }
       }
     }
