@@ -33,7 +33,8 @@ class ExpaApplicationSync
                               podio_last_sync: nil,
                               product: application.opportunity.programme.short_name_display.downcase.to_sym,
                               tnid: application.opportunity.id,
-                              standards: application.standards)
+                              standards: application.standards,
+                              resync: false)
           ep.update_attributes(status: exchange_participant_status_expa(application.person.status))
           log = "Sync application with EP #{ep&.fullname}"
         end
@@ -53,13 +54,16 @@ class ExpaApplicationSync
                               podio_last_sync: nil,
                               product: application.opportunity.programme.short_name_display.downcase.to_sym,
                               tnid: application.opportunity.id,
-                              standards: application.standards)
+                              standards: application.standards,
+                              resync: false)
 
           log = 'Sync application without EP'
         end
         log += " last status #{application.status}"
         log += " application id #{application.id}"
         logger.info log
+
+        sleep(3)
       rescue StandardError => error
         message = "Error when trying sync ogx applications: #{error.message}"
         logger.error message
