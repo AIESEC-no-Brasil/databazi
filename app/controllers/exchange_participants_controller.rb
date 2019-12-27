@@ -13,10 +13,19 @@ class ExchangeParticipantsController < ApplicationController
   private
 
   def check_email_existence(email)
-    find_exchange_participant(email)
+    exchange_participant = find_exchange_participant(email)
+
+    if exchange_participant
+      RepositoryPodio.init
+      Podio::Tag.create('item', exchange_participant&.podio_id, ['retentativa-de-cadastro'])
+
+      return true
+    end
+
+    false
   end
 
   def find_exchange_participant(email)
-    true if ExchangeParticipant.find_by(email: email)
+    ExchangeParticipant.find_by(email: email)
   end
 end
