@@ -8,6 +8,6 @@ FactoryBot.define do
     state { "MyString" }
     cellphone_contactable { false }
     college_course { 1 }
-    local_committee { 1 }
+    nearest_committee { 1 }
   end
 end
