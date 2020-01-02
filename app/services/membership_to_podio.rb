@@ -27,7 +27,7 @@ class MembershipToPodio
       'telefone' => [{ 'type' => 'home', 'value' => @membership.cellphone }],
       'cidade' => @membership.city,
       'curso' => @membership.college_course.podio_item_id.to_i,
-      'aiesec-mais-proxima' => @membership.local_committee.podio_id,
+      'aiesec-mais-proxima-digite-primeira-letra-para-filtrar' => @membership.nearest_committee,
       'estado' => state_id(@membership.state),
       'cellphone-contactable' => cellphone_contactable_to_podio(@membership.cellphone_contactable)
     }

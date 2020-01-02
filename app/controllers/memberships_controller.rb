@@ -23,7 +23,7 @@ class MembershipsController < ApplicationController
     params.require(:membership).permit(
       :fullname, :cellphone, :birthdate, :email, :city,
       :state, :cellphone_contactable, :college_course_id,
-      :local_committee_id
+      :nearest_committee
     )
   end
 end
