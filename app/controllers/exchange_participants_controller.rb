@@ -20,6 +20,38 @@ class ExchangeParticipantsController < ApplicationController
       Podio::Tag.create('item', exchange_participant&.podio_id, ['retentativa-de-cadastro'])
 
       return true
+    else
+      res = EXPAAPI::Client.query(
+        ExistsQuery,
+        variables: {
+          email: email
+        }
+      ).data.check_person_present
+
+      if res
+        programme = nil
+
+        if res.programmes.any?
+          res.programmes.each do |programme|
+            programme = programme[:short_name_display] if programme[:short_name_display].in?(%w[GV GE GT])
+        end
+
+        programme ||= 'GV'
+
+        exchange_participant = ExchangeParticipant.create(
+          expa_id: res.id,
+          fullname: res.full_name,
+          birthdate: res.dob,
+          email: res.email,
+          local_committee_id: LocalCommittee.where('name ilike ?', res.home_lc.name).first.id,
+          program: programme.downcase.to_sym,
+          status: res.status
+        ).validate(:false)
+      end
+
+      ExpaToPodioWorker.perform_async({ 'exchange_participant_id' => exchange_participant.id })
+
+      return true
     end
 
     false
