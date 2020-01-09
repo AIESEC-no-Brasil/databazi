@@ -35,7 +35,7 @@ class ExchangeParticipantsController < ApplicationController
 
         if res.programmes.any?
           res.programmes.each do |program|
-            programme = program[:short_name_display] if (%w[GV GE GT]).include?(program[:short_name_display])
+            programme = program.short_name_display if (%w[GV GE GT]).include?(program.short_name_display)
           end
         end
 
