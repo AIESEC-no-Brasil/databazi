@@ -38,17 +38,20 @@ class ExpaToPodio
       'data-inscricao' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
       'title' => @exchange_participant.fullname,
       'email' => [{ 'type' => 'home', 'value' => @exchange_participant.email }],
-      'data-de-nascimento' => {
-        start: Date.parse(@exchange_participant.birthdate.to_s).strftime('%Y-%m-%d %H:%M:%S')
-      },
-      'cl-marcado-no-expa-nao-conta-expansao-ainda' => @exchange_participant.local_committee.podio_id
+      'cl-marcado-no-expa-nao-conta-expansao-ainda' => @exchange_participant.local_committee.podio_id,
       'status-expa' => map_status(@exchange_participant.status)
     }
 
-    if @exchange_participant.program == :gv
-      podio_params['di-ep-id'] = @exchange_participant.expa_id
+    if @exchange_participant.birthdate
+      podio_params['data-de-nascimento'] = {
+          start: Date.parse(@exchange_participant.birthdate.to_s).strftime('%Y-%m-%d %H:%M:%S')
+      }
+    end
+
+    if @exchange_participant.program == 'gv'
+      podio_params['di-ep-id'] = @exchange_participant.expa_id.to_s
     else
-      podio_params['di-ep-id-2'] = @exchange_participant.expa_id
+      podio_params['di-ep-id-2'] = @exchange_participant.expa_id.to_s
     end
 
     podio_params
