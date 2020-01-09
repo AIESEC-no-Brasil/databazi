@@ -32,5 +32,4 @@ ExistsQuery = EXPAAPI::Client.parse <<-'GRAPHQL'
         }
       }
     }
-}
 GRAPHQL
