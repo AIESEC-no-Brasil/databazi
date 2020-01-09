@@ -28,7 +28,9 @@ class ExchangeParticipant < ApplicationRecord
 
   accepts_nested_attributes_for :campaign
 
-  enum exchange_type: { ogx: 0, icx: 1}
+  enum exchange_type: { ogx: 0, icx: 1 }
+
+  enum program: { gv: 0, ge: 1, gt: 2 }
 
   enum status: { open: 1, applied: 2, accepted: 3, approved_tn_manager: 4, approved_ep_manager: 5, approved: 6,
     break_approved: 7, rejected: 8, withdrawn: 9,

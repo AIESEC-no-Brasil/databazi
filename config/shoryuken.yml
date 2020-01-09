@@ -8,3 +8,4 @@ queues:
   - [update_podio_id, 1]
   - [exchange_student_host, 1]
   - [membership_queue, 1]
+  - [expa_to_podio, 1]
