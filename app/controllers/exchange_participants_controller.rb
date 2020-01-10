@@ -28,7 +28,7 @@ class ExchangeParticipantsController < ApplicationController
         variables: {
           email: email
         }
-      ).data.check_person_present
+      ).try(:data).try(:check_person_present)
 
       if res
         programme = nil
