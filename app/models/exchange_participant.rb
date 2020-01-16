@@ -30,6 +30,8 @@ class ExchangeParticipant < ApplicationRecord
 
   enum exchange_type: { ogx: 0, icx: 1 }
 
+  enum signup_source: { databazi: 0, prospect: 1 }, _suffix: true
+
   enum program: { gv: 0, ge: 1, gt: 2 }
 
   enum status: { open: 1, applied: 2, accepted: 3, approved_tn_manager: 4, approved_ep_manager: 5, approved: 6,
@@ -149,6 +151,7 @@ class ExchangeParticipant < ApplicationRecord
   private
 
   def encrypted_password
+    self.password = Utils::PasswordGenerator.call if self.prospect_signup_source?
     self.password = password_encryptor.encrypt_and_sign(password)
   end
 
