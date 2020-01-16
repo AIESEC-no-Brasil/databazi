@@ -52,11 +52,10 @@ class ExchangeParticipantsController < ApplicationController
         )
 
         exchange_participant.save(validate: false)
+
+        ExpaToPodioWorker.perform_async({ 'exchange_participant_id' => exchange_participant.id })
+        return true
       end
-
-      ExpaToPodioWorker.perform_async({ 'exchange_participant_id' => exchange_participant.id })
-
-      return true
     end
 
     false

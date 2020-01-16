@@ -16,7 +16,7 @@ class ExchangeParticipant < ApplicationRecord
                     format: { with: URI::MailTo::EMAIL_REGEXP },
                     uniqueness: true, if: :ogx?
   validates :birthdate, presence: true, if: :ogx?
-  validates :password, presence: true, if: :ogx?
+  validates :password, presence: true, if: -> record { record.ogx? && record.databazi_signup_source? }
 
   has_many :expa_applications, class_name: 'Expa::Application'
 
