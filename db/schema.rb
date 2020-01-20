@@ -89,7 +89,7 @@ ActiveRecord::Schema.define(version: 2020_01_16_124648) do
     t.integer "referral_type"
     t.datetime "deleted_at"
     t.integer "program"
-    t.integer "signup_source", default: 0
+    t.integer "signup_source"
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
