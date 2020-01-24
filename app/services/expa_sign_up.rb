@@ -67,6 +67,8 @@ class ExpaSignUp
       'email' => 'Email',
       'other_website' => 'Altre Sitio Web',
       'other' => 'Altro',
+      'class_presentation' => 'Presentazione in classe',
+      'informative_banquet' => 'Banchetto informativo'
     }[referral_type]
   end
 

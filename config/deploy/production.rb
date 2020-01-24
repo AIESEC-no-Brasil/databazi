@@ -1,11 +1,11 @@
 # BRA
-server '52.8.202.239', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
-server '13.52.15.16', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
+# server '52.8.202.239', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
+# server '13.52.15.16', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
 
-# ARG
-server '13.52.15.180', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
+# ITA
+server '35.181.101.201', port: 22, user: 'ubuntu', roles: [:web, :app, :db], primary: true
 
-set :branch, :master
+set :branch, :'IT-35'
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.
