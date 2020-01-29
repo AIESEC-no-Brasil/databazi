@@ -97,7 +97,7 @@ class SendToPodio
 
     podio_id
   end
-  
+
   def update_participant(podio_id)
     @gx_participant.exchange_participant.update_attributes(podio_id: podio_id)
 
@@ -184,10 +184,10 @@ class SendToPodio
       'title' => sqs_params['fullname'],
       'email' => [{ 'type' => 'home', 'value' => sqs_params['email'] }],
       'telefone' => [{ 'type' => 'home', 'value' => sqs_params['cellphone'] }],
-      'data-de-nascimento' => {
-        start: Date.parse(sqs_params['birthdate'].to_s).strftime('%Y-%m-%d %H:%M:%S')
-      }
     }
+
+
+    params['data-de-nascimento'] = { start: Date.parse(sqs_params['birthdate'].to_s).strftime('%Y-%m-%d %H:%M:%S') } if sqs_params['birthdate']
 
     params['tag-origem-2'] = utm_source_to_podio(sqs_params['utm_source']) if sqs_params['utm_source']
     params['tag-meio-2'] = utm_medium_to_podio(sqs_params['utm_medium']) if sqs_params['utm_medium']
@@ -229,5 +229,5 @@ class SendToPodio
 
   def gv_participant?
     registerable_class_name == 'GvParticipant'
-  end  
+  end
 end
