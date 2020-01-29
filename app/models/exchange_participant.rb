@@ -6,7 +6,7 @@ class ExchangeParticipant < ApplicationRecord
   ARGENTINEAN_SCHOLARITY = %i[incomplete_highschool highschool graduating graduated post_graduating post_graduated]
   BRAZILIAN_SCHOLARITY = %i[highschool incomplete_graduation graduating post_graduated almost_graduated graduated other]
 
-  validates_with YouthValidator, on: :create
+  validates_with YouthValidator, on: :create, if: -> record { record.ogx? && record.databazi_signup_source? }
   validates_with ScholarityValidator, on: :create
 
 
@@ -15,7 +15,7 @@ class ExchangeParticipant < ApplicationRecord
   validates :email, presence: true,
                     format: { with: URI::MailTo::EMAIL_REGEXP },
                     uniqueness: true, if: :ogx?
-  validates :birthdate, presence: true, if: :ogx?
+  validates :birthdate, presence: true, if: -> record { record.ogx? && record.databazi_signup_source? }
   validates :password, presence: true, if: -> record { record.ogx? && record.databazi_signup_source? }
 
   has_many :expa_applications, class_name: 'Expa::Application'
