@@ -16,6 +16,11 @@ class RepositoryPodio
       Podio::Item.create(application, fields: params)
     end
 
+    def update_fields(id, params)
+      check_podio
+      Podio::Item.update(id, fields: params)
+    end
+
     def delete_ep(id)
       check_podio
       Podio::Item.delete(id)

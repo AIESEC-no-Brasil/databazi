@@ -2,6 +2,8 @@ class ExchangeParticipant < ApplicationRecord
   include ActiveModel::Validations
   before_create :encrypted_password
   before_save :check_segmentation if ENV['COUNTRY'] == 'arg'
+  before_save :check_expa_id if ENV['COUNTRY'] == 'bra'
+  before_save :check_status
 
   ARGENTINEAN_SCHOLARITY = %i[incomplete_highschool highschool graduating graduated post_graduating post_graduated]
   BRAZILIAN_SCHOLARITY = %i[highschool incomplete_graduation graduating post_graduated almost_graduated graduated other]
@@ -9,9 +11,8 @@ class ExchangeParticipant < ApplicationRecord
   validates_with YouthValidator, on: :create, if: -> record { record.ogx? && record.databazi_signup_source? }
   validates_with ScholarityValidator, on: :create
 
-
-  validates :fullname, presence: true, if: :ogx?
-  validates :cellphone, presence: true, if: :ogx?
+  validates :fullname, presence: true, if: :databazi?
+  validates :cellphone, presence: true, if: :databazi?
   validates :email, presence: true,
                     format: { with: URI::MailTo::EMAIL_REGEXP },
                     uniqueness: true, if: :ogx?
@@ -34,6 +35,10 @@ class ExchangeParticipant < ApplicationRecord
 
   enum program: { gv: 0, ge: 1, gt: 2 }
 
+  enum origin: { databazi: 0, expa: 1 }
+
+  enum signup_source: { databazi: 0, prospect: 1 }, _suffix: true
+
   enum status: { open: 1, applied: 2, accepted: 3, approved_tn_manager: 4, approved_ep_manager: 5, approved: 6,
     break_approved: 7, rejected: 8, withdrawn: 9,
     realized: 100, approval_broken: 101, realization_broken: 102, matched: 103,
@@ -43,7 +48,7 @@ class ExchangeParticipant < ApplicationRecord
     friend_social_network: 4, google: 5, facebook_group: 6, facebook_ad: 7,
     instagram_ad: 8, university_presentation: 9, university_mail: 10,
     university_workshop: 11, university_website: 12, event_or_fair: 13,
-    partner_organization: 14, spanglish_event: 15, potenciate_ad: 16, influencer: 17 },
+    partner_organization: 14, spanglish_event: 15, potenciate_ad: 16, influencer: 17, search_engine: 18, teacher: 19, flyer: 20, other: 21 },
     _suffix: true
 
   def scholarity_sym
@@ -86,6 +91,10 @@ class ExchangeParticipant < ApplicationRecord
 
   def last_name
     fullname.split(' ').drop(1).join(' ')
+  end
+
+  def local_committee_podio_id
+    local_committee.try(:podio_id)
   end
 
   def as_sqs
@@ -148,6 +157,20 @@ class ExchangeParticipant < ApplicationRecord
     scholarity[symbol]
   end
 
+  def status_to_podio
+    statuses = {
+      open: 1,
+      applied: 2,
+      accepted: 3,
+      approved: 4,
+      break_approval: 5,
+      rejected: 6,
+      withdrawn: 7
+    }
+
+    statuses[status&.to_sym]
+  end
+
   private
 
   def encrypted_password
@@ -171,4 +194,15 @@ class ExchangeParticipant < ApplicationRecord
     self.local_committee_id = local_committee_segmentation.destination_local_committee_id if local_committee_segmentation
   end
 
+  def check_expa_id
+    if ((expa_id_changed? || expa_id_sync) && podio_id)
+      res = RepositoryPodio.update_fields(podio_id, { 'di-ep-id-2' => expa_id.to_s })
+
+      update_attribute(:expa_id_sync, false) if res == 200
+    end
+  end
+
+  def check_status
+    RepositoryPodio.update_fields(podio_id, { 'status-expa' => status_to_podio }) if status_changed? && status_to_podio && podio_id
+  end
 end

@@ -45,14 +45,30 @@ class ExpaSignUp
         password: @exchange_participant.decrypted_password,
         lc: @exchange_participant.local_committee.expa_id,
         mc: ENV['EXPA_MC_ID'],
+        selected_programmes: [selected_programme(@exchange_participant.registerable.class.name).to_s],
         allow_phone_communication: @exchange_participant.cellphone_contactable,
-        created_via: "json"
+        created_via: "json",        
+        referral_type: "#{@exchange_participant.referral_type}&#{@exchange_participant.exchange_reason}",
       }
     }.to_json
   end
 
+  def selected_programme(program)
+    programmes = { gv_participant: 1, gt_participant: 2, ge_participant: 5 }
+
+    programmes[program_snake_case(program).to_sym]
+  end
+
+  def program_snake_case(program)
+    program.underscore.downcase
+  end
+
   def update_exchange_participant_id
-    @exchange_participant.update_attribute(:expa_id, @res.parsed_response['person_id'])
+    @exchange_participant.update_attributes(expa_id: @res.parsed_response['person_id'])
+  end
+
+  def send_mail
+    Utils::SesSendMail.call(@exchange_participant.id)
   end
 
   def send_mail

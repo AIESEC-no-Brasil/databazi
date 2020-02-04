@@ -24,10 +24,7 @@ class GvParticipantsController < ApplicationController
 
   def params_filled
     params[:gv_participant][:utm_source] &&
-      params[:gv_participant][:utm_medium] &&
-      params[:gv_participant][:utm_campaign] &&
-      params[:gv_participant][:utm_term] &&
-      params[:gv_participant][:utm_content]
+      params[:gv_participant][:utm_campaign]
   end
 
   def gv_participant_params
@@ -43,7 +40,11 @@ class GvParticipantsController < ApplicationController
     %i[
       id fullname birthdate email cellphone local_committee_id
       university_id college_course_id password scholarity
+<<<<<<< HEAD
       campaign_id cellphone_contactable other_university referral_type signup_source
+=======
+      campaign_id cellphone_contactable other_university referral_type city department signup_source scholarity_stage exchange_reason university_name
+>>>>>>> staging
     ]
   end
 
@@ -67,6 +68,7 @@ class GvParticipantsController < ApplicationController
   def normalized_exchange_participant_params
     params = exchange_participant_params
     params[:scholarity] = params[:scholarity].to_i
+    params[:signup_source] = params[:signup_source].to_i
     params[:referral_type] = params[:referral_type].to_i
     params[:signup_source] = params[:signup_source].to_i
 

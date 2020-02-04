@@ -13,17 +13,14 @@ module GeParticipantFields
       'email' => ge_participant.email, 'fullname' => ge_participant.fullname,
       'cellphone' => ge_participant.cellphone,
       'birthdate' => ge_participant.birthdate,
-      'utm_source' => utm_source, 'utm_medium' => utm_medium,
-      'utm_campaign' => utm_campaign, 'utm_term' => utm_term,
-      'utm_content' => utm_content, 'podio_app' => ENV['PODIO_APP_GE'],
-      'scholarity' => ge_participant.scholarity,
+      'utm_source' => utm_source,
+      'utm_campaign' => utm_campaign,
       'local_committee' => ge_participant.exchange_participant&.local_committee&.podio_id,
-      'spanish_level' => ge_participant.read_attribute_before_type_cast(:spanish_level),
       'english_level' => ge_participant&.english_level&.read_attribute_before_type_cast(:english_level),
-      'university' => ge_participant.exchange_participant&.university&.podio_item_id,
       'college_course' => ge_participant.exchange_participant&.college_course&.podio_item_id,
       'cellphone_contactable' => ge_participant.exchange_participant.cellphone_contactable,
-      'signup_source' => ge_participant.exchange_participant.signup_source
+      'signup_source' => ge_participant.exchange_participant.signup_source,
+      'program' => 'ge'
     }
   end
 
