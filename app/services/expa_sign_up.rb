@@ -70,4 +70,8 @@ class ExpaSignUp
   def send_mail
     Utils::SesSendMail.call(@exchange_participant.id)
   end
+
+  def send_mail
+    Utils::SesSendMail.call(@exchange_participant.id)
+  end
 end

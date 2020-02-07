@@ -23,8 +23,16 @@ ExistsQuery = EXPAAPI::Client.parse <<~'GRAPHQL'
         id
         full_name
         email
+        status
+        dob
+        home_lc {
+          name
+        }
+        programmes {
+          short_name_display
+        }
+      }
     }
-}
 GRAPHQL
 
 LoadApplications = EXPAAPI::Client.parse <<~'GRAPHQL'
@@ -70,8 +78,13 @@ LoadApplications = EXPAAPI::Client.parse <<~'GRAPHQL'
           }
         }
         standards{
-          constant_name
-          option
+          constant {
+            name
+          }
+          standard_option {
+            name
+            option
+          }
         }
       }
     }

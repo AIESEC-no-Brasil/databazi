@@ -2,6 +2,10 @@ require "#{Rails.root}/app/repos/chat_logger"
 
 class RepositoryPodio
   class << self
+    def init
+      check_podio
+    end
+
     def create_item(application, params)
       check_podio
       Podio::Item.create(application, fields: params)
@@ -123,8 +127,8 @@ class RepositoryPodio
       podio_standards_fields = {}
       standards.each do |standard|
         standard_data = standard['data'] || standard['table']
-        podio_key = map_standard_constant_to_podio(standard_data['constant_name'])
-        podio_value = map_standard_option_to_podio(standard_data['option'])
+        podio_key = map_standard_constant_to_podio(standard_data['constant']['name'])
+        podio_value = map_standard_option_to_podio(standard_data.dig('standard_option', 'option'))
         podio_standards_fields[podio_key] = podio_value if podio_key
       end
       podio_standards_fields
@@ -160,6 +164,7 @@ class RepositoryPodio
         'false': 3,
         'not needed': 4
       }
+
       map_option[option.to_sym] || 1 #default is 'not filled'
     end
 

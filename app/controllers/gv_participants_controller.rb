@@ -56,7 +56,7 @@ class GvParticipantsController < ApplicationController
   def exchange_participant_params
     params[:gv_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
-             :local_committee_id, :university_id, :college_course_id, 
+             :local_committee_id, :university_id, :college_course_id,
              :password, :scholarity, :campaign_id, :cellphone_contactable,
              :other_university, :referral_type, :city, :department, :signup_source, :scholarity_stage, :exchange_reason, :university_name)
   end
@@ -66,7 +66,7 @@ class GvParticipantsController < ApplicationController
     params[:scholarity] = params[:scholarity].to_i
     params[:signup_source] = params[:signup_source].to_i
     params[:referral_type] = params[:referral_type].to_i
-
+    params[:signup_source] = params[:signup_source].to_i
 
     params
   end

@@ -59,7 +59,7 @@ module Utils
     end
 
     def text_body
-      "Bem-vindo a AIESEC! Seus dados de acesso são de acesso ao portal https://aiesec.org.br e-mail: #{recipient} e senha: #{password}"
+      "Bem-vindo a AIESEC! Seus dados de acesso ao portal https://aiesec.org.br são e-mail: #{recipient} e senha: #{password}"
     end
 
     def html_body

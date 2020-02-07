@@ -1,6 +1,5 @@
 class Membership < ApplicationRecord
   belongs_to :college_course
-  belongs_to :local_committee
 
   validates :fullname, presence: true
   validates :birthdate, presence: true
@@ -10,5 +9,5 @@ class Membership < ApplicationRecord
   validates :state, presence: true
   validates :cellphone_contactable, presence: true
   validates :college_course, presence: true
-  validates :local_committee, presence: true
+  validates :nearest_committee, presence: true
 end

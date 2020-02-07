@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_29_174609) do
+ActiveRecord::Schema.define(version: 2020_01_20_153429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,16 +88,17 @@ ActiveRecord::Schema.define(version: 2019_11_29_174609) do
     t.text "academic_backgrounds", array: true
     t.integer "referral_type"
     t.datetime "deleted_at"
+    t.integer "program"
+    t.integer "signup_source", default: 0
+    t.string "city"
+    t.string "exchange_reason"
+    t.string "department"
     t.datetime "updated_at_expa"
     t.integer "origin"
     t.boolean "has_error", default: false
     t.datetime "created_at_expa"
     t.boolean "expa_id_sync", default: true
-    t.integer "signup_source", default: 0
-    t.string "city"
-    t.string "department"
     t.string "scholarity_stage"
-    t.string "exchange_reason"
     t.string "university_name"
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
@@ -245,6 +246,7 @@ ActiveRecord::Schema.define(version: 2019_11_29_174609) do
     t.bigint "local_committee_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "nearest_committee"
     t.index ["college_course_id"], name: "index_memberships_on_college_course_id"
     t.index ["local_committee_id"], name: "index_memberships_on_local_committee_id"
   end

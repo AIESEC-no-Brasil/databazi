@@ -8,15 +8,16 @@ class ExchangeParticipant < ApplicationRecord
   ARGENTINEAN_SCHOLARITY = %i[incomplete_highschool highschool graduating graduated post_graduating post_graduated]
   BRAZILIAN_SCHOLARITY = %i[highschool incomplete_graduation graduating post_graduated almost_graduated graduated other]
 
-  validates_with YouthValidator, on: :create
+  validates_with YouthValidator, on: :create, if: -> record { record.ogx? && record.databazi_signup_source? }
+  validates_with ScholarityValidator, on: :create
 
   validates :fullname, presence: true, if: :databazi?
   validates :cellphone, presence: true, if: :databazi?
   validates :email, presence: true,
                     format: { with: URI::MailTo::EMAIL_REGEXP },
-                    uniqueness: true, if: :databazi?
-  validates :birthdate, presence: true, if: :databazi?
-  validates :password, presence: true, if: :databazi?
+                    uniqueness: true, if: :ogx?
+  validates :birthdate, presence: true, if: -> record { record.ogx? && record.databazi_signup_source? }
+  validates :password, presence: true, if: -> record { record.ogx? && record.databazi_signup_source? }
 
   has_many :expa_applications, class_name: 'Expa::Application'
 
@@ -28,7 +29,9 @@ class ExchangeParticipant < ApplicationRecord
 
   accepts_nested_attributes_for :campaign
 
-  enum exchange_type: { ogx: 0, icx: 1}
+  enum exchange_type: { ogx: 0, icx: 1 }
+
+  enum program: { gv: 0, ge: 1, gt: 2 }
 
   enum origin: { databazi: 0, expa: 1 }
 
@@ -37,7 +40,7 @@ class ExchangeParticipant < ApplicationRecord
   enum status: { open: 1, applied: 2, accepted: 3, approved_tn_manager: 4, approved_ep_manager: 5, approved: 6,
     break_approved: 7, rejected: 8, withdrawn: 9,
     realized: 100, approval_broken: 101, realization_broken: 102, matched: 103,
-    completed: 104, finished: 105, other_status: 999 }
+    completed: 104, finished: 105, other_status: 999, deleted: -1 }
 
   enum referral_type: { none: 0, friend: 1, friend_facebook: 2, friend_instastories: 3,
     friend_social_network: 4, google: 5, facebook_group: 6, facebook_ad: 7,
@@ -56,7 +59,7 @@ class ExchangeParticipant < ApplicationRecord
 
   def argentinean_scholarity
     ExchangeParticipant::ARGENTINEAN_SCHOLARITY[scholarity]
-  end 
+  end
 
   def scholarity_length
     if ENV['COUNTRY'] == 'bra'
@@ -190,7 +193,7 @@ class ExchangeParticipant < ApplicationRecord
   end
 
   def check_expa_id
-    if ((expa_id_changed? || expa_id_sync) && podio_id)
+    if ((expa_id_changed? || expa_id_sync) && podio_id && expa_id)
       res = RepositoryPodio.update_fields(podio_id, { 'di-ep-id-2' => expa_id.to_s })
 
       update_attribute(:expa_id_sync, false) if res == 200

@@ -90,6 +90,7 @@ class GtParticipantsController < ApplicationController
     params[:scholarity] = params[:scholarity].to_i
     params[:signup_source] = params[:signup_source].to_i
     params[:referral_type] = params[:referral_type].to_i
+    params[:signup_source] = params[:signup_source].to_i
 
     params
   end

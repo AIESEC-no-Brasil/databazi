@@ -1,3 +1,5 @@
+require "#{Rails.root}/lib/expa_api"
+
 class ExchangeParticipantsController < ApplicationController
   require 'net/http'
   require 'uri'
@@ -13,17 +15,53 @@ class ExchangeParticipantsController < ApplicationController
   private
 
   def check_email_existence(email)
-    find_exchange_participant(email) || bazicon_email_validation(email)
+    exchange_participant = find_exchange_participant(email)
+
+    if exchange_participant
+      RepositoryPodio.init
+      Podio::Tag.create('item', exchange_participant&.podio_id, ['retentativa-de-cadastro'])
+
+      return true
+    else
+      res = EXPAAPI::Client.query(
+        ExistsQuery,
+        variables: {
+          email: email
+        }
+      ).try(:data).try(:check_person_present)
+
+      if res
+        programme = nil
+
+        if res.programmes.any?
+          res.programmes.each do |program|
+            programme = program.short_name_display if (%w[GV GE GT]).include?(program.short_name_display)
+          end
+        end
+
+        programme ||= 'GV'
+
+        exchange_participant = ExchangeParticipant.where(expa_id: res.id).first_or_initialize(
+          expa_id: res.id,
+          fullname: res.full_name,
+          birthdate: res.try(:dob),
+          email: res.email,
+          local_committee_id: LocalCommittee.where('name ilike ?', res.home_lc.name).first.try(:id),
+          program: programme.downcase.to_sym,
+          status: res.status
+        )
+
+        exchange_participant.save(validate: false)
+
+        ExpaToPodioWorker.perform_async({ 'exchange_participant_id' => exchange_participant.id })
+        return true
+      end
+    end
+
+    false
   end
 
   def find_exchange_participant(email)
-    true if ExchangeParticipant.find_by(email: email)
-  end
-
-  def bazicon_email_validation(email)
-    uri = URI.parse('http://bazicon.aiesec.org.br/' \
-      "api/v1/expa_person?email=#{email}")
-
-    JSON.parse(Net::HTTP.get_response(uri).read_body)['email_exists']
+    ExchangeParticipant.find_by(email: email)
   end
 end
