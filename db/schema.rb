@@ -90,6 +90,16 @@ ActiveRecord::Schema.define(version: 2020_01_20_153429) do
     t.datetime "deleted_at"
     t.integer "program"
     t.integer "signup_source", default: 0
+    t.string "city"
+    t.string "exchange_reason"
+    t.string "department"
+    t.datetime "updated_at_expa"
+    t.integer "origin"
+    t.boolean "has_error", default: false
+    t.datetime "created_at_expa"
+    t.boolean "expa_id_sync", default: true
+    t.string "scholarity_stage"
+    t.string "university_name"
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
@@ -148,6 +158,7 @@ ActiveRecord::Schema.define(version: 2020_01_20_153429) do
     t.datetime "opportunity_start_date"
     t.boolean "resync", default: false
     t.boolean "finished", default: false
+    t.string "podio_last_synched_status"
     t.index ["home_lc_id"], name: "index_expa_applications_on_home_lc_id"
     t.index ["home_mc_id"], name: "index_expa_applications_on_home_mc_id"
     t.index ["host_lc_id"], name: "index_expa_applications_on_host_lc_id"
@@ -170,12 +181,15 @@ ActiveRecord::Schema.define(version: 2020_01_20_153429) do
     t.datetime "updated_at", null: false
     t.integer "when_can_travel"
     t.integer "preferred_destination"
+    t.integer "work_experience"
   end
 
   create_table "gt_participants", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "preferred_destination"
+    t.integer "work_experience"
+    t.integer "subproduct"
   end
 
   create_table "gv_participants", force: :cascade do |t|
@@ -266,7 +280,20 @@ ActiveRecord::Schema.define(version: 2020_01_20_153429) do
     t.string "podio_item_id"
     t.bigint "local_committee_id"
     t.string "city"
+    t.string "department"
+    t.bigint "expa_id"
     t.index ["local_committee_id"], name: "index_universities_on_local_committee_id"
+  end
+
+  create_table "university_local_committees", force: :cascade do |t|
+    t.bigint "university_id"
+    t.bigint "local_committee_id"
+    t.integer "program"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["local_committee_id"], name: "index_university_local_committees_on_local_committee_id"
+    t.index ["program"], name: "index_university_local_committees_on_program"
+    t.index ["university_id"], name: "index_university_local_committees_on_university_id"
   end
 
   add_foreign_key "exchange_participants", "college_courses"
@@ -278,4 +305,6 @@ ActiveRecord::Schema.define(version: 2020_01_20_153429) do
   add_foreign_key "memberships", "college_courses"
   add_foreign_key "memberships", "local_committees"
   add_foreign_key "universities", "local_committees"
+  add_foreign_key "university_local_committees", "local_committees"
+  add_foreign_key "university_local_committees", "universities"
 end

@@ -93,8 +93,6 @@ class SendToPodio
 
     podio_id = Podio::Item.create(params['podio_app'], fields: podio_item_fields(params)).item_id
 
-    update_participant(podio_id) if podio_id
-
     podio_id
   end
 

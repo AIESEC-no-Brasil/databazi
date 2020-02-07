@@ -15,17 +15,13 @@ module GvParticipantFields
       'cellphone' => gv_participant.cellphone,
       'birthdate' => gv_participant.birthdate,
       'utm_source' => utm_source,
-      'utm_medium' => utm_medium,
       'utm_campaign' => utm_campaign,
-      'utm_term' => utm_term,
-      'utm_content' => utm_content,
-      'podio_app' => ENV['PODIO_APP_GV'],
-      'scholarity' => gv_participant.scholarity,
       'local_committee' => gv_participant.exchange_participant&.local_committee&.podio_id,
-      'university' => gv_participant.exchange_participant&.university&.podio_item_id,
       'college_course' => gv_participant.exchange_participant&.college_course&.podio_item_id,
       'cellphone_contactable' => gv_participant.exchange_participant.cellphone_contactable,
-      'signup_source' => gv_participant.exchange_participant.signup_source
+      'signup_source' => gv_participant.exchange_participant.signup_source,
+      'program' => 'gv',
+      'podio_app' => ENV['PODIO_APP_GV']
     }
   end
 

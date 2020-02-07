@@ -24,16 +24,15 @@ class GtParticipantsController < ApplicationController
 
   def params_filled
     params[:gt_participant][:utm_source] &&
-      params[:gt_participant][:utm_medium] &&
-      params[:gt_participant][:utm_campaign] &&
-      params[:gt_participant][:utm_term] &&
-      params[:gt_participant][:utm_content]
+      params[:gt_participant][:utm_campaign]
   end
 
   def gt_participant_params
     nested_params.require(:gt_participant).permit(
       :curriculum,
       :preferred_destination,
+      :work_experience,
+      :subproduct,
       english_level_attributes: [:english_level],
       exchange_participant_attributes:
         exchange_participant_permitted_attributes,
@@ -45,7 +44,7 @@ class GtParticipantsController < ApplicationController
     %i[
       id fullname email birthdate cellphone local_committee_id
       university_id college_course_id password scholarity
-      campaign_id cellphone_contactable other_university referral_type signup_source
+      campaign_id cellphone_contactable other_university referral_type city department signup_source scholarity_stage exchange_reason university_name
     ]
   end
 
@@ -63,7 +62,9 @@ class GtParticipantsController < ApplicationController
         curriculum: gt_params[:curriculum],
         english_level_attributes: normalized_english_level_params,
         exchange_participant_attributes: normalized_exchange_participant_params,
-        experience_attributes: experience_params
+        experience_attributes: experience_params,
+        work_experience: gt_params[:work_experience].to_i,
+        subproduct: gt_params[:subproduct].to_i
       }
     )
   end
@@ -87,6 +88,7 @@ class GtParticipantsController < ApplicationController
   def normalized_exchange_participant_params
     params = exchange_participant_params
     params[:scholarity] = params[:scholarity].to_i
+    params[:signup_source] = params[:signup_source].to_i
     params[:referral_type] = params[:referral_type].to_i
     params[:signup_source] = params[:signup_source].to_i
 
@@ -98,7 +100,7 @@ class GtParticipantsController < ApplicationController
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
              :local_committee_id, :university_id, :college_course_id,
              :password, :scholarity, :campaign_id, :cellphone_contactable,
-             :other_university, :referral_type, :signup_source)
+             :other_university, :referral_type, :city, :department, :signup_source, :scholarity_stage, :exchange_reason, :university_name)
   end
 
   def experience_params
