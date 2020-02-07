@@ -37,11 +37,7 @@ class GeParticipantsController < ApplicationController
       exchange_participant_attributes: %i[
         id fullname email birthdate cellphone local_committee_id
         university_id college_course_id password scholarity
-<<<<<<< HEAD
-        campaign_id cellphone_contactable other_university referral_type signup_source
-=======
         campaign_id cellphone_contactable other_university referral_type city department signup_source scholarity_stage exchange_reason university_name
->>>>>>> staging
       ]
     )
   end

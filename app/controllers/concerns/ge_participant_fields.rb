@@ -20,7 +20,8 @@ module GeParticipantFields
       'college_course' => ge_participant.exchange_participant&.college_course&.podio_item_id,
       'cellphone_contactable' => ge_participant.exchange_participant.cellphone_contactable,
       'signup_source' => ge_participant.exchange_participant.signup_source,
-      'program' => 'ge'
+      'program' => 'ge',
+      'podio_app' => ENV['PODIO_APP_GE']
     }
   end
 

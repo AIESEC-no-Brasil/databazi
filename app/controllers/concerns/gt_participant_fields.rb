@@ -22,7 +22,8 @@ module GtParticipantFields
       'experience' => gt_participant&.experience&.for_podio,
       'cellphone_contactable' => gt_participant.exchange_participant.cellphone_contactable,
       'signup_source' => gt_participant.exchange_participant.signup_source,
-      'program' => 'gt'
+      'program' => 'gt',
+      'podio_app' => ENV['PODIO_APP_GT']
     }
   end
 

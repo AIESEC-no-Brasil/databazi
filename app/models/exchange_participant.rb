@@ -31,8 +31,6 @@ class ExchangeParticipant < ApplicationRecord
 
   enum exchange_type: { ogx: 0, icx: 1 }
 
-  enum signup_source: { databazi: 0, prospect: 1 }, _suffix: true
-
   enum program: { gv: 0, ge: 1, gt: 2 }
 
   enum origin: { databazi: 0, expa: 1 }
@@ -195,7 +193,7 @@ class ExchangeParticipant < ApplicationRecord
   end
 
   def check_expa_id
-    if ((expa_id_changed? || expa_id_sync) && podio_id)
+    if ((expa_id_changed? || expa_id_sync) && podio_id && expa_id)
       res = RepositoryPodio.update_fields(podio_id, { 'di-ep-id-2' => expa_id.to_s })
 
       update_attribute(:expa_id_sync, false) if res == 200
