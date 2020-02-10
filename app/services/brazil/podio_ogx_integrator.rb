@@ -18,7 +18,8 @@ module Brazil
 
       # params gets initialized with the minimum amount of information which is known to always be existent
       podio_params = {
-        'data-inscricao' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') }
+        'data-inscricao' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
+        'status-expa' => 1
       }
 
       # then for each optional_key we check wether it's available on the incoming @params and assign it to params

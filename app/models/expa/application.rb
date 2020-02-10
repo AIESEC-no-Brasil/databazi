@@ -57,7 +57,7 @@ class Expa::Application < ApplicationRecord
   end
 
   def pending_initial_sync
-    self.status == 'approved' && self.prep_podio_id.blank?
+    self.status == 'approved' && self.prep_podio_id.blank? && self&.exchange_participant&.exchange_type == 'ogx'
   end
 
   def pending_status_change
