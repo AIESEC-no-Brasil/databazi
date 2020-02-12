@@ -45,10 +45,11 @@ class ExchangeParticipantsController < ApplicationController
           expa_id: res.id,
           fullname: res.full_name,
           birthdate: res.try(:dob),
-          email: res.email,
+          email: email,
           local_committee_id: LocalCommittee.where('name ilike ?', res.home_lc.name).first.try(:id),
           program: programme.downcase.to_sym,
-          status: res.status
+          status: res.status,
+          origin: :expa
         )
 
         exchange_participant.save(validate: false)
