@@ -98,3 +98,27 @@ CountApplications = EXPAAPI::Client.parse <<~'GRAPHQL'
     }
   }
 GRAPHQL
+
+GetPerson = EXPAAPI::Client.parse <<~'GRAPHQL'
+  query($id: ID) {
+    getPerson(id: $id) {
+      id
+      full_name
+      email
+      status
+      dob
+
+      home_lc {
+        id
+        name
+        full_name
+      }
+
+      programmes {
+        short_name_display
+      }
+      created_at
+      updated_at
+    }
+  }
+GRAPHQL

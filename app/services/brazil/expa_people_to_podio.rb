@@ -2,16 +2,17 @@ module Brazil
   class ExpaPeopleToPodio
     attr_reader :status
 
-    def self.call
-      new.call
+    def self.call(params = nil)
+      new(params).call
     end
 
-    def initialize
+    def initialize(params = nil)
+      @pending = params || pending_exchange_participants
       @status = false
     end
 
     def call
-      pending_exchange_participants.each do |exchange_participant|
+      @pending.each do |exchange_participant|
         @status = Brazil::PodioOgxIntegrator.call(assemble_message(exchange_participant))
 
         exchange_participant.update_attribute(:has_error, true) unless @status
@@ -41,6 +42,7 @@ module Brazil
         local_committee_podio_id
         status
         origin
+        program
       ]
     end
 

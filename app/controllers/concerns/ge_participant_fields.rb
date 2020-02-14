@@ -15,6 +15,8 @@ module GeParticipantFields
       'birthdate' => ge_participant.birthdate,
       'utm_source' => utm_source,
       'utm_campaign' => utm_campaign,
+      'utm_medium' => utm_medium,
+      'utm_content' => utm_content,
       'local_committee' => ge_participant.exchange_participant&.local_committee&.podio_id,
       'english_level' => ge_participant&.english_level&.read_attribute_before_type_cast(:english_level),
       'college_course' => ge_participant.exchange_participant&.college_course&.podio_item_id,

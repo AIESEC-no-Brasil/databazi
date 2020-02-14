@@ -16,6 +16,8 @@ module GvParticipantFields
       'birthdate' => gv_participant.birthdate,
       'utm_source' => utm_source,
       'utm_campaign' => utm_campaign,
+      'utm_medium' => utm_medium,
+      'utm_content' => utm_content,
       'local_committee' => gv_participant.exchange_participant&.local_committee&.podio_id,
       'college_course' => gv_participant.exchange_participant&.college_course&.podio_item_id,
       'cellphone_contactable' => gv_participant.exchange_participant.cellphone_contactable,
