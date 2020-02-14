@@ -16,9 +16,11 @@ module Brazil
     def call
       Shoryuken.logger.info("=>SQS PARAMS:\n=>#{@params}\n=>SQS PARAMS END")
 
+      signup_date = @exchange_participant.created_at_expa || @exchange_participant.created_at
+
       # params gets initialized with the minimum amount of information which is known to always be existent
       podio_params = {
-        'data-inscricao' => { 'start' => Time.now.strftime('%Y-%m-%d %H:%M:%S') },
+        'data-inscricao' => { 'start' => signup_date.strftime('%Y-%m-%d %H:%M:%S') },
         'status-expa' => 1
       }
 
