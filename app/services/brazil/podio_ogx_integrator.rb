@@ -21,7 +21,8 @@ module Brazil
       # params gets initialized with the minimum amount of information which is known to always be existent
       podio_params = {
         'data-inscricao' => { 'start' => signup_date.strftime('%Y-%m-%d %H:%M:%S') },
-        'status-expa' => 1
+        'status-expa' => 1,
+        'status' => 1
       }
 
       # then for each optional_key we check wether it's available on the incoming @params and assign it to params
@@ -61,6 +62,8 @@ module Brazil
         'telefone': ['cellphone', 'cellphone_to_podio'],
         'data-de-nascimento': ['birthdate', 'birthdate_to_podio'],
         'tag-origem-2': ['utm_source', 'utm_source_to_podio'],
+        'tag-conteudo-2-2': ['utm_content', nil],
+        'tag-meio-2-2': ['utm_medium', 'utm_medium_to_podio'],
         'cl-marcado-no-expa-nao-conta-expansao-ainda': ['local_committee', nil],
         'nivel-de-ingles': ['english_level', 'language_level_to_podio'],
         'curso': ['college_course', 'id_to_podio'],
@@ -127,29 +130,29 @@ module Brazil
 
     def utm_medium_to_podio(db_medium)
       podio_domains = {
-        'banner': 19,
-        'banner-home': 1,
-        'pop-up': 10,
-        'post-form': 12,
-        'imagem': 7,
-        'interacao': 20,
-        'post-blog': 11,
-        'post-link': 13,
-        'stories': 15,
-        'video': 17,
-        'lead-ads': 9,
-        'cpc': 4,
-        'display': 5,
+        'banner': 1,
+        'banner-home': 2,
+        'pop-up': 3,
+        'post-form': 4,
+        'imagem': 5,
+        'interacao': 6,
+        'post-blog': 7,
+        'post-link': 8,
+        'stories': 9,
+        'video': 10,
+        'lead-ads': 11,
+        'cpc': 12,
+        'display': 13,
         'search': 14,
-        'imagem-unica': 21,
-        'cartaz': 3,
-        'evento': 22,
-        'indicacao': 8,
-        'outro': 18,
-        'panfleto': 23,
-        'email': 6,
-        'bumper': 2,
-        'trueview': 16
+        'imagem-unica': 15,
+        'cartaz': 16,
+        'evento': 17,
+        'indicacao': 18,
+        'outro': 19,
+        'panfleto': 20,
+        'email': 21,
+        'bumper': 22,
+        'trueview': 23
       }
 
       podio_domain = podio_domains[db_medium.downcase.to_sym]
