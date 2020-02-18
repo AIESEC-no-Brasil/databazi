@@ -25,7 +25,11 @@ module Brazil
 
     # based on given databazi_keys, assembles the message as `{ key => value }` based on given key existence (non-nil value) on exchange_participant
     def assemble_message(exchange_participant)
-      message = { 'exchange_participant_id' => exchange_participant.id }
+      message = {
+        'exchange_participant_id' => exchange_participant.id,
+        'status' => exchange_participant.status_to_podio
+      }
+
       databazi_keys.each { |k| if value = exchange_participant.try(k.to_sym); message.store(trim_key(k), normalize_value(value)); end }
 
       message
@@ -40,7 +44,6 @@ module Brazil
         expa_id
         fullname
         local_committee_podio_id
-        status
         origin
         program
       ]
