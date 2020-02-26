@@ -10,7 +10,9 @@ module EXPAAPI
     ENV['API_AUTHENTICITY_TOKEN']
   end
 
-  HTTP = GraphQL::Client::HTTP.new("https://gis-api.aiesec.org/graphql?access_token=#{access_token}")
+  expa_token = access_token
+
+  HTTP = GraphQL::Client::HTTP.new("https://gis-api.aiesec.org/graphql?access_token=#{expa_token}")
   Schema = GraphQL::Client.load_schema(HTTP)
 
   Client = GraphQL::Client.new(schema: Schema, execute: HTTP)
