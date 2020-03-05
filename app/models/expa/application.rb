@@ -36,9 +36,17 @@ class Expa::Application < ApplicationRecord
   private
 
   def prep_phase_check
+    return if has_error?
+
     fetch_exchange_participant if orphaned_application
-    setup_and_dispatch if pending_initial_sync
-    update_status if pending_status_change
+
+    begin
+      setup_and_dispatch if pending_initial_sync
+      update_status if pending_status_change
+    rescue Podio::GoneError
+      puts "APPLICATION #{id} has been deleted from Podio"
+      self.update_attribute(:has_error, true)
+    end
   end
 
   def fetch_exchange_participant

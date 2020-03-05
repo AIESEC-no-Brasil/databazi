@@ -6,7 +6,8 @@ class RepositoryExpaApi
       res = EXPAAPI::Client.query(
         ICXAPPLICATIONS,
         variables: {
-          from: from
+          from: from,
+          page: page
         }
       )
 
@@ -167,10 +168,11 @@ class RepositoryExpaApi
 end
 
 ICXAPPLICATIONS = EXPAAPI::Client.parse <<~'GRAPHQL'
-  query ($from: DateTime) {
+  query ($from: DateTime, $page: Int) {
     allOpportunityApplication(
       sort: "ASC_updated_at",
       per_page: 500,
+      page: $page,
       filters:{
         opportunity_home_mc: 1606,
         last_interaction: {from: $from}
