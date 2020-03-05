@@ -25,7 +25,7 @@ module Brazil
       end
 
       def load_expa_people(from, page = 1, &callback)
-        res = query_all_people(from)
+        res = query_all_people(from, page)
 
         total_pages = res&.data&.all_people&.paging&.total_pages
 
@@ -68,11 +68,12 @@ module Brazil
         sleep 2
       end
 
-      def query_all_people(from)
+      def query_all_people(from, page)
         EXPAAPI::Client.query(
           ALLPEOPLEOGX,
           variables: {
-            from: from
+            from: from,
+            page: page
           }
         )
       end
@@ -100,8 +101,8 @@ module Brazil
 end
 
 ALLPEOPLEOGX = EXPAAPI::Client.parse <<~'GRAPHQL'
-  query ($from: DateTime) {
-    allPeople(per_page: 500, sort: "+updated_at",
+  query ($from: DateTime, $page: Int) {
+    allPeople(per_page: 500, sort: "+updated_at", page: $page,
               filters: {
                 home_committee: 1606,
                 last_interaction: { from: $from }

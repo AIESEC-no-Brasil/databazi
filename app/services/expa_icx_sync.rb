@@ -11,7 +11,7 @@ class ExpaIcxSync
 
     RepositoryExpaApi.load_icx_applications(from) {|application|
       logger.info "Saving into databazi"
-      RepositoryApplication.save_icx_from_expa(application)
+      RepositoryApplication.save_icx_from_expa(application) unless application.status == 'deleted'
     }
 
     RepositoryApplication.pending_podio_sync_icx_applications.each do |application|
@@ -25,6 +25,7 @@ class ExpaIcxSync
         application.update_attribute(:has_error, true)
       end
     end
+
     logger.info "Done sync"
     sleep(2)
     true
