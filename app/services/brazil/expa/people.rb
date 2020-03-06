@@ -83,7 +83,7 @@ module Brazil
       end
 
       def create_new_exchange_participant(person)
-        program = (person.programmes.map(&:short_name_display) & %w[GV GE GT]).pop.downcase || 'gv'
+        program = (person.programmes.map(&:short_name_display) & %w[GV GE GT]).pop&.downcase || 'gv'
 
         ExchangeParticipant.new(expa_id: person.id,
                                   updated_at_expa: person.updated_at,
