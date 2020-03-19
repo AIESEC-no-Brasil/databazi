@@ -87,10 +87,10 @@ ActiveRecord::Schema.define(version: 2019_12_05_145049) do
     t.integer "approved_sync_count", default: 1
     t.text "academic_backgrounds", array: true
     t.integer "referral_type"
-    t.datetime "deleted_at"
     t.string "city"
     t.string "exchange_reason"
     t.string "department"
+    t.datetime "deleted_at"
     t.datetime "updated_at_expa"
     t.integer "origin"
     t.boolean "has_error", default: false
@@ -235,22 +235,6 @@ ActiveRecord::Schema.define(version: 2019_12_05_145049) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "memberships", force: :cascade do |t|
-    t.string "fullname"
-    t.string "cellphone"
-    t.date "birthdate"
-    t.string "email"
-    t.string "city"
-    t.string "state"
-    t.boolean "cellphone_contactable"
-    t.bigint "college_course_id"
-    t.bigint "local_committee_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["college_course_id"], name: "index_memberships_on_college_course_id"
-    t.index ["local_committee_id"], name: "index_memberships_on_local_committee_id"
-  end
-
   create_table "survey_histories", force: :cascade do |t|
     t.integer "podio_id"
     t.jsonb "surveys"
@@ -302,8 +286,6 @@ ActiveRecord::Schema.define(version: 2019_12_05_145049) do
   add_foreign_key "expa_applications", "local_committees", column: "home_lc_id"
   add_foreign_key "expa_applications", "local_committees", column: "host_lc_id"
   add_foreign_key "expa_applications", "member_committees", column: "home_mc_id"
-  add_foreign_key "memberships", "college_courses"
-  add_foreign_key "memberships", "local_committees"
   add_foreign_key "universities", "local_committees"
   add_foreign_key "university_local_committees", "local_committees"
   add_foreign_key "university_local_committees", "universities"
