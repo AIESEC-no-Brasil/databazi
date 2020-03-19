@@ -48,9 +48,17 @@ class ExpaSignUp
         selected_programmes: [selected_programme(@exchange_participant.registerable.class.name).to_s],
         allow_phone_communication: @exchange_participant.cellphone_contactable,
         created_via: "json",
-        referral_type: "#{referral_type_translation(@exchange_participant.try(:referral_type))}&#{@exchange_participant.try(:exchange_reason)}",
+        referral_type: "#{referral_type_translation(@exchange_participant.try(:referral_type))}&#{@exchange_participant.try(:exchange_reason)}&#{campaign_tag}",
       }
     }.to_json
+  end
+
+  def campaign_tag
+    campaign = @exchange_participant.try(:campaign)
+
+    return "#{campaign.utm_campaign} | #{campaign.utm_medium} | #{campaign.utm_content}" if campaign
+
+    ""
   end
 
   def referral_type_translation(referral_type)

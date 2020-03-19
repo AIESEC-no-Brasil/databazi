@@ -50,7 +50,16 @@ module Italy
       podio_params.store('referral', referral_type_translation(@exchange_participant.referral_type)) if @exchange_participant.referral_type
 
       podio_id = RepositoryPodio.create_ep(ENV['PODIO_APP_LEADS_OGX'], podio_params).item_id
+
       @status = update_podio_id(podio_id)
+
+      if podio_id && @exchange_participant.campaign
+        campaign = @exchange_participant.campaign
+        campaign_tag = "#{campaign.utm_campaign} | #{campaign.utm_medium} | #{campaign.utm_content}"
+
+        Podio::Tag.create('item', podio_id, [campaign_tag])
+      end
+
       @status
     end
 

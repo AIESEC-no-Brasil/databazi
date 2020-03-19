@@ -23,8 +23,12 @@ class GtParticipantsController < ApplicationController
   end
 
   def params_filled
-    params[:gt_participant][:utm_source] &&
-      params[:gt_participant][:utm_campaign]
+    if ENV['COUNTRY'] = 'ita'
+      params[:gt_participant][:utm_medium] && params[:gt_participant][:utm_campaign] && params[:gt_participant][:utm_content]
+    else
+      params[:gt_participant][:utm_source] &&
+        params[:gt_participant][:utm_campaign]
+    end
   end
 
   def gt_participant_params

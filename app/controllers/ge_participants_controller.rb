@@ -23,8 +23,12 @@ class GeParticipantsController < ApplicationController
   end
 
   def params_filled
-    params[:ge_participant][:utm_source] &&
-      params[:ge_participant][:utm_campaign]
+    if ENV['COUNTRY'] = 'ita'
+      params[:ge_participant][:utm_medium] && params[:ge_participant][:utm_campaign] && params[:ge_participant][:utm_content]
+    else
+      params[:ge_participant][:utm_source] &&
+        params[:ge_participant][:utm_campaign]
+    end
   end
 
   def ge_participant_params

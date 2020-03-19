@@ -23,8 +23,12 @@ class GvParticipantsController < ApplicationController
   end
 
   def params_filled
-    params[:gv_participant][:utm_source] &&
-      params[:gv_participant][:utm_campaign]
+    if ENV['COUNTRY'] = 'ita'
+      params[:gv_participant][:utm_medium] && params[:gv_participant][:utm_campaign] && params[:gv_participant][:utm_content]
+    else
+      params[:gv_participant][:utm_source] &&
+        params[:gv_participant][:utm_campaign]
+    end
   end
 
   def gv_participant_params
@@ -56,7 +60,7 @@ class GvParticipantsController < ApplicationController
   def exchange_participant_params
     params[:gv_participant]
       .slice(:id, :birthdate, :fullname, :email, :cellphone,
-             :local_committee_id, :university_id, :college_course_id, 
+             :local_committee_id, :university_id, :college_course_id,
              :password, :scholarity, :campaign_id, :cellphone_contactable,
              :other_university, :referral_type, :city, :department, :signup_source, :scholarity_stage, :exchange_reason, :university_name)
   end
