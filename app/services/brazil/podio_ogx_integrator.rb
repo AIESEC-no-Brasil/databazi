@@ -71,7 +71,8 @@ module Brazil
         'gostaria-de-ser-contactado-por-celular-2': ['cellphone_contactable', 'cellphone_contactable_to_podio'],
         'produto': ['program', 'program_to_podio'],
         'origem-aplicacao': ['origin', 'origin_to_podio'],
-        'interno': ['signup_source', 'signup_source_to_podio']
+        'interno': ['signup_source', 'signup_source_to_podio'],
+        'di-ep-id-2': ['expa_id', nil]
       }
     end
 
