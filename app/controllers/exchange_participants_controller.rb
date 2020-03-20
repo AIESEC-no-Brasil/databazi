@@ -54,12 +54,40 @@ class ExchangeParticipantsController < ApplicationController
 
         exchange_participant.save(validate: false)
 
-        ExpaToPodioWorker.perform_async({ 'exchange_participant_id' => exchange_participant.id })
-        return true
+        @status = Brazil::PodioOgxIntegrator.call(assemble_message(exchange_participant))
+
+        return @status
       end
     end
 
     false
+  end
+
+  def assemble_message(exchange_participant)
+    message = {
+      'exchange_participant_id' => exchange_participant.id,
+      'status' => exchange_participant.status_to_podio,
+      'expa_id' => exchange_participant.expa_id,
+      'fullname' => exchange_participant.fullname,
+      'birthdate' => exchange_participant.birthdate,
+      'email' => exchange_participant.email,
+      'local_committee' => exchange_participant&.local_committee&.podio_id,
+      'program' => exchange_participant.program
+    }
+
+    databazi_keys.each { |k| if value = exchange_participant.try(k.to_sym); message.store(trim_key(k), normalize_value(value)); end }
+
+    message
+  end
+
+  def trim_key(key)
+    key.gsub(/_podio_id$/, '')
+  end
+
+  def normalize_value(value)
+    return value.to_s if (value.instance_of? Date)
+
+    value
   end
 
   def find_exchange_participant(email)
