@@ -55,7 +55,7 @@ class ExchangeParticipantsController < ApplicationController
         exchange_participant.save(validate: false)
 
         @status = Brazil::PodioOgxIntegrator.call(assemble_message(exchange_participant))
-        # ExpaToPodioWorker.perform_async({ 'exchange_participant_id' => exchange_participant.id })
+
         return @status
       end
     end
