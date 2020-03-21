@@ -82,7 +82,54 @@ module Italy
       end
 
       def update_exchange_participant(exchange_participant, person)
-        exchange_participant.update_attributes(status: expa_person_status(person.status), updated_at_expa: person.updated_at)
+        exchange_participant.update_attributes(
+          status: expa_person_status(person.status),
+          updated_at_expa: person.updated_at,
+          birthdate: person.dob,
+          first_position_start: first_position_start(person.positions)
+          last_position_end: last_position_end(person.positions),
+          education_level: person.academic_experiences,
+          academic_backgrounds: person.academic_backgrounds,
+          city: person.city,
+          gender: person.gender,
+          expa_id: person.id,
+          programmes: selected_programmes(person.profile.selected_programmes),
+          lc_alignment: person.lc_alignment.label,
+          managers: managers(person.managers),
+          opportunity_applications_count: person.opportunity_applications_count
+        )
+
+        exchange_participant.update_attribute(:rdstation_sync, true) if exchange_participant.rdstation_uuid
+      end
+
+      def managers(managers)
+        managers.map { |manager| m.full_name }.join(', ')
+      end
+
+      # def selected_programmes(programmes)
+      #   translation = { 1: 'GV', 2: 'GE', 5: 'GT' }
+
+      #   selected_programmes << programmes.each { |program| }
+      # end
+
+      def first_position_start(positions)
+        return unless positions.any?
+
+        first = Date.today
+
+        positions.map { |pos| Date.parse(pos.start_date) < first ? first = Date.parse(pos.start_date) : next }
+
+        first
+      end
+
+      def last_position_end(positions)
+        return unless positions.any?
+
+        last = Date.new
+
+        positions.map { |pos| Date.parse(pos.end_date) < last ? last = Date.parse(pos.end_date) : next }
+
+        last
       end
 
       def create_new_exchange_participant(person)
@@ -114,23 +161,79 @@ ALLPEOPLEOGX = EXPAAPI::Client.parse <<~'GRAPHQL'
           total_items
         }
         data {
+          updated_at
           id
-          full_name
-          email
-          status
+          academic_experiences {
+            backgrounds {
+              name
+            }
+            experience_level {
+              name
+            }
+          }
+          address_detail {
+            city
+          }
+          contact_detail {
+            country_code
+            facebook
+            instagram
+            linkedin
+            phone
+            twitter
+            website
+          }
+          contacted_at
+          contacted_by{
+            full_name
+          }
+          created_at
           dob
-
+          email
+          follow_up{
+            name
+          }
+          full_name
+          gender
           home_lc {
             id
             name
             full_name
           }
+          home_mc {
+            id
+            name
+          }
+          is_ai_member
+          last_active_at
+          lc_alignment {
+            id
+            label
+          }
+          managers {
+            full_name
+          }
+          meta {
+            allow_phone_communication
+          }
+          opportunity_applications_count
+          person_profile {
+            selected_programmes
 
+          }
+          positions {
+            start_date
+            end_date
+          }
           programmes {
             short_name_display
           }
-          created_at
-          updated_at
+          secure_identity_email
+          status
+          referral_type
+          tag_lists {
+            name
+          }
         }
     }
   }

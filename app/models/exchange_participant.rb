@@ -5,6 +5,8 @@ class ExchangeParticipant < ApplicationRecord
   before_save :check_expa_id if ENV['COUNTRY'] == 'bra'
   before_save :check_status
 
+  after_save :check_rdstation_sync if ENV['COUNTRY'] == 'ita'
+
   ARGENTINEAN_SCHOLARITY = %i[incomplete_highschool highschool graduating graduated post_graduating post_graduated]
   BRAZILIAN_SCHOLARITY = %i[highschool incomplete_graduation graduating post_graduated almost_graduated graduated other]
 
@@ -172,6 +174,37 @@ class ExchangeParticipant < ApplicationRecord
   end
 
   private
+
+  def check_rdstation_sync
+    return if expa?
+    return unless rdstation_sync
+
+    integrator = RdstationIntegration.new
+
+    integrator.update_lead_by_uuid(rdstation_uuid, contat_info_fields) if rdstation_uuid
+  end
+
+  def contact_info_fields
+    params = {
+      cf_birthday: birthdate,
+      cf_date_registered: created_at,
+      cf_date_first_position_start: first_position_start,
+      cf_date_last_position_end: last_position_end,
+      cf_education_level: education_level,
+      cf_ep_backgrounds: academic_backgrounds,
+      city: city,
+      cf_ep_gender: gender,
+      cf_ep_id: expa_id,
+      cf_product: programmes,
+      cf_lc_alignment: lc_alignment,
+      cf_name_of_the_ep_aiesec_responsible: managers,
+      cf_number_of_opportunities_ep_applied: opportunity_applications_count
+    }
+
+    expa_id? ? params.store(:cf_is_on_expa, true) : params.store(:cf_is_on_expa, false)
+
+    params
+  end
 
   def encrypted_password
     self.password = Utils::PasswordGenerator.call if self.prospect_signup_source?

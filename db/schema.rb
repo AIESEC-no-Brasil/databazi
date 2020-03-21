@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_05_145049) do
+ActiveRecord::Schema.define(version: 2020_03_21_160926) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,6 +101,13 @@ ActiveRecord::Schema.define(version: 2019_12_05_145049) do
     t.string "university_name"
     t.string "rdstation_uuid"
     t.boolean "pending_sync", default: false
+    t.boolean "rdstation_sync"
+    t.text "education_level", array: true
+    t.string "gender"
+    t.string "programmes"
+    t.string "lc_alignment"
+    t.string "managers"
+    t.integer "opportunity_applications_count"
     t.index ["college_course_id"], name: "index_exchange_participants_on_college_course_id"
     t.index ["local_committee_id"], name: "index_exchange_participants_on_local_committee_id"
     t.index ["registerable_type", "registerable_id"], name: "registerable_index_on_exchange_participants"
